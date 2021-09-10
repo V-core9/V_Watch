@@ -28,5 +28,8 @@
   "bugs": {
     "url": "https://github.com/V-core9/V_Observer/issues"
   },
-  "homepage": "https://github.com/V-core9/V_Observer#readme"
+  "homepage": "https://github.com/V-core9/V_Observer#readme",
+  "dependencies": {
+    "node-notifier": "^10.0.0"
+  }
 }
