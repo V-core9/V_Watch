@@ -4,7 +4,9 @@
   "description": "V_Observer is hopefully gonna become useful OS Monitor[ing] tool based on Node.js",
   "main": "v_observer.js",
   "scripts": {
-    "test": "test"
+    "test": "test",
+    "install_global_dependencies": "bash -c \" npm install -g pm2 pm2-windows-startup \" && bash -c \" pm2-startup install \" ",
+    "start_in_background": "bash -c \" pm2 start v_observer.js \" && bash -c \" pm2 save \" "
   },
   "repository": {
     "type": "git",
