@@ -32,6 +32,9 @@
   },
   "homepage": "https://github.com/V-core9/V_Observer#readme",
   "dependencies": {
-    "node-notifier": "^10.0.0"
-  }
+    "node-notifier": "^10.0.0",
+    "systray": "^1.0.5"
+  },
+  
+  "type": "module"
 }
