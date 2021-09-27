@@ -10,7 +10,7 @@ const vWindowsTray = () => {
 
   process.title = 'Tray Demo';
 
-  const tray = new NodeTray(path.join(__dirname, "colors.ico"))
+  const tray = new NodeTray(path.join(__dirname, "../../ASSETS/icon/rick.ico"))
   tray.setToolTip(process.title);
 
   tray.on('click', () => {
