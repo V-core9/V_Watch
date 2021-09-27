@@ -34,6 +34,7 @@
   "dependencies": {
     "v_cli_bash_do": "https://github.com/V-tech-tools/v_cli_bash_do.git",
     "node-notifier": "^10.0.0",
-    "systray": "^1.0.5"
+    "systray": "^1.0.5",
+    "v_req": "https://github.com/V-core9/__v_req"
   }
 }
