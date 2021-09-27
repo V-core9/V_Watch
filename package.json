@@ -36,6 +36,7 @@
     "systray": "^1.0.5",
     "v_cli_bash_do": "https://github.com/V-tech-tools/v_cli_bash_do.git",
     "v_req": "https://github.com/V-core9/__v_req",
-    "windows-trayicon": "^3.0.0"
+    "windows-trayicon": "^3.0.0",
+    "windows-tray": "https://github.com/AHgPuK/window-tray.git"
   }
 }

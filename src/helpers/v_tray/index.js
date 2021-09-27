@@ -1,28 +1,29 @@
-const WindowsTrayicon = require("windows-trayicon");
-const path = require("path");
-const fs = require("fs");
 
 
-const myTrayApp = new WindowsTrayicon({
-  title: "Trayicon Test",
-  icon: path.join(__dirname, "rick.ico"),
-  menu: [
-    {
-      id: "item-1-id",
-      caption: "First Item"
-    },
-    {
-      id: "item-2-id",
-      caption: "Second Item"
-    },
-    {
-      id: "item-3-id-exit",
-      caption: "Exit"
-    }
-  ]
-});
 
 const vTray = () => {
+  const WindowsTrayicon = require("windows-trayicon");
+  const path = require("path");
+  const fs = require("fs");
+  const myTrayApp = new WindowsTrayicon({
+    title: "Trayicon Test",
+    icon: path.join(__dirname, "rick.ico"),
+    menu: [
+      {
+        id: "item-1-id",
+        caption: "First Item"
+      },
+      {
+        id: "item-2-id",
+        caption: "Second Item"
+      },
+      {
+        id: "item-3-id-exit",
+        caption: "Exit"
+      }
+    ]
+  });
+
 
   myTrayApp.item((id) => {
     console.log(`Menu id selected=${id}`);
