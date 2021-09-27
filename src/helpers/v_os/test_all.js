@@ -1,4 +1,3 @@
-
 const Vos = require('./v_os')
 
 console.log("\n<[ EOL() ]>---------");
