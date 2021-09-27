@@ -1,25 +1,27 @@
-const vWindowsTray = () => {
-  
+
+  const Votify = require('../v_notify/votify');
   const EventEmitter = require('events').EventEmitter;
   const NodeTray = require("../../../node_modules/windows-tray/build/Release/tray").NodeTray
 
   const util = require('util')
+
+  
   util.inherits(NodeTray, EventEmitter)
 
   const path = require("path")
 
   process.title = 'Tray Demo';
 
-  const tray = new NodeTray(path.join(__dirname, "../../ASSETS/icon/rick.ico"))
-  tray.setToolTip(process.title);
+  const vTray = new NodeTray(path.join(__dirname, "../../ASSETS/icon/rick.ico"))
+  vTray.setToolTip(process.title);
 
-  tray.on('click', () => {
-
-    let result = tray.toggleWindow(process.title);
+  vTray.on('click', () => {
+    
+    let result = vTray.toggleWindow(process.title);
     console.log("click, result = ", result);
 
   })
-  tray.on('right-click', () => {
+  vTray.on('right-click', () => {
 
     // console.log("right-click");
 
@@ -42,11 +44,11 @@ const vWindowsTray = () => {
       },
     ];
 
-    tray.showPopup(menu, function (err, result) {
+    vTray.showPopup(menu, function (err, result) {
 
       console.log('error:', err);
       console.log('result:', result);
-
+      Votify.tray.leftClick();
       if (result == 50) {
         shutdown();
         return;
@@ -55,7 +57,7 @@ const vWindowsTray = () => {
     });
 
   })
-  tray.on('balloon-click', () => {
+  vTray.on('balloon-click', () => {
 
     console.log('balloon-click')
 
@@ -63,13 +65,13 @@ const vWindowsTray = () => {
 
   setInterval(function () {
 
-    // console.log('Window Visibility: ', tray.isWindowVisible(process.title));
-    // console.log('Window Minimized: ', tray.isWindowMinimized(process.title));
+    // console.log('Window Visibility: ', vTray.isWindowVisible(process.title));
+    // console.log('Window Minimized: ', vTray.isWindowMinimized(process.title));
 
-    if (tray.isWindowMinimized(process.title) == true) {
-      tray.toggleWindow(process.title);
+    if (vTray.isWindowMinimized(process.title) == true) {
+      vTray.toggleWindow(process.title);
 
-      tray.balloon(process.title, 'Will continue in background', 5000);
+      vTray.balloon(process.title, 'Will continue in background', 5000);
       return;
     }
 
@@ -77,8 +79,8 @@ const vWindowsTray = () => {
 
   }, 1000)
 
-  // tray.on("double-click", () => {
-  // 	tray.destroy()
+  // vTray.on("double-click", () => {
+  // 	vTray.destroy()
   // 	process.exit(0)
   // })
 
@@ -102,14 +104,11 @@ const vWindowsTray = () => {
 
   var shutdown = function () {
     console.log('Shutdown!');
-    tray.destroy();
+    vTray.destroy();
     process.exit(0);
   }
 
   onShutdown(shutdown);
-}
-
-vWindowsTray();
 
 
-module.exports = vWindowsTray;
+module.exports = vTray;

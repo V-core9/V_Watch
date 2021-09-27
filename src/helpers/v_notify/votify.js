@@ -12,6 +12,14 @@ const Votify = {
     lowsysmem: ()=> {
       notifier.notify(notifList.app.lowsysmem);
     }
+  },
+  tray : {
+    leftClick: ()=> {
+      notifier.notify(notifList.tray.leftClick);
+    },
+    rightClick: ()=> {
+      notifier.notify(notifList.tray.rightClick);
+    }
   }
 }
 
