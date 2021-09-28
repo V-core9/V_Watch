@@ -1,5 +1,5 @@
 
-  const Votify = require('../v_notify/votify');
+  const Votify = require('../v_notify');
   const EventEmitter = require('events').EventEmitter;
   const NodeTray = require("../../../node_modules/windows-tray/build/Release/tray").NodeTray
 
