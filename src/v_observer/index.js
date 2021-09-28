@@ -1,5 +1,5 @@
-const Vos = require('../helpers/v_os/v_os');
-const Votify = require('../helpers/v_notify/votify');
+const Vos = require('../helpers/v_os');
+const Votify = require('../helpers/v_notify');
 
 
 var VobCore = null;

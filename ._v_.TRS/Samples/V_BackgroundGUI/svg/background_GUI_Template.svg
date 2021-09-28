@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 720"  height="720" width="1280" class="customSVGdemoName">
+<path d="M 0 0 l 1280 0 0 60 -20 20 0 540  20 20 0 60 -20 20 -160 0 -20 -20-880  0 -20 20 -160 0 -20 -20 0 -60 20 -20 0 -440  -20 -20" stroke="none" stroke-width="3" fill="#b8f3c6" ></path>
+<path d="M 0 0 l 950  0 -20 60 -930  0" stroke="none" stroke-width="3" fill="#cd67ba" ></path>
+<path d="M 960  0 l 20 0 -20 60 -20 0" stroke="none" stroke-width="3" fill="#cd67ba" ></path>
+<path d="M 990  0 l 50 0 -15 45 -50 0" stroke="none" stroke-width="3" fill="#cd67ba" ></path>
+<path d="M 1050  0 l 230 0 0 30 -240 0" stroke="none" stroke-width="3" fill="#cd67ba" ></path>
+<path class="closeButton background" onmouseleave="closeLeave()" onmouseover="closeHover()" d="M 1250  0 l 30 0 0 30 -40 0 10 -30" stroke="none" stroke-width="3" fill="#3a0000" ></path>
+<path class="closeButton icon" onmouseleave="closeLeave()" onmouseover="closeHover()" d="M 1258  7 l 2 0 5 5 5 -5 2 0 0 2 -5 5 5 5 0 2 -2 0 -5 -5 -5 5 -2 0 0 -2 5 -5 -5 -5" stroke="none" stroke-width="3" fill="gray" ></path>
+<path class="minButton background"  onmouseleave="minLeave()" onmouseover="minHover()" d="M 1210  0 l 40 0 -10 30 -40 0 10 -30" stroke="none" stroke-width="3" fill="#333333" ></path>
+<path class="minButton icon"  onmouseleave="minLeave()" onmouseover="minHover()" d="M 1218  20 l 15 0 0 2 -15 0" stroke="none" stroke-width="3" fill="gray" ></path>
+<path d="M 10 690  l  20 20 140 0 20 -20 -10 0 -15 15 -130 0 -15 -15" stroke="none" stroke-width="3" fill="#cd67ba" ></path>
+<path d="M 1090  690  l  20 20 140 0 20 -20 -10 0 -15 15 -130 0 -15 -15" stroke="none" stroke-width="3" fill="#cd67ba" ></path>
+<g font-size="30" font-family="Saira Stencil One" fill="white" stroke="none" text-anchor="middle">
+<text x="200" y="40" letter-spacing="1">DemoHeading Container</text>
+</g>
+</svg>
