@@ -5,7 +5,7 @@
   "main": "v_observer.js",
   "scripts": {
     "test": "test",
-    "install_global_dependencies": "bash -c \" npm install -g pm2 pm2-windows-startup \" && bash -c \" pm2-startup install \" ",
+    "__install": "bash -c \" npm install -g pm2 pm2-windows-startup \" && bash -c \" pm2-startup install \" && powershell -c \" Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1')) \" && powershell -c \"choco install visualstudio2017buildtools -A \" && bash -c \" npm install -g node-gyp \" && bash -c \" npm config set msvs_version 2017 \" && bash -c \" npm install \" ",
     "start_in_background": "bash -c \" pm2 start v_observer.js \" && bash -c \" pm2 save \" "
   },
   "repository": {
@@ -33,10 +33,8 @@
   "homepage": "https://github.com/V-core9/V_Observer#readme",
   "dependencies": {
     "node-notifier": "^10.0.0",
-    "systray": "^1.0.5",
     "v_cli_bash_do": "https://github.com/V-tech-tools/v_cli_bash_do.git",
     "v_req": "https://github.com/V-core9/__v_req",
-    "windows-trayicon": "^3.0.0",
     "windows-tray": "https://github.com/AHgPuK/window-tray.git"
   }
 }
