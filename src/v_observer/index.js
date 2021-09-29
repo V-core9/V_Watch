@@ -78,7 +78,6 @@ const V_Observer = {
   mainLoop () {
     Votify.app.starting();
     VobCore = setInterval(() => {
-      //var perfMarkS = performance.now();
       console.time("Tick_Exec_Time");
       var timeOf = Date.now();
       //console.log(this.options.tickTime);

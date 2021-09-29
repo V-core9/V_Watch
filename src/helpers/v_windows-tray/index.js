@@ -1,117 +1,112 @@
+const vWindowsTray = () => {
+  
+  const path = require("path")
+  const EventEmitter = require('events').EventEmitter;
+  const NodeTray = require("../../../node_modules/windows-tray/build/Release/tray").NodeTray;
+  const tray = new NodeTray(path.join(__dirname, "../../ASSETS/icon/rick.ico"))
+  const util = require('util');
+  util.inherits(NodeTray, EventEmitter);
 
-const path = require("path")
-const Votify = require('../v_notify');
-const EventEmitter = require('events').EventEmitter;
-const NodeTray = require("../../../node_modules/windows-tray/build/Release/tray").NodeTray
+  process.title = 'Tray Demo';
 
-const util = require('util')
+  tray.setToolTip(process.title);
 
+  tray.on('click', () => {
+    console.log("[X][_] = click");
+    let result = tray.toggleWindow(process.title);
+    console.log("click, result = ", result);
+  })
+  tray.on('right-click', () => {
 
-util.inherits(NodeTray, EventEmitter)
+    console.log("[_][X] = Right_Click");
 
+    var menu = [
+      {
+        id: 10,
+        title: 'Item 1',
+      },
+      {
+        id: 20,
+        title: 'Item 2',
+      },
+      {
+        id: 30,
+        title: '---',
+      },
+      {
+        id: 50,
+        title: 'Exit',
+      },
+    ];
 
-const vTray = new NodeTray(path.join(__dirname, "../../ASSETS/icon/rick.ico"))
-vTray.setToolTip(process.title);
+    tray.showPopup(menu, function (err, result) {
 
+      console.log('error:', err);
+      console.log('result:', result);
 
+      if (result == 50) {
+        shutdown();
+        return;
+      }
 
-const appTRAY_Menu = [
-  {
-    id: 10,
-    title: 'Item 1',
-  },
-  {
-    id: 20,
-    title: 'Item 2',
-  },
-  {
-    id: 30,
-    title: '---',
-  },
-  {
-    id: 50,
-    title: 'Exit',
-  },
-];
+    });
 
+  });
+  tray.on('balloon-click', () => {
 
+    console.log('balloon-click')
 
-async function vTrayShowPopup (err, result) {
+  })
 
-  console.log('vTrayShowPopup  \n','error:', err);
-  console.log('result:', result);
-  if (result == 50) {
-    shutdown();
-    return;
+  setInterval(function () {
+
+    // console.log('Window Visibility: ', tray.isWindowVisible(process.title));
+    // console.log('Window Minimized: ', tray.isWindowMinimized(process.title));
+
+    if (tray.isWindowMinimized(process.title) == true) {
+      tray.toggleWindow(process.title);
+
+      tray.balloon(process.title, 'Will continue in background', 5000);
+      return;
+    }
+
+    console.log('In background');
+
+  }, 1000)
+
+  // tray.on("double-click", () => {
+  // 	tray.destroy()
+  // 	process.exit(0)
+  // })
+
+  var SHUTDOWN_EVENTS = [
+    'exit',
+    'SIGINT',
+    'SIGUSR1',
+    'SIGUSR2',
+    'SIGTERM',
+    'uncaughtException',
+  ];
+
+  var onShutdown = function (cb) {
+
+    for (let i = 0; i < SHUTDOWN_EVENTS.length; i++) {
+      let event = SHUTDOWN_EVENTS[i];
+      process.on(event, cb);
+    }
+
+  };
+
+  function  shutdown  () {
+    console.log('Shutdown!');
+    tray.destroy();
+    process.exit(0);
   }
-};
 
-vTray.on('right-click', (event) => {
-  console.log(JSON.stringify(event));
-  //console.log("[_][X]  -- RIGHT-click");
-  vTray.showPopup(appTRAY_Menu,   vTrayShowPopup );
-
-});
-
-vTray.on('balloon-click', (event) => {
-  console.log(JSON.stringify(event));
-  console.log('balloon-click')
-});
-
-vTray.on('click', (event) => {
-  console.log(JSON.stringify(event));
-  //console.log("LEFT-click\n[X][_]  -- LEFT-click");
-  let result = vTray.toggleWindow(process.title);
-  console.log("click, result = = - - -"+result);
-});
-
-vTray.on("double-click", (event) => {
-  console.log(JSON.stringify(event));
-  vTray.destroy()
-  process.exit(0)
-})
-
-setInterval( () => {
-
-  // console.log('Window Visibility: ', vTray.isWindowVisible(process.title));
-  //console.log('Window Minimized: ', vTray.isWindowMinimized(process.title));
-
-  if (vTray.isWindowMinimized(process.title) == true) {
-    vTray.toggleWindow(process.title);
-
-    vTray.balloon(process.title, 'Will continue in background', 5000);
-    return;
-  }
-
-  //console.log('In background');
-
-}, 1000)
-
-const SHUTDOWN_EVENTS = [
-  'exit',
-  'SIGINT',
-  'SIGUSR1',
-  'SIGUSR2',
-  'SIGTERM',
-  'uncaughtException',
-];
-
-const onShutdown = function (cb) {
-
-  for (let i = 0; i < SHUTDOWN_EVENTS.length; i++) {
-    let event = SHUTDOWN_EVENTS[i];
-    process.on(event, cb);
-  }
-
-};
-
-const shutdown = function () {
-  console.log('Shutdown!');
-  vTray.destroy();
-  process.exit(0);
+  onShutdown(shutdown);
 }
 
-onShutdown(shutdown);
+vWindowsTray();
 
 
-module.exports = vTray;
+module.exports = vWindowsTray;
