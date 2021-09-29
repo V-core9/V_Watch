@@ -38,7 +38,7 @@ const appTRAY_Menu = [
 
 async function vTrayShowPopup (err, result) {
 
-  console.log('error:', err);
+  console.log('vTrayShowPopup  \n','error:', err);
   console.log('result:', result);
   if (result == 50) {
     shutdown();
