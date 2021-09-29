@@ -33,7 +33,7 @@ const util = require('util')
 util.inherits(NodeTray, EventEmitter)
 
 
-async function vTrayShowPopup (err, result) {
+async function vTrayShowPopup(err, result) {
 
   console.log('error:', err);
   console.log('result:', result);
@@ -48,35 +48,32 @@ const vTray = new NodeTray(path.join(__dirname, "../../ASSETS/icon/rick.ico"));
 vTray.setToolTip(process.title);
 
 vTray.on('click', (event) => {
-  vTrayShowPopup(appTRAY_Menu,   JSON.stringify(event ));
-  //console.log("LEFT-click\n[X][_]  -- LEFT-click");
+  vTrayShowPopup(appTRAY_Menu, JSON.stringify(event));
+  console.log("LEFT-click\n[X][_]  -- LEFT-click");
   let result = vTray.toggleWindow(process.title);
-  //console.log("click, result = = - - -");
-  //console.log(result);
 });
 
 
 
 
 vTray.on('right-click', (event) => {
-  //console.log(JSON.stringify(event));
-  //console.log("[_][X]  -- RIGHT-click");
-  vTrayShowPopup(appTRAY_Menu,   JSON.stringify( event ));
-
+  console.log("RIGHT-click\n[_][X]  -- RIGHT-click");
+  vTrayShowPopup(appTRAY_Menu, JSON.stringify(event));
 });
 
 vTray.on('balloon-click', (event) => {
-  vTrayShowPopup(appTRAY_Menu,   JSON.stringify(event ));
-  console.log('balloon-click')
+  console.log('[==] balloon-click');
+  vTrayShowPopup(appTRAY_Menu, JSON.stringify(event));
 });
 
 vTray.on("double-click", (event) => {
-  vTrayShowPopup(appTRAY_Menu,   JSON.stringify(event ));
+  console.log('|.|.  double-click');
+  vTrayShowPopup(appTRAY_Menu, JSON.stringify(event));
   vTray.destroy()
   process.exit(0)
-})
+});
 
-setInterval(function () {
+setInterval(() => {
 
   //console.log('Window Visibility: ', vTray.isWindowVisible(process.title));
   //console.log('Window Minimized: ', vTray.isWindowMinimized(process.title));
