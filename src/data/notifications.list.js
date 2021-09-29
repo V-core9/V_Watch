@@ -23,12 +23,12 @@ const notifList = {
   tray : {
     leftClick: {
       appID: "V_Observer",
-      title: 'V_Observer -TRAY- leftClick ',
+      title: 'V_Observer - v_tray  _.:.:._  LEFT_CLICK ',
       message: 'You have clicked left click....'
     },
     rightClick: {
         appID: "V_Observer",
-        title: 'V_Observer -TRAY- rightClick ',
+        title: 'V_Observer - v_tray  _.:.:._  RIGHT_CLICK ',
         message: 'You have clicked right click....'
     }
   }
