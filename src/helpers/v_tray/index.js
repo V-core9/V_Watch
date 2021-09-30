@@ -1,4 +1,11 @@
 
+
+const EventEmitter = require('events').EventEmitter;
+const NodeTray = require("../../../node_modules/windows-tray/build/Release/tray").NodeTray;
+
+const util = require('util')
+util.inherits(NodeTray, EventEmitter)
+
 const path = require("path")
 
 const menu = [
@@ -29,12 +36,6 @@ const SHUTDOWN_EVENTS = [
   'SIGTERM',
   'uncaughtException',
 ];
-
-const EventEmitter = require('events').EventEmitter;
-const NodeTray = require("../../../node_modules/windows-tray/build/Release/tray").NodeTray;
-
-const util = require('util')
-util.inherits(NodeTray, EventEmitter)
 
 process.title = 'Tray Demo';
 

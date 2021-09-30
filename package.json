@@ -1,13 +1,13 @@
 {
   "name": "v_observer",
-  "version": "1.0.0",
+  "version": "2.3.11",
   "description": "V_Observer is hopefully gonna become useful OS Monitor[ing] tool based on Node.js",
   "main": "v_observer.js",
   "scripts": {
     "test": "test",
     "__install": "bash -c \" npm install -g pm2 pm2-windows-startup \" && bash -c \" pm2-startup install \" && bash -c \" npm install -g node-gyp \" && bash -c \" npm install \" ",
     "start_in_background": "bash -c \" pm2 start v_observer.js \" && bash -c \" pm2 save \" ",
-    "install_choco": "&& powershell -c \" Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1')) \" && powershell -c \"choco install visualstudio2017buildtools -A \"  && bash -c \" npm config set msvs_version 2017 \" "
+    "install_choco": "powershell -c \" Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1')) \" && powershell -c \"choco install visualstudio2017buildtools -A \"  && bash -c \" npm config set msvs_version 2017 \" "
   },
   "repository": {
     "type": "git",
@@ -33,15 +33,13 @@
   },
   "homepage": "https://github.com/V-core9/V_Observer#readme",
   "dependencies": {
-    "@genee/desktop-idle": "^1.3.0-4",
-    "idle-timer": "^1.2.0",
+    "@mapbox/node-pre-gyp": "^1.0.5",
+    "@schlameel/native-idle-time": "^1.0.6",
     "node-notifier": "^10.0.0",
     "svg-to-png": "^4.0.0",
+    "url-regex-safe": "^2.0.2",
     "v_cli_bash_do": "https://github.com/V-tech-tools/v_cli_bash_do.git",
     "v_req": "https://github.com/V-core9/__v_req",
     "windows-tray": "https://github.com/AHgPuK/window-tray.git"
-  },
-  "engines": {
-    "node": ">=7.9.0"
   }
 }
