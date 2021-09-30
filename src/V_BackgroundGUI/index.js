@@ -51,31 +51,45 @@ const  vBackGUI = () => {
   this.convert =()=> {
     svg_to_png.convert(mFile, outF).then(data => {
       var helpering = this.SetNewBackground();
-      if (this.repNum < 20) {
+      if (this.repNum < 2000) {
         setTimeout(() => {
           this.generateSVG_FILE();
         }, 0);
+
+        setTimeout(() => {
+          this.convert();
+        }, 0);
+        
+        
+        setTimeout(() => {
+          this.saveFile();
+        }, 0);
+        
+        setTimeout(() => {
+          this.saveFile();
+        }, 0);
       };
     });
+    
+    this.repNum++;
   };
 
   this.generateSVG_FILE =()=>  {
-    console.log("generateSVG_FILE -> exec()")
+    //console.log("generateSVG_FILE -> exec()")
     this.templateHelper = mainSVG_Template();
     var helper =  this.saveFile();
     
     this.convert();
 
-    console.log(helper)    
+    //console.log(helper)    
     return helper;
   };
 
   this.saveFile = ()=> {
-    console.log("saveFile -> exec()")
+    //console.log("saveFile -> exec()")
     try {
       
       const promise = writeFile(mFile, this.templateHelper);
-
 
       return  promise;
     } catch (err) {
@@ -84,9 +98,7 @@ const  vBackGUI = () => {
     }
   };
   
-
   this.GetDisplayResolution();
-  
 };
 
 vBackGUI();

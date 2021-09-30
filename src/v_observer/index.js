@@ -1,6 +1,6 @@
 const Vos = require('../helpers/v_os');
 const Votify = require('../helpers/v_notify');
-
+//var desktopIdle = require('@genee/desktop-idle');
 
 var VobCore = null;
 const V_Observer = {
@@ -52,6 +52,7 @@ const V_Observer = {
         interval: 10000,
         lastCheck: 0,
         exec () {
+          //console.log(desktopIdle.getIdleTime());
           console.log('🎮 [.ARI.] >> [ 10000 || 10s ] => 10th Hearth Beat\n');
         },
       },
