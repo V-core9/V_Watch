@@ -35,6 +35,7 @@
   "dependencies": {
     "@mapbox/node-pre-gyp": "^1.0.5",
     "@schlameel/native-idle-time": "^1.0.6",
+    "glob-parent": ">=5.1.2",
     "node-notifier": "^10.0.0",
     "svg-to-png": "^4.0.0",
     "url-regex-safe": "^2.0.2",
