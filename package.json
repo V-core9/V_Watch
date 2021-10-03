@@ -38,6 +38,7 @@
     "glob-parent": ">=5.1.2",
     "node-notifier": "^10.0.0",
     "svg-to-png": "^4.0.0",
+    "svg2img": "^0.9.3",
     "url-regex-safe": "^2.0.2",
     "v_cli_bash_do": "https://github.com/V-tech-tools/v_cli_bash_do.git",
     "v_req": "https://github.com/V-core9/__v_req",
