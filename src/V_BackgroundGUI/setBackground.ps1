@@ -24,5 +24,5 @@ public class Params
  
 }
  
- Set-WallPaper -Image "C:\Users\-v-\_V_\V_Observer\src\V_BackgroundGUI\png\background_GUI_Template.jpg" -Style Fit
+ Set-WallPaper -Image "C:\Users\v__V_\_V_\V_Observer\src\V_BackgroundGUI\png\background_GUI_Template.jpg" -Style Fit
 
