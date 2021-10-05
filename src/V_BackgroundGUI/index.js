@@ -1,106 +1,77 @@
 const bashDo = require('v_cli_bash_do');
 const mainSVG_Template = require('./_main_svg_template')
 const path = require('path');
-let { writeFile } = require('fs/promises');
-let {Buffer} = require('buffer');
+const fs = require('fs')
 
-// DEMO FILE EXPORTING SVG TO PNG
-var svg_to_png = require('svg-to-png');
-
-const bGuiConfig = {
-  mainTemplate: path.join(__dirname, './svg/background_GUI_Template.svg'),
-  output_folder: path.join(__dirname, "./png")
-}
-const mFile = bGuiConfig.mainTemplate;
-const outF = bGuiConfig.output_folder;
-
+// NPM: svg2png [many more options]
+var svg2img = require('svg2img');
+var screenW = 0;
+var screenH = 0;
+var resScale = 0.5;
+var screenWsc = screenW * resScale;
+var screenHsc = screenH * resScale;
+var totalUpdates = 0;
+var lastExecTimeVal = 0;
 
 const  vBackGUI = () => {
-  this.repNum = 0;
-  this.mFile = bGuiConfig.mainTemplate;
-  this.outF = bGuiConfig.output_folder;
+  console.time(":> INTO : vBackGUI");
+  this.mFile = path.join(__dirname, './png/background_GUI_Template.jpg');
   this.templateHelper = "";
   this.screen = {};
   this.screen.width = 0;
   this.screen.height = 0;
 
   this.GetDisplayResolution = () => {
-    return bashDo(" powershell -c \" Add-Type -AssemblyName System.Windows.Forms ; [System.Windows.Forms.Screen]::AllScreens \" ", this.handleGettingResolution);
-  };
-
-  this.SetNewBackground = () => {
-    return bashDo(" powershell -c \" powershell.exe -ExecutionPolicy Bypass  -NoProfile -WindowStyle Hidden -File " + path.join(__dirname,'setBackground.ps1') +" \" ");
+        var displayRes = bashDo(" powershell -c \" Add-Type -AssemblyName System.Windows.Forms ; [System.Windows.Forms.Screen]::AllScreens \" ", this.handleGettingResolution);
+        return displayRes;
   };
 
   this.handleGettingResolution = (response) => {
-    //console.log(response);
+    console.time("- handleGettingResolution(response) ");
     var stdoutHelp = response.stdout.replace(/[&\/\\#+()$~%.'"*?<> ]/g, '');
     stdoutHelp = stdoutHelp.replace(/\r\n/g, ',');
     response.stdout = stdoutHelp;
-
     var displayWidthH = response.stdout.split("Bounds:{")[1].split(",Width=")[1].split(",Height=");
-    this.screen.width = displayWidthH[0];
-    this.screen.height = displayWidthH[1].split("},DeviceName")[0];
-
+    this.screen.width = displayWidthH[0] ;
+    this.screen.height = displayWidthH[1].split("},DeviceName")[0] ;
+    screenW = this.screen.width ;
+    screenH = this.screen.height ;
+    screenWsc = screenW * resScale;
+    screenHsc = screenH * resScale;
     console.log(`System Display Resolution\n[o> Height: ${this.screen.height}px\n[o> Width: ${this.screen.width}px`);
-      
-    this.generateSVG_FILE();
+    console.timeEnd("- handleGettingResolution(response) ");
     return { width: this.screen.width, height: this.screen.height };
   };
 
-  this.convert =()=> {
-    svg_to_png.convert(mFile, outF).then(data => {
-      var helpering = this.SetNewBackground();
-      if (this.repNum < 2000) {
-        setTimeout(() => {
-          this.generateSVG_FILE();
-        }, 0);
 
-        setTimeout(() => {
-          this.convert();
-        }, 0);
-        
-        
-        setTimeout(() => {
-          this.saveFile();
-        }, 0);
-        
-        setTimeout(() => {
-          this.saveFile();
-        }, 0);
-      };
-    });
-    
-    this.repNum++;
-  };
-
-  this.generateSVG_FILE =()=>  {
-    //console.log("generateSVG_FILE -> exec()")
-    this.templateHelper = mainSVG_Template();
-    var helper =  this.saveFile();
-    
-    this.convert();
-
-    //console.log(helper)    
-    return helper;
-  };
-
-  this.saveFile = ()=> {
-    //console.log("saveFile -> exec()")
+  this.saveFile = (error, buffer)=> {
     try {
-      
-      const promise = writeFile(mFile, this.templateHelper);
-
-      return  promise;
+      //console.time("-> File Save  ")
+      fs.writeFileSync(this.mFile, buffer);
+      //console.timeEnd("-> File Save  ")
+      //console.time("[o> SetNewBackground  ")
+      bashDo(" powershell -c \" powershell.exe -ExecutionPolicy Bypass  -NoProfile -WindowStyle Hidden -File " + path.join(__dirname,'setBackground.ps1') +" \" ");
+      //console.timeEnd("[o> SetNewBackground  ")
+      totalUpdates++;
+      return true;
     } catch (err) {
-      // When a request is aborted - err is an AbortError
-      console.error(err);
+      return err;
     }
   };
-  
+
+  console.time("> GetDisplayResolution() -> bash -> powershell");
   this.GetDisplayResolution();
+  console.timeEnd("> GetDisplayResolution() -> bash -> powershell");
+
+  setInterval(() => {
+    var time_01 = Date.now();
+    svg2img( mainSVG_Template( {title:"YEAAA SOME TITLE OPTINOS", totalUpdates: totalUpdates, lastExecTimeVal : lastExecTimeVal}), {'width': screenW, 'height': screenH, format:'jpg', 'quality': 60 }, this.saveFile);
+    lastExecTimeVal = Date.now() - time_01;
+  }, 10000);
 };
 
+console.time("vBackGUI() >>");
 vBackGUI();
+console.timeEnd("vBackGUI() >>");
 
 module.exports = vBackGUI;
