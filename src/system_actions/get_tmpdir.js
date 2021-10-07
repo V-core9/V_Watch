@@ -1,5 +1,5 @@
-const vNodeOS = require('../../helpers/v_os');
-const generateIntervalMS = require('../../helpers/interval_generator');
+const vNodeOS = require('../v_node_os');
+const generateIntervalMS = require('../interval_generator');
 
 module.exports = {
   name: "getTmpdir",

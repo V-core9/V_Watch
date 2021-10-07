@@ -25,6 +25,7 @@ const V_Watch = {
       return exec();
     }
   },
+  
   runIt(item) {
     if (( (this.data.timeOf - item.lastCheck) * this.config.relativeTimeSpeed )> item.interval) {
       if (V_Watch.config.getExecTimes === true) console.time("ExecTime of " + item.name);
@@ -33,6 +34,7 @@ const V_Watch = {
       if (V_Watch.config.getExecTimes === true) console.timeEnd("ExecTime of " + item.name);
     }
   },
+
   mainLoop() {
     vWatchCore = setInterval(() => {
       this.data.timeOf = Date.now();
@@ -41,6 +43,7 @@ const V_Watch = {
       });
     }, (this.options.tickTime / this.config.relativeTimeSpeed));
   },
+
   init() {
     this.mainLoop();
   },

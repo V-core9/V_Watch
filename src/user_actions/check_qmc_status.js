@@ -1,5 +1,5 @@
 const vReq = require('v_req');
-const generateIntervalMS = require('../../helpers/interval_generator');
+const generateIntervalMS = require('../interval_generator');
 
 const qmcRoot = {
   options: {
@@ -14,8 +14,8 @@ const qmcRoot = {
 };
 
 module.exports = {
-  name: "get_cpus",
-  description: "Print Device Uptime...",
+  name: "check_qmc_status",
+  description: "check_qmc_status...",
   interval: generateIntervalMS.minute(1),
   lastCheck: 0,
   exec() {
