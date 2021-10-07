@@ -8,7 +8,6 @@ module.exports = {
   interval: generateIntervalMS.day(2),
   lastCheck: 0,
   exec ()  {
-    console.log('🕜 Average Load [ 15s ]: ');
-    console.log(Vos.loadavg());
+    console.log('🕜 Average Load [ 15s ]: ' + JSON.stringify(Vos.totalmem()));
   }
 }

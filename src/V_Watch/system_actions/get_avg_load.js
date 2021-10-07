@@ -7,7 +7,8 @@ module.exports = {
   interval: generateIntervalMS.second(10),
   lastCheck: 0,
   exec ()  {
-    console.log('🕜 Average Load [ 15s ]: ');
-    console.log(Vos.loadavg());
+    var response = Vos.loadavg();
+    console.log('🕜 Average Load [ 15s ]: ' + JSON.stringify(response));
+    return response;
   }
 }

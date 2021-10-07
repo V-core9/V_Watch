@@ -7,7 +7,8 @@ module.exports = {
   interval: generateIntervalMS.month(2),
   lastCheck: 0,
   exec ()  {
-    console.log('📌 getPlatform [ 5s ]: ');
-    console.log( Vos.getPlatform());
+    var response = Vos.platform();
+    console.log('📌 getPlatform [ 2months ]: ' + JSON.stringify(response));
+    return response;
   }
 }

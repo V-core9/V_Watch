@@ -7,7 +7,8 @@ module.exports = {
   interval: generateIntervalMS.hour(12),
   lastCheck: 0,
   exec ()  {
-    console.log('💻 CPUs [ 12h ]: ');
-    console.log(Vos.cpus());
+    var response = Vos.cpus();
+    console.log('💻 CPUs [ 12h ]: ' + JSON.stringify(response));
+    return response;
   }
 }

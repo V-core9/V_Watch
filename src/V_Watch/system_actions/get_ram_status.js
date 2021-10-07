@@ -7,9 +7,8 @@ module.exports = {
   interval: generateIntervalMS.second(),
   lastCheck: 0,
   exec ()  {
-    console.log('Free RAM [ 1s ]: '+ Vos.freememproc() +'% ');
-    if (Vos.freememproc() < 10 ) {
-      console.log("🔥 WARNING : LOW RAM  - Free RAM under 10%");
-    }
+    var response = Vos.freememproc();
+    console.log('🔥 Free RAM [ 1s ]: '+ response +'% ');
+    return response;
   }
 }

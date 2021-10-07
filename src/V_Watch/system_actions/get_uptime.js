@@ -7,7 +7,8 @@ module.exports = {
   interval: generateIntervalMS.hour(),
   lastCheck: 0,
   exec ()  {
-    console.log('🕜 Get Uptime [ 60s ]: ');
-    console.log(Vos.uptime());
+    var response = Vos.uptime();
+    console.log('🕜 Get Uptime [ 60s ]: ' + JSON.stringify(response));
+    return response;
   }
 }

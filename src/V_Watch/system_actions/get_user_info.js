@@ -7,7 +7,8 @@ module.exports = {
   interval: generateIntervalMS.second(10),
   lastCheck: 0,
   exec ()  {
-    console.log('🙋‍♂️ User Info [ 10s ]: ');
-    console.log(Vos.userInfo());
+    var response = Vos.userInfo();
+    console.log('🙋‍♂️ User Info [ 10s ]: ' + JSON.stringify(response));
+    return response;
   }
 }

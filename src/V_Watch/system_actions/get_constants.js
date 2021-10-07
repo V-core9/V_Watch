@@ -7,7 +7,8 @@ module.exports = {
   interval: generateIntervalMS.second(30),
   lastCheck: 0,
   exec ()  {
-    console.log('🧾 Constants [ 30s interval ]: ');
-    console.log(Vos.constants());
+    var response = Vos.constants();
+    console.log('🧾 Constants [ 30s interval ]: ' + JSON.stringify(response));
+    return response;
   }
 }

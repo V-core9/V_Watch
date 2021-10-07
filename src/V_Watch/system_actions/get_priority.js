@@ -7,7 +7,8 @@ module.exports = {
   interval: generateIntervalMS.minute(2),
   lastCheck: 0,
   exec ()  {
-    console.log('🌋 Priority [ 5s ]: ');
-    console.log( Vos.getPriority());
+    var response = Vos.getPriority();
+    console.log('🌋 Priority [ 5s ]: ' + JSON.stringify(response));
+    return response;
   }
 }
