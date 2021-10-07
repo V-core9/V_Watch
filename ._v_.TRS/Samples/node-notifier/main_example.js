@@ -1,6 +1,7 @@
 let path = require('path')
 const NotificationCenter = require('node-notifier/notifiers/notificationcenter');
 const options = {
+    appID: "SAMPLE_ID",
     title: "Some Random Notification Title Space",
     subtitle: "Again we can just put some random string into it and hope to achive all needed.",
     message: "Well since this is now 3rd thing I am inputing it's starting to require being aware of limits of these text spaces:\n1>  50\n2> 100",

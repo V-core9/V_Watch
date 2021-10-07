@@ -1,7 +1,7 @@
 
 
 const EventEmitter = require('events').EventEmitter;
-const NodeTray = require("../../../node_modules/windows-tray/build/Release/tray").NodeTray;
+const NodeTray = require("../../node_modules/windows-tray/build/Release/tray").NodeTray;
 
 const util = require('util')
 util.inherits(NodeTray, EventEmitter)
@@ -39,7 +39,7 @@ const SHUTDOWN_EVENTS = [
 
 process.title = 'Tray Demo';
 
-const v_tray = new NodeTray(path.join(__dirname, "../../ASSETS/icon/rick.ico"))
+const v_tray = new NodeTray(path.join(__dirname, "../ASSETS/icon/rick.ico"))
 v_tray.setToolTip(process.title);
 
 v_tray.on('click', () => {
