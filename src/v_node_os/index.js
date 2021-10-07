@@ -1,6 +1,6 @@
 const os = require('os');
 
-const Vos = {
+const vNodeOS = {
   EOL: function () {
     return os.EOL;
   },
@@ -69,4 +69,4 @@ const Vos = {
   }
 };
 
-module.exports = Vos
+module.exports = vNodeOS

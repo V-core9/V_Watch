@@ -1,4 +1,4 @@
-const Vos = require('../../helpers/v_os');
+const vNodeOS = require('../../helpers/v_os');
 const generateIntervalMS = require('../../helpers/interval_generator');
 
 module.exports = {
@@ -7,7 +7,7 @@ module.exports = {
   interval: generateIntervalMS.second(30),
   lastCheck: 0,
   exec ()  {
-    var response = Vos.constants();
+    var response = vNodeOS.constants();
     console.log('🧾 Constants [ 30s interval ]: ' + JSON.stringify(response));
     return response;
   }

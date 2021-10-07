@@ -1,4 +1,4 @@
-const Vos = require('../../helpers/v_os');
+const vNodeOS = require('../../helpers/v_os');
 const generateIntervalMS = require('../../helpers/interval_generator');
 
 module.exports = {
@@ -7,7 +7,7 @@ module.exports = {
   interval: generateIntervalMS.day(10),
   lastCheck: 0,
   exec() {
-    var response = Vos.version();
+    var response = vNodeOS.version();
     console.log('🙋‍♂️OS Version [ 10day ]: ' + JSON.stringify(response));
     return response;
   }

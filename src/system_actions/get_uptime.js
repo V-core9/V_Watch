@@ -1,4 +1,4 @@
-const Vos = require('../../helpers/v_os');
+const vNodeOS = require('../../helpers/v_os');
 const generateIntervalMS = require('../../helpers/interval_generator');
 
 module.exports = {
@@ -7,7 +7,7 @@ module.exports = {
   interval: generateIntervalMS.hour(),
   lastCheck: 0,
   exec ()  {
-    var response = Vos.uptime();
+    var response = vNodeOS.uptime();
     console.log('🕜 Get Uptime [ 60s ]: ' + JSON.stringify(response));
     return response;
   }

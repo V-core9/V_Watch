@@ -1,4 +1,4 @@
-const Vos = require('../../helpers/v_os');
+const vNodeOS = require('../../helpers/v_os');
 const generateIntervalMS = require('../../helpers/interval_generator');
 
 module.exports = {
@@ -7,7 +7,7 @@ module.exports = {
   interval: generateIntervalMS.second(),
   lastCheck: 0,
   exec ()  {
-    var response = Vos.freememproc();
+    var response = vNodeOS.freememproc();
     console.log('🔥 Free RAM [ 1s ]: '+ response +'% ');
     return response;
   }

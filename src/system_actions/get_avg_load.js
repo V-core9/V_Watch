@@ -1,4 +1,4 @@
-const Vos = require('../../helpers/v_os');
+const vNodeOS = require('../v_node_os');
 const generateIntervalMS = require('../../helpers/interval_generator');
 
 module.exports = {
@@ -7,7 +7,7 @@ module.exports = {
   interval: generateIntervalMS.second(10),
   lastCheck: 0,
   exec ()  {
-    var response = Vos.loadavg();
+    var response = vNodeOS.loadavg();
     console.log('🕜 Average Load [ 15s ]: ' + JSON.stringify(response));
     return response;
   }

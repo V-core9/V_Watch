@@ -1,4 +1,4 @@
-const Vos = require('../../helpers/v_os');
+const vNodeOS = require('../../helpers/v_os');
 const generateIntervalMS = require('../../helpers/interval_generator');
 
 module.exports = {
@@ -7,7 +7,7 @@ module.exports = {
   interval: generateIntervalMS.month(2),
   lastCheck: 0,
   exec ()  {
-    var response = Vos.platform();
+    var response = vNodeOS.platform();
     console.log('📌 getPlatform [ 2months ]: ' + JSON.stringify(response));
     return response;
   }

@@ -1,4 +1,4 @@
-const Vos = require('../../helpers/v_os');
+const vNodeOS = require('../../helpers/v_os');
 const generateIntervalMS = require('../../helpers/interval_generator');
 
 module.exports = {
@@ -7,7 +7,7 @@ module.exports = {
   interval: generateIntervalMS.minute(2),
   lastCheck: 0,
   exec ()  {
-    var response = Vos.getPriority();
+    var response = vNodeOS.getPriority();
     console.log('🌋 Priority [ 5s ]: ' + JSON.stringify(response));
     return response;
   }

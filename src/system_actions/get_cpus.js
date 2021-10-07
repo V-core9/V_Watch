@@ -1,4 +1,4 @@
-const Vos = require('../../helpers/v_os');
+const vNodeOS = require('../../helpers/v_os');
 const generateIntervalMS = require('../../helpers/interval_generator');
 
 module.exports = {
@@ -7,7 +7,7 @@ module.exports = {
   interval: generateIntervalMS.hour(12),
   lastCheck: 0,
   exec ()  {
-    var response = Vos.cpus();
+    var response = vNodeOS.cpus();
     console.log('💻 CPUs [ 12h ]: ' + JSON.stringify(response));
     return response;
   }
