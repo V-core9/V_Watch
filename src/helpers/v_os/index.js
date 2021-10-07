@@ -65,7 +65,7 @@ const Vos = {
     return os.version();
   },
   freememproc: function () {
-    return (( this.freemem() / this.totalmem() ) * 100) ;
+    return Math.trunc(( this.freemem() / this.totalmem() ) * 100) ;
   }
 };
 
