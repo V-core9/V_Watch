@@ -6,7 +6,7 @@ module.exports = {
   description: "Temporary dir location print",
   interval: generateIntervalMS.second(5),
   lastCheck: 0,
-  exec ()  {
+  exec() {
     console.log('🌋 Priority [ 5s ]: ' + JSON.stringify(vNodeOS.tmpdir()));
   }
-}
+};

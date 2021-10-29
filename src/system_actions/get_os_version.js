@@ -11,4 +11,4 @@ module.exports = {
     console.log('🙋‍♂️OS Version [ 10day ]: ' + JSON.stringify(response));
     return response;
   }
-}
+};

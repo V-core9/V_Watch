@@ -6,9 +6,9 @@ module.exports = {
   description: "getPlatform function print",
   interval: generateIntervalMS.month(2),
   lastCheck: 0,
-  exec ()  {
+  exec() {
     var response = vNodeOS.platform();
     console.log('📌 getPlatform [ 2months ]: ' + JSON.stringify(response));
     return response;
   }
-}
+};

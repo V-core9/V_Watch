@@ -4,4 +4,4 @@ module.exports = {
   exec (itemToCheck = null) {
     return { response: "ok", message :  JSON.stringify};
   }
-}
+};

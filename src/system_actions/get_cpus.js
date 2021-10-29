@@ -6,9 +6,9 @@ module.exports = {
   description: "Print Device Uptime...",
   interval: generateIntervalMS.hour(12),
   lastCheck: 0,
-  exec ()  {
+  exec() {
     var response = vNodeOS.cpus();
     console.log('💻 CPUs [ 12h ]: ' + JSON.stringify(response));
     return response;
   }
-}
+};

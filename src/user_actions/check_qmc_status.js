@@ -23,4 +23,4 @@ module.exports = {
     console.log('💻 QMC_Status [ 1m ]: ' + JSON.stringify(response));
     return response;
   }
-}
+};

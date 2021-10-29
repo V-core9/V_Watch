@@ -1,4 +1,4 @@
-const Vos = require('./v_os')
+const Vos = require('./v_os');
 
 console.log("\n<[ EOL() ]>---------");
 console.log(vNodeOS.EOL());

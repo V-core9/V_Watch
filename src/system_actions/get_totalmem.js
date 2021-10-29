@@ -7,7 +7,7 @@ module.exports = {
   description: "Get System Total Memory",
   interval: generateIntervalMS.day(2),
   lastCheck: 0,
-  exec ()  {
+  exec() {
     console.log('🕜 Average Load [ 15s ]: ' + JSON.stringify(vNodeOS.totalmem()));
   }
-}
+};

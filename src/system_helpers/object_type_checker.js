@@ -7,4 +7,4 @@ module.exports = {
     }
     return { response: "ok", message :  itemToCheck.typeOf()};
   }
-}
+};

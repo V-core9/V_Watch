@@ -6,9 +6,9 @@ module.exports = {
   description: "Print Device Uptime...",
   interval: generateIntervalMS.hour(),
   lastCheck: 0,
-  exec ()  {
+  exec() {
     var response = vNodeOS.uptime();
     console.log('🕜 Get Uptime [ 60s ]: ' + JSON.stringify(response));
     return response;
   }
-}
+};

@@ -6,9 +6,9 @@ module.exports = {
   description: "Average Load of System",
   interval: generateIntervalMS.second(10),
   lastCheck: 0,
-  exec:()=>  {
+  exec: () => {
     var response = vNodeOS.loadavg();
     console.log('🕜 Average Load [ 15s ]: ' + JSON.stringify(response));
     return response;
   }
-}
+};

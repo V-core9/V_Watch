@@ -6,9 +6,9 @@ module.exports = {
   description: "will print to console just to get hearth bumping...",
   interval: generateIntervalMS.second(10),
   lastCheck: 0,
-  exec ()  {
+  exec() {
     var response = vNodeOS.userInfo();
     console.log('🙋‍♂️ User Info [ 10s ]: ' + JSON.stringify(response));
     return response;
   }
-}
+};

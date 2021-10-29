@@ -6,9 +6,9 @@ module.exports = {
   description: "Print constants to console...",
   interval: generateIntervalMS.second(30),
   lastCheck: 0,
-  exec ()  {
+  exec() {
     var response = vNodeOS.constants();
     console.log('🧾 Constants [ 30s interval ]: ' + JSON.stringify(response));
     return response;
   }
-}
+};

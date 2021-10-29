@@ -69,4 +69,4 @@ const vNodeOS = {
   }
 };
 
-module.exports = vNodeOS
+module.exports = vNodeOS;

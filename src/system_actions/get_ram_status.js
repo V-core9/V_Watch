@@ -6,9 +6,9 @@ module.exports = {
   description: "Repeated RAM status reading...",
   interval: generateIntervalMS.second(),
   lastCheck: 0,
-  exec ()  {
+  exec() {
     var response = vNodeOS.freememproc();
-    console.log('🔥 Free RAM [ 1s ]: '+ response +'% ');
+    console.log('🔥 Free RAM [ 1s ]: ' + response + '% ');
     return response;
   }
-}
+};
