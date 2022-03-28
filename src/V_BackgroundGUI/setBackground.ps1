@@ -13,16 +13,16 @@ public class Params
                                                    Int32 fuWinIni);
 }
 "@ 
-  
-    $SPI_SETDESKWALLPAPER = 0x0014
-    $UpdateIniFile = 0x01
-    $SendChangeEvent = 0x02
-  
-    $fWinIni = $UpdateIniFile -bor $SendChangeEvent
-  
-    $ret = [Params]::SystemParametersInfo($SPI_SETDESKWALLPAPER, 0, $Image, $fWinIni)
- 
+
+  $SPI_SETDESKWALLPAPER = 0x0014
+  $UpdateIniFile = 0x01
+  $SendChangeEvent = 0x02
+
+  $fWinIni = $UpdateIniFile -bor $SendChangeEvent
+
+  $ret = [Params]::SystemParametersInfo($SPI_SETDESKWALLPAPER, 0, $Image, $fWinIni)
+
 }
- 
- Set-WallPaper -Image "C:\Users\v__V_\_V_\V_Observer\src\V_BackgroundGUI\png\background_GUI_Template.jpg" -Style Fit
+
+Set-WallPaper -Image "C:\Users\v__V_\Desktop\V_Watch\src\V_BackgroundGUI\png\background_GUI_Template.jpg" -Style Fit
 

@@ -1,17 +1,21 @@
-const Vos = require('../helpers/v_os');
+const v_os = require('../helpers/v_os');
 const Votify = require('../helpers/v_notify');
 //var desktopIdle = require('@genee/desktop-idle');
 
 var VobCore = null;
+
 const V_Observer = {
+
   config: {
 
   },
+
   options: {
     exitSignal: false,
     status: 'not-running',
     tickTime: 1000, // 1s
   },
+
   data: {
     actions: [
       {
@@ -22,8 +26,8 @@ const V_Observer = {
         exec ()  {
           var tri = this.interval;
           console.log('\n\n💓 [.ARI.] >> [ 1000 || 1s ] => BASE_BEAT\n');
-          console.log('Free RAM: '+ Vos.freememproc() +'% ');
-          if (Vos.freememproc() < 10 ) {
+          console.log('Free RAM: '+ v_os.freememproc() +'% ');
+          if (v_os.freememproc() < 10 ) {
             Votify.app.lowsysmem();
           }
         },
@@ -76,6 +80,7 @@ const V_Observer = {
       }
     ],
   },
+
   mainLoop () {
     Votify.app.starting();
     VobCore = setInterval(() => {
@@ -93,10 +98,12 @@ const V_Observer = {
       console.timeEnd("Tick_Exec_Time");
     }, this.options.tickTime);
   },
+
   init(){
     console.log("<[- V_Observer @ INIT() -]>");
     this.mainLoop();
   }
+
 };
 
 V_Observer.init();

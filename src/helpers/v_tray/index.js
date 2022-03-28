@@ -3,29 +3,50 @@
 const EventEmitter = require('events').EventEmitter;
 const NodeTray = require("../../../node_modules/windows-tray/build/Release/tray").NodeTray;
 
-const util = require('util')
-util.inherits(NodeTray, EventEmitter)
+const util = require('util');
+util.inherits(NodeTray, EventEmitter);
 
-const path = require("path")
+const path = require("path");
 
 const menu = [
   {
     id: 10,
     title: 'Item 1',
+    exec: () => {
+      console.log('Item 1 clicked');
+    }
   },
   {
     id: 20,
     title: 'Item 2',
+    exec: () => {
+      console.log('Item 2 clicked');
+    }
   },
   {
     id: 30,
     title: '---',
+    exec: () => {
+      console.log('Item 3 clicked');
+    }
   },
   {
     id: 50,
     title: 'Exit',
+    exec: () => {
+      shutdown();
+      return;
+    }
   },
 ];
+
+const runRes = (id) => {
+  menu.forEach(item => {
+    if (item.id === id) {
+      item.exec();
+    }
+  });
+};
 
 
 const SHUTDOWN_EVENTS = [
@@ -37,9 +58,9 @@ const SHUTDOWN_EVENTS = [
   'uncaughtException',
 ];
 
-process.title = 'Tray Demo';
+process.title = '-v-';
 
-const v_tray = new NodeTray(path.join(__dirname, "../../ASSETS/icon/rick.ico"))
+const v_tray = new NodeTray(path.join(__dirname, "../../ASSETS/icon/rick.ico"));
 v_tray.setToolTip(process.title);
 
 v_tray.on('click', () => {
@@ -52,39 +73,29 @@ v_tray.on('click', () => {
 v_tray.on('right-click', () => {
 
   // console.log("right-click");
-  v_tray.showPopup(menu, function (err, result) {
-
-    console.log('error:', err);
-    console.log('result:', result);
-
-    if (result == 50) {
-      shutdown();
-      return;
-    }
-
+  v_tray.showPopup(menu, (err, result) => {
+    runRes(result);
   });
 
+  v_tray.on("double-click", () => {
+    let result = v_tray.toggleWindow(process.title);
+    console.log("click, result = ", result);
+    v_tray.destroy();
+    process.exit(0);
+    return;
+  });
 
-v_tray.on("double-click", () => {
-  let result = v_tray.toggleWindow(process.title);
-  console.log("click, result = ", result);
-  v_tray.destroy()
-  process.exit(0);
-  return;
-});
-
-v_tray.on('balloon-click', () => {
-  let result = v_tray.toggleWindow(process.title);
-  console.log("click, result = ", result);
-  console.log('balloon-click');
-  return;
-});
-
+  v_tray.on('balloon-click', () => {
+    let result = v_tray.toggleWindow(process.title);
+    console.log("click, result = ", result);
+    console.log('balloon-click');
+    return;
+  });
 
 });
 
 
-v_tray.interval = setInterval( () => {
+v_tray.interval = setInterval(() => {
 
   // console.log('Window Visibility: ', v_tray.isWindowVisible(process.title));
   // console.log('Window Minimized: ', v_tray.isWindowMinimized(process.title));
@@ -98,7 +109,7 @@ v_tray.interval = setInterval( () => {
 
   console.log('In background');
 
-}, 1000)
+}, 1000);
 
 
 var onShutdown = function (cb) {
@@ -112,6 +123,6 @@ var shutdown = function () {
   console.log('Shutdown!');
   v_tray.destroy();
   process.exit(0);
-}
+};
 
 module.exports = v_tray;
