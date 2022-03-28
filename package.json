@@ -1,17 +1,17 @@
 {
-  "name": "v_observer",
+  "name": "v_watch",
   "version": "2.3.11",
-  "description": "V_Observer is hopefully gonna become useful OS Monitor[ing] tool based on Node.js",
-  "main": "v_observer.js",
+  "description": "v_watch is hopefully gonna become useful OS Monitor[ing] tool based on Node.js",
+  "main": "index.js",
   "scripts": {
     "test": "test",
-    "__install": "bash -c \" npm install -g pm2 pm2-windows-startup \" && bash -c \" pm2-startup install \" && bash -c \" npm install -g node-gyp \" && bash -c \" npm install \" ",
-    "start_in_background": "bash -c \" pm2 start v_observer.js \" && bash -c \" pm2 save \" ",
-    "install_choco": "powershell -c \" Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1')) \" && powershell -c \"choco install visualstudio2017buildtools -A \"  && bash -c \" npm config set msvs_version 2017 \" "
+    "start": "bash -c \" pm2 start index.js \" && bash -c \" pm2 save \" ",
+    "preinstall": "powershell -c \" Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1')) \" && powershell -c \"choco install visualstudio2017buildtools -A \"  && bash -c \" npm config set msvs_version 2017 \" ",
+    "postinstall": "bash -c \" npm install -g pm2 pm2-windows-startup \" && bash -c \" pm2-startup install \" && bash -c \" npm install -g node-gyp \" && bash -c \" npm install \" "
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/V-core9/V_Observer.git"
+    "url": "git+https://github.com/V-core9/v_watch.git"
   },
   "keywords": [
     "monitoring",
@@ -29,9 +29,9 @@
   "author": "🢔⟬⛛⟭🢖",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/V-core9/V_Observer/issues"
+    "url": "https://github.com/V-core9/v_watch/issues"
   },
-  "homepage": "https://github.com/V-core9/V_Observer#readme",
+  "homepage": "https://github.com/V-core9/v_watch#readme",
   "dependencies": {
     "@mapbox/node-pre-gyp": "^1.0.5",
     "@schlameel/native-idle-time": "^1.0.6",

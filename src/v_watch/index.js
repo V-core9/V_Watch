@@ -4,7 +4,7 @@ const Votify = require('../helpers/v_notify');
 
 var VobCore = null;
 
-const V_Observer = {
+const v_watch = {
 
   config: {
 
@@ -27,7 +27,7 @@ const V_Observer = {
           var tri = this.interval;
           console.log('\n\n💓 [.ARI.] >> [ 1000 || 1s ] => BASE_BEAT\n');
           console.log('Free RAM: '+ v_os.freememproc() +'% ');
-          if (v_os.freememproc() < 10 ) {
+          if (v_os.freememproc() < 40 ) {
             Votify.app.lowsysmem();
           }
         },
@@ -100,12 +100,12 @@ const V_Observer = {
   },
 
   init(){
-    console.log("<[- V_Observer @ INIT() -]>");
+    console.log("<[- v_watch @ INIT() -]>");
     this.mainLoop();
   }
 
 };
 
-V_Observer.init();
+v_watch.init();
 
-module.exports = V_Observer;
+module.exports = v_watch;
