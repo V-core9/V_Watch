@@ -6,10 +6,6 @@ var VobCore = null;
 
 const v_watch = {
 
-  config: {
-
-  },
-
   options: {
     exitSignal: false,
     status: 'not-running',
@@ -23,11 +19,11 @@ const v_watch = {
         description: "will print to console just to get hearth bumping...",
         interval: 1000,
         lastCheck: 0,
-        exec ()  {
+        exec() {
           var tri = this.interval;
           console.log('\n\n💓 [.ARI.] >> [ 1000 || 1s ] => BASE_BEAT\n');
-          console.log('Free RAM: '+ v_os.freememproc() +'% ');
-          if (v_os.freememproc() < 40 ) {
+          console.log('Free RAM: ' + v_os.freememproc() + '% ');
+          if (v_os.freememproc() < 15) {
             Votify.app.lowsysmem();
           }
         },
@@ -37,7 +33,7 @@ const v_watch = {
         description: "will print to console just to get hearth bumping...",
         interval: 2000,
         lastCheck: 0,
-        exec ()  {
+        exec() {
           console.log('🔥 [.ARI.] >> [ 2000 || 2s ] => Every Second Hit\n');
         },
       },
@@ -46,7 +42,7 @@ const v_watch = {
         description: "will print to console just to get hearth bumping...",
         interval: 5000,
         lastCheck: 0,
-        exec () {
+        exec() {
           console.log('🚀 [.ARI.] >> [ 5000 || 5s ] => Every 5th Hit\n');
         },
       },
@@ -55,7 +51,7 @@ const v_watch = {
         description: "will print to console just to get hearth bumping...",
         interval: 10000,
         lastCheck: 0,
-        exec () {
+        exec() {
           //console.log(desktopIdle.getIdleTime());
           console.log('🎮 [.ARI.] >> [ 10000 || 10s ] => 10th Hearth Beat\n');
         },
@@ -65,7 +61,7 @@ const v_watch = {
         description: "will print to console just to get hearth bumping...",
         interval: 15000,
         lastCheck: 0,
-        exec () {
+        exec() {
           console.log('🚨 [.ARI.] >> [ 15000 || 15s ] => 15th Hearth Beat\n');
         },
       },
@@ -74,32 +70,31 @@ const v_watch = {
         description: "will print to console just to get hearth bumping...",
         interval: 30000,
         lastCheck: 0,
-        exec () {
+        exec() {
           console.log('🎉 [.ARI.] >> [ 30000 || 30s ] => 30th Hearth Beat\n');
         },
       }
     ],
   },
 
-  mainLoop () {
-    Votify.app.starting();
+  mainLoop() {
     VobCore = setInterval(() => {
       console.time("Tick_Exec_Time");
       var timeOf = Date.now();
       //console.log(this.options.tickTime);
       this.data.actions.forEach(item => {
-        if ( (timeOf - item.lastCheck ) > item.interval){
+        if ((timeOf - item.lastCheck) > item.interval) {
           //console.log("EXECUTING >>> " +item.name);
           item.exec();
           item.lastCheck = timeOf;
         }
       });
-      
+
       console.timeEnd("Tick_Exec_Time");
     }, this.options.tickTime);
   },
 
-  init(){
+  init() {
     console.log("<[- v_watch @ INIT() -]>");
     this.mainLoop();
   }

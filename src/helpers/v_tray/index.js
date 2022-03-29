@@ -122,7 +122,7 @@ var onShutdown = function (cb) {
 var shutdown = function () {
   console.log('Shutdown!');
   v_tray.destroy();
-  process.exit(0);
+  process.emit('SIGINT');
 };
 
 module.exports = v_tray;

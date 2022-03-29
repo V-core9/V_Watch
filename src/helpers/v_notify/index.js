@@ -1,27 +1,22 @@
 const notifier = require('node-notifier');
-const notifList = require('../../data/notifications.list');
+const notificationList = require('../../data/notifications.list');
 
 const Votify = {
-  app : {
-    starting: ()=> {
-      notifier.notify(notifList.app.starting);
-    },
-    stopping: ()=> {
-      notifier.notify(notifList.app.stopping);
-    },
-    lowsysmem: ()=> {
-      notifier.notify(notifList.app.lowsysmem);
-    }
+  app: {
+    starting: () => notifier.notify(notificationList.app.starting),
+    stopping: () => notifier.notify(notificationList.app.stopping),
+    lowsysmem: () => notifier.notify(notificationList.app.lowsysmem)
+
   },
-  tray : {
-    leftClick: ()=> {
-      notifier.notify(notifList.tray.leftClick);
+  tray: {
+    leftClick: () => {
+      notifier.notify(notificationList.tray.leftClick);
     },
-    rightClick: ()=> {
-      notifier.notify(notifList.tray.rightClick);
+    rightClick: () => {
+      notifier.notify(notificationList.tray.rightClick);
     }
   }
-}
+};
 
 
 module.exports = Votify;

@@ -17,6 +17,8 @@ function backgroundGUI(data = {}) {
     heightScaled: 1,
   };
 
+  this.autoInit = data.autoInit || true;
+
   this.scale = data.scale || 0.5;
 
   this.totalUpdates = 0;
@@ -58,11 +60,15 @@ function backgroundGUI(data = {}) {
 
 
   this.start = () => {
+
+    this.getScreenSize();
+
     this.loopObj = setInterval(async () => {
       var time_01 = Date.now();
       svg2img(mainSVG_Template({ title: "YEAAA SOME TITLE OPTINOS", totalUpdates: this.totalUpdates, lastExecTimeVal: this.lastExecTimeVal }), { 'width': this.screen.widthScaled, 'height': this.screen.heightScaled, format: 'jpg', 'quality': 60 }, this.saveFile);
       this.lastExecTimeVal = Date.now() - time_01;
     }, this.interval);
+
   };
 
 
@@ -74,17 +80,6 @@ function backgroundGUI(data = {}) {
   };
 
 
-  process.on('exit',() => {
-    console.log("process.exit() method is fired");
-    this.stop();
-  });
-  
-  process.on('SIGINT', function() {
-    console.log("Caught interrupt signal");
-    process.exit();
-  });
-
-  this.getScreenSize();
   this.start();
 
 }

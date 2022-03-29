@@ -7,12 +7,12 @@ const notifList = {
     starting: {
       appID: "v_watch",
       title: 'v_watch - Starting',
-      message: 'OS Monitoring STARTING...',
+      message: 'OS Monitor STARTING...🚀',
     },
     stopping: {
         appID: "v_watch",
-        title: 'v_watch - Starting',
-        message: 'OS Monitoring STOPPING...',
+        title: 'v_watch - Exiting',
+        message: 'vOS Monitor STOPPING...🙋‍♂️',
     },
     lowsysmem: {
         appID: "v_watch",
