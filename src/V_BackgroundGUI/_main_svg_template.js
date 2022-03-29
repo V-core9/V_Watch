@@ -19,7 +19,7 @@ const mainSVG_Template = (data = null) => {
   this.minFontSize = 11;
 
   this.getTemplate = () => {
-    this.randomColors();
+    //this.randomColors();
     return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${this.helperWidth} ${this.helperHeight}"  height="${this.helperHeight}" width="${this.helperWidth}" class="${this.configSVG.svgName}">
 <path d="M 0 0 l ${this.helperWidth} 0 0 60 -20 20 0 ${(this.helperHeight - 180)}  20 20 0 60 -20 20 -160 0 -20 -20${-(this.helperWidth - 400)}  0 -20 20 -160 0 -20 -20 0 -60 20 -20 0 ${-(this.helperHeight - 280)}  -20 -20" stroke="none" stroke-width="3" fill="${this.configSVG.containerBackground}" ></path>
 <path d="M 0 0 l ${(this.helperWidth - 330)}  0 -20 60 ${-(this.helperWidth - 350)}  0" stroke="none" stroke-width="3" fill="${this.configSVG.mainColor}" ></path>
