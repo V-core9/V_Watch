@@ -1,4 +1,6 @@
+const config = require('../config');
 
+const notify = require('../v_notify');
 
 const EventEmitter = require('events').EventEmitter;
 const NodeTray = require("../../../node_modules/windows-tray/build/Release/tray").NodeTray;
@@ -10,17 +12,27 @@ const path = require("path");
 
 const menu = [
   {
-    id: 10,
-    title: 'Item 1',
+    id: 1,
+    title: 'Toggle Notifications',
     exec: () => {
       console.log('Item 1 clicked');
+      config.notifications = !config.notifications;
+    }
+  },
+  {
+    id: 10,
+    title: 'Item 10',
+    exec: () => {
+      console.log('Item 10 clicked');
+      notify.tray.firstItem();
     }
   },
   {
     id: 20,
-    title: 'Item 2',
+    title: 'Item 20',
     exec: () => {
-      console.log('Item 2 clicked');
+      console.log('Item 20 clicked');
+      notify.tray.secondItem();
     }
   },
   {

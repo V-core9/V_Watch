@@ -21,15 +21,15 @@ const notifList = {
     }
   },
   tray : {
-    leftClick: {
+    firstItem: {
       appID: "v_watch",
-      title: 'v_watch - v_tray  _.:.:._  LEFT_CLICK ',
-      message: 'You have clicked left click....'
+      title: 'v_watch - v_tray  _.:.:._  firstItem ',
+      message: 'You have clicked firstItem.'
     },
-    rightClick: {
+    secondItem: {
         appID: "v_watch",
-        title: 'v_watch - v_tray  _.:.:._  RIGHT_CLICK ',
-        message: 'You have clicked right click....',
+        title: 'v_watch - v_tray  _.:.:._  secondItem ',
+        message: 'You have clicked secondItem.',
     }
   }
 };
