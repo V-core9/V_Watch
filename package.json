@@ -6,8 +6,9 @@
   "scripts": {
     "test": "test",
     "start": "bash -c \" pm2 start index.js \" && bash -c \" pm2 save \" ",
-    "preinstall": "powershell -c \" Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1')) \" && powershell -c \"choco install visualstudio2017buildtools -A \"  && bash -c \" npm config set msvs_version 2017 \" ",
-    "postinstall": "bash -c \" npm install -g pm2 pm2-windows-startup \" && bash -c \" pm2-startup install \" && bash -c \" npm install -g node-gyp \" && bash -c \" npm install \" "
+    "setup": "powershell -c \" Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1')) \" && powershell -c \"choco install visualstudio2017buildtools -A \"  && bash -c \" npm config set msvs_version 2017 \" ",
+    "preinstall": "bash -c \" npm install -g pm2 pm2-windows-startup \" && bash -c \" pm2-startup install \" && bash -c \" npm install -g node-gyp \" ",
+    "postinstall": "sed -i -e 's/\"type\": \"module\"/\"type\": \"commonjs\"/g' node_modules/canvg/package.json "
   },
   "repository": {
     "type": "git",
