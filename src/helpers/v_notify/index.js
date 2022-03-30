@@ -1,27 +1,44 @@
 const notifier = require('node-notifier');
-const notifList = require('../../data/notifications.list');
+const notificationList = require('../../data/notifications.list');
+const config = require('../../config');
 
-const Votify = {
-  app : {
-    starting: ()=> {
-      notifier.notify(notifList.app.starting);
+const notify = {
+
+  
+  app: {
+
+    starting: async () => {
+      return config.notifications ? notifier.notify(notificationList.app.starting) : null;
     },
-    stopping: ()=> {
-      notifier.notify(notifList.app.stopping);
+
+    stopping: async() => {
+      return config.notifications ? notifier.notify(notificationList.app.stopping) : null;
     },
-    lowsysmem: ()=> {
-      notifier.notify(notifList.app.lowsysmem);
+
+    lowsysmem: async() => {
+      return config.notifications ? notifier.notify(notificationList.app.lowsysmem) : null;
     }
+
   },
-  tray : {
-    leftClick: ()=> {
-      notifier.notify(notifList.tray.leftClick);
+
+
+  tray: {
+
+    backgroundContinue : async () => {
+      return config.notifications ? notifier.notify(notificationList.tray.backgroundContinue) : null;
     },
-    rightClick: ()=> {
-      notifier.notify(notifList.tray.rightClick);
-    }
+    firstItem: async () => {
+      return config.notifications ? notifier.notify(notificationList.tray.firstItem) : null;
+    },
+
+    secondItem: async () => {
+      return config.notifications ? notifier.notify(notificationList.tray.secondItem) : null;
+    },
+
   }
-}
 
 
-module.exports = Votify;
+};
+
+
+module.exports = notify;

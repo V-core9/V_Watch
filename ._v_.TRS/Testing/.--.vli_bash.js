@@ -1,7 +1,7 @@
-const bashDo = require('v_cli_bash_do');
+const v_execute = require('v_execute');
 
 // Simple listing
-bashDo("ls");
+v_execute("ls");
 
 // Check git status
-bashDo("git status");
+v_execute("git status");

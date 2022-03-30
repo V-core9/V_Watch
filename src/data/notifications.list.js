@@ -5,31 +5,36 @@ const notifList = {
   },
   app : {
     starting: {
-      appID: "v_watch",
+      appID: process.title,
       title: 'v_watch - Starting',
-      message: 'OS Monitoring STARTING...',
+      message: 'OS Monitor STARTING...🚀',
     },
     stopping: {
-        appID: "v_watch",
-        title: 'v_watch - Starting',
-        message: 'OS Monitoring STOPPING...',
+        appID: process.title,
+        title: 'v_watch - Exiting',
+        message: 'vOS Monitor STOPPING...🙋‍♂️',
     },
     lowsysmem: {
-        appID: "v_watch",
+        appID: process.title,
         title: 'v_watch - Starting',
         message: 'Your RAM is getting full.',
     }
   },
   tray : {
-    leftClick: {
-      appID: "v_watch",
-      title: 'v_watch - v_tray  _.:.:._  LEFT_CLICK ',
-      message: 'You have clicked left click....'
+    backgroundContinue: {
+      appID: process.title,
+      title: 'v_watch - Background',
+      message: 'vOS Monitor is running in background.',
     },
-    rightClick: {
-        appID: "v_watch",
-        title: 'v_watch - v_tray  _.:.:._  RIGHT_CLICK ',
-        message: 'You have clicked right click....',
+    firstItem: {
+      appID: process.title,
+      title: 'v_watch - v_tray  _.:.:._  firstItem ',
+      message: 'You have clicked firstItem.'
+    },
+    secondItem: {
+        appID: process.title,
+        title: 'v_watch - v_tray  _.:.:._  secondItem ',
+        message: 'You have clicked secondItem.',
     }
   }
 };

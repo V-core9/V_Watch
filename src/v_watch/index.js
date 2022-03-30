@@ -1,111 +1,80 @@
-const v_os = require('../helpers/v_os');
-const Votify = require('../helpers/v_notify');
-//var desktopIdle = require('@genee/desktop-idle');
+const config = require('../config');
+const vwTasks = {};
 
-var VobCore = null;
+function V_Watch(data = {}) {
+  this.tickInterval = data.interval || 1000;
+  this.autoStart = data.autoStart || true;
 
-const v_watch = {
+  this.loopCore = null;
 
-  config: {
+  this.tick = () => {
 
-  },
+    for (const taskId in vwTasks) {
+      const task = vwTasks[taskId];
 
-  options: {
-    exitSignal: false,
-    status: 'not-running',
-    tickTime: 1000, // 1s
-  },
-
-  data: {
-    actions: [
-      {
-        name: "hearth_beat",
-        description: "will print to console just to get hearth bumping...",
-        interval: 1000,
-        lastCheck: 0,
-        exec ()  {
-          var tri = this.interval;
-          console.log('\n\n💓 [.ARI.] >> [ 1000 || 1s ] => BASE_BEAT\n');
-          console.log('Free RAM: '+ v_os.freememproc() +'% ');
-          if (v_os.freememproc() < 40 ) {
-            Votify.app.lowsysmem();
-          }
-        },
-      },
-      {
-        name: "second_beat",
-        description: "will print to console just to get hearth bumping...",
-        interval: 2000,
-        lastCheck: 0,
-        exec ()  {
-          console.log('🔥 [.ARI.] >> [ 2000 || 2s ] => Every Second Hit\n');
-        },
-      },
-      {
-        name: "fifth_beat",
-        description: "will print to console just to get hearth bumping...",
-        interval: 5000,
-        lastCheck: 0,
-        exec () {
-          console.log('🚀 [.ARI.] >> [ 5000 || 5s ] => Every 5th Hit\n');
-        },
-      },
-      {
-        name: "10th_beat",
-        description: "will print to console just to get hearth bumping...",
-        interval: 10000,
-        lastCheck: 0,
-        exec () {
-          //console.log(desktopIdle.getIdleTime());
-          console.log('🎮 [.ARI.] >> [ 10000 || 10s ] => 10th Hearth Beat\n');
-        },
-      },
-      {
-        name: "15th_beat",
-        description: "will print to console just to get hearth bumping...",
-        interval: 15000,
-        lastCheck: 0,
-        exec () {
-          console.log('🚨 [.ARI.] >> [ 15000 || 15s ] => 15th Hearth Beat\n');
-        },
-      },
-      {
-        name: "10th_beat",
-        description: "will print to console just to get hearth bumping...",
-        interval: 30000,
-        lastCheck: 0,
-        exec () {
-          console.log('🎉 [.ARI.] >> [ 30000 || 30s ] => 30th Hearth Beat\n');
-        },
+      if ((task.lastRun + task.interval) <= Date.now() && task.enabled) {
+        if (config.debug) console.log("Executing: " + taskId);
+        task.callback();
+        task.lastRun = Date.now();
+        task.runs++;
       }
-    ],
-  },
+    }
 
-  mainLoop () {
-    Votify.app.starting();
-    VobCore = setInterval(() => {
-      console.time("Tick_Exec_Time");
-      var timeOf = Date.now();
-      //console.log(this.options.tickTime);
-      this.data.actions.forEach(item => {
-        if ( (timeOf - item.lastCheck ) > item.interval){
-          //console.log("EXECUTING >>> " +item.name);
-          item.exec();
-          item.lastCheck = timeOf;
-        }
-      });
-      
-      console.timeEnd("Tick_Exec_Time");
-    }, this.options.tickTime);
-  },
+    if (config.debug) console.log('Tick!');
 
-  init(){
-    console.log("<[- v_watch @ INIT() -]>");
-    this.mainLoop();
-  }
+  };
 
-};
+  this.start = () => {
+    if (config.debug) console.log("V_Watch: STARTING >>>");
+    this.loopCore = setInterval(this.tick, this.tickInterval);
+  };
 
-v_watch.init();
+  this.stop = () => {
+    if (config.debug) console.log("V_Watch: STOPPING ...");
+    clearInterval(this.loopCore);
+    this.loopCore = null;
+  };
 
-module.exports = v_watch;
+  this.newTask = (id, interval, callback, description = "") => {
+    vwTasks[id] = {
+      interval: interval || this.tickInterval,
+      callback: callback,
+      description: description,
+      enabled: true,
+      lastRun: 0,
+      runs: 0,
+    };
+  };
+
+  this.disableTask = (id) => {
+    return this.setTaskStatus(id, false);
+  };
+
+  this.enableTask = (id) => {
+    return this.setTaskStatus(id, true);
+  };
+
+  this.setTaskStatus = (id, value) => {
+    if (typeof value === "boolean") {
+      if (vwTasks[id]) {
+        vwTasks[id].enabled = value;
+      } else {
+        console.log("V_Watch: Task not found: " + id);
+      }
+    } else {
+      console.log("V_Watch: Invalid value: " + value);
+    }
+  };
+
+
+  this.getTask = (id) => {
+    return vwTasks[id] || null;
+  };
+
+
+  if (this.autoStart) this.start();
+
+}
+
+
+module.exports = V_Watch;
