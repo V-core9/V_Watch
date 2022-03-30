@@ -1,21 +1,21 @@
 const notifier = require('node-notifier');
 const notificationList = require('../../data/notifications.list');
-const config = require('../config');
+const config = require('../../config');
 
 const notify = {
 
   
   app: {
 
-    starting: () => {
+    starting: async () => {
       return config.notifications ? notifier.notify(notificationList.app.starting) : null;
     },
 
-    stopping: () => {
+    stopping: async() => {
       return config.notifications ? notifier.notify(notificationList.app.stopping) : null;
     },
 
-    lowsysmem:() => {
+    lowsysmem: async() => {
       return config.notifications ? notifier.notify(notificationList.app.lowsysmem) : null;
     }
 
@@ -24,11 +24,14 @@ const notify = {
 
   tray: {
 
-    firstItem: () => {
+    backgroundContinue : async () => {
+      return config.notifications ? notifier.notify(notificationList.tray.backgroundContinue) : null;
+    },
+    firstItem: async () => {
       return config.notifications ? notifier.notify(notificationList.tray.firstItem) : null;
     },
 
-    secondItem: () => {
+    secondItem: async () => {
       return config.notifications ? notifier.notify(notificationList.tray.secondItem) : null;
     },
 

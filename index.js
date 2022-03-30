@@ -1,3 +1,7 @@
+const config = require('./src/config');
+config.loadConfigFromFile();
+process.title = '-v-';
+
 const notify = require('./src/helpers/v_notify');
 notify.app.starting();
 
@@ -17,6 +21,9 @@ require('./src/v_watch');
 // Exit Handler
 process.on('SIGINT', () => {
   console.log("Caught interrupt signal");
+
+  
+  config.saveConfigToFile();
 
   // vBackgroundGUI Terminate
   vBackgroundGUI.stop();
