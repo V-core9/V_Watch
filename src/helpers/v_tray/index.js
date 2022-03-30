@@ -13,10 +13,10 @@ const path = require("path");
 const menu = [
   {
     id: 1,
-    title: 'Toggle Notifications',
+    title: "Disable Notifications",
     exec: () => {
-      console.log('Item 1 clicked');
-      config.notifications = !config.notifications;
+      config.toggleNotifications();
+      menu[0].title = (config.notifications) ? "Disable Notifications" : "Enable Notifications";
     }
   },
   {
@@ -133,7 +133,6 @@ var onShutdown = function (cb) {
 
 var shutdown = function () {
   console.log('Shutdown!');
-  v_tray.destroy();
   process.emit('SIGINT');
 };
 

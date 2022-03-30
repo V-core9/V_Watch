@@ -1,15 +1,31 @@
-var allowNotifications = true;
+const config = {
 
-module.exports = {
-
+  notify: true,
 
   set notifications(value) {
-    if (typeof value === 'boolean') allowNotifications = value;
+    return (typeof value === 'boolean') ? config.notify = value : false;
   },
+
 
   get notifications() {
-    return allowNotifications;
+    return config.notify;
   },
 
 
+  toggleNotifications() {
+    config.notifications = !config.notifications;
+  },
+
+  set(key, value) {
+    try {
+      config[key] = value;
+      return true;
+    } catch (error) {
+      console.log(error);
+      return false; 
+    }
+  }
+
 };
+
+module.exports = config;

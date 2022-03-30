@@ -7,7 +7,7 @@ var vBackgroundGUI = new backgroundGUI({ interval: 3000, scale: 1 });
 
 
 // Windows System Tray Icon and Menu
-require('./src/helpers/v_tray');
+const v_tray = require('./src/helpers/v_tray');
 
 
 // v_watch - Tasks Queue Runner
@@ -20,6 +20,9 @@ process.on('SIGINT', () => {
 
   // vBackgroundGUI Terminate
   vBackgroundGUI.stop();
+  
+  // v_tray Terminate
+  v_tray.destroy();
 
   // Send Notification that we are about to stop running
   notify.app.stopping();
