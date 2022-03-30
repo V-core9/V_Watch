@@ -1,8 +1,8 @@
-const config = require('./src/config');
+const config = require('./config');
 const vBackgroundGUI = require('./vBackgroundGUI');
 
 // v_watch - Tasks Queue Runner
-const V_Watch = require('./src/v_watch');
+const V_Watch = require('./v_watch');
 const vWatch = new V_Watch({ interval: 50 });
 
 

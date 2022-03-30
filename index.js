@@ -10,10 +10,10 @@ notify.app.starting();
 const v_tray = require('./src/helpers/v_tray');
 
 // vBackgroundGUI - Background GUI
-const vBackgroundGUI = require('./vBackgroundGUI');
+const vBackgroundGUI = require('./src/vBackgroundGUI');
 
 // vWatch - Tasks Runner
-const vWatch = require('./vWatch');
+const vWatch = require('./src/vWatch');
 
 // Exit Handler
 process.on('SIGINT', () => {
