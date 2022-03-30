@@ -5,33 +5,15 @@ process.title = '-v-';
 const notify = require('./src/helpers/v_notify');
 notify.app.starting();
 
-// System Background GUI
-const backgroundGUI = require('./src/V_BackgroundGUI');
-var vBackgroundGUI = new backgroundGUI({ interval: 20000, scale: 1, autoInit: false });
-
 
 // Windows System Tray Icon and Menu
 const v_tray = require('./src/helpers/v_tray');
 
+// vBackgroundGUI - Background GUI
+const vBackgroundGUI = require('./vBackgroundGUI');
 
-// v_watch - Tasks Queue Runner
-const V_Watch = require('./src/v_watch');
-const vWatch = new V_Watch({ interval: 50 });
-
-
-//* DEMO/SAMPLE TASKS TO RUN
-vWatch.newTask("printToConsole", 500, () => console.log("printToConsole PRINT TO CONSOLE TASK"));
-vWatch.newTask("justDoIt", 750, () => console.log("justDoIt PRINT TO CONSOLE TASK"));
-
-
-//! FEW REAL TASKS 
-
-// This will do the rendering of vBackgroundGUI.
-vWatch.newTask("vBackgroundGUI", 2000, async () => await vBackgroundGUI.render());
-// Setting Task status to match settings.
-vWatch.setTaskStatus("vBackgroundGUI", config.backgroundUpdates);
-
-
+// vWatch - Tasks Runner
+const vWatch = require('./vWatch');
 
 // Exit Handler
 process.on('SIGINT', () => {
@@ -55,8 +37,3 @@ process.on('SIGINT', () => {
   // Set timeout to wait for all tasks to finish
   setTimeout(() => process.exit(0), 1000);
 });
-
-
-module.exports = {
-  setTaskStatus: (name, value) => vWatch.setTaskStatus(name, value)
-};
