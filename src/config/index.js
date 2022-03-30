@@ -26,7 +26,7 @@ const config = {
   set backgroundUpdates(value) {
     if (typeof value === 'boolean') {
       config.bgUpdates = value;
-      require('../../vWatch').setTaskStatus('vBackgroundGUI', value);
+      require('../vWatch').setTaskStatus('vBackgroundGUI', value);
       return true;
     } else {
       return false;
