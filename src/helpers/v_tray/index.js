@@ -6,12 +6,15 @@ const util = require('util');
 util.inherits(NodeTray, EventEmitter);
 const path = require("path");
 
+
 /*
 * Getting Text Content for it.
 */
 getNotifyTitle = () => ((config.notifications) ? "❌ Disable" : "✅ Enable") + " Notifications";
 
-getDebugTitle = () => ((config.debug) ? "✅ Enable" : "❌ Disable") + " Debug";
+getDebugTitle = () => ((config.debug) ? "❌ Disable" : "✅ Enable") + " Debug";
+
+getBackgroundTitle = () => ((config.backgroundUpdates) ? "❌ Disable" : "✅ Enable") + " vBackgroundGUI";
 
 
 /*
@@ -36,9 +39,10 @@ const menu = [
   },
   {
     id: 20,
-    title: 'Item 20',
+    title: getBackgroundTitle(),
     exec: () => {
-      console.log('Item 20 clicked');
+      config.toggleBackgroundUpdates();
+      menu[2].title = getBackgroundTitle();
       notify.tray.secondItem();
     }
   },

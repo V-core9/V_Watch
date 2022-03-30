@@ -1,4 +1,5 @@
 const v_execute = require('v_execute');
+const config = require('../config');
 
 const svgTemplate = require('./_main_svg_template');
 var mainSVG_Template = new svgTemplate();
@@ -9,16 +10,17 @@ const fs = require('fs');
 // NPM: svg2png [many more options]
 var svg2img = require('svg2img');
 
-function backgroundGUI(data = {}) {
+function backgroundGUI(data = { interval: 20000, scale: 0.75, autoInit: true}) {
   // Few variables setup.
+  console.log(data);
   this.mFile = path.join(__dirname, './png/background_GUI_Template.jpg');
   this.templateHelper = "";
-  this.autoInit = data.autoInit || true;
-  this.scale = data.scale || 0.5;
+  this.autoInit = data.autoInit;
+  this.scale = data.scale;
   this.totalUpdates = 0;
   this.lastExecTimeVal = 0;
   this.loopObj = null;
-  this.interval = data.interval || 2500;
+  this.interval = data.interval;
   this.screen = {
     width: 0,
     height: 0,
@@ -26,6 +28,7 @@ function backgroundGUI(data = {}) {
     heightScaled: 1,
   };
 
+  console.log(this);
 
   /* 
   * Gets the screen size using powershell command.
@@ -64,19 +67,23 @@ function backgroundGUI(data = {}) {
   };
 
 
-  this.render = () => svg2img(mainSVG_Template.render({ title: "YEAAA SOME TITLE OPTINOS", totalUpdates: this.totalUpdates, lastExecTimeVal: this.lastExecTimeVal }), { 'width': this.screen.widthScaled, 'height': this.screen.heightScaled, format: 'jpg', 'quality': 60 }, this.saveAndSetBackground);
+  this.render = async () => {
+    var time_01 = Date.now();
+    if (config.debug) console.log("RENDERING-->>");
+    svg2img(mainSVG_Template.render({ title: "YEAAA SOME TITLE OPTINOS", totalUpdates: this.totalUpdates, lastExecTimeVal: this.lastExecTimeVal }), { 'width': this.screen.widthScaled, 'height': this.screen.heightScaled, format: 'jpg', 'quality': 60 }, this.saveAndSetBackground);
+    this.lastExecTimeVal = Date.now() - time_01;
+  };
 
   /*
   * Starts the looping process. 
   */
   this.start = () => {
 
+    if (config.debug) console.log("BackgroundGUI: STARTING >>>");
     this.getScreenSize();
 
     this.loopObj = setInterval(async () => {
-      var time_01 = Date.now();
       this.render();
-      this.lastExecTimeVal = Date.now() - time_01;
     }, this.interval);
 
   };
@@ -86,12 +93,14 @@ function backgroundGUI(data = {}) {
   * Stop the whole thing from running by clearing the Interval. 
   */
   this.stop = () => {
-    console.log("Stopping BackgroundGUI...🙋‍♂️");
+    console.log("BackgroundGUI: STOPPING...🙋‍♂️");
     clearInterval(this.loopObj);
     this.loopObj = null;
     return this.loopObj;
   };
 
+
+  this.getScreenSize();
 
   if (this.autoInit) this.start();
 

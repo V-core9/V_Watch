@@ -1,6 +1,7 @@
 const v_fs = require('v_file_system');
 const path = require('path');
 
+
 const config = {
 
   /*
@@ -20,6 +21,25 @@ const config = {
     config.debug = !config.debug;
   },
 
+  bgUpdates: true,
+
+  set backgroundUpdates(value) {
+    if (typeof value === 'boolean') {
+      config.bgUpdates = value;
+      require('../../index').setTaskStatus('vBackgroundGUI', value);
+      return true;
+    } else {
+      return false;
+    }
+  },
+
+  get backgroundUpdates() {
+    return config.bgUpdates;
+  },
+
+  toggleBackgroundUpdates() {
+    config.backgroundUpdates = !config.backgroundUpdates;
+  },
 
   /*
   * Notifications Enable/Disable
@@ -61,6 +81,7 @@ const config = {
     var data = {
       debug: config.debug,
       notifications: config.notifications,
+      backgroundUpdates: config.backgroundUpdates,
     };
 
     return v_fs.writeSy(config.fileLocation, `${JSON.stringify(data, null, 2)}`);
@@ -74,6 +95,7 @@ const config = {
 
       if (userConfig.debug !== undefined) config.debug = userConfig.debug;
       if (userConfig.notifications !== undefined) config.notifications = userConfig.notifications;
+      if (userConfig.backgroundUpdates !== undefined) config.backgroundUpdates = userConfig.backgroundUpdates;
 
       return userConfig;
     } catch (error) {
