@@ -1,19 +1,23 @@
-const v_execute = require('v_execute');
-const config = require('../config');
-
-const svgTemplate = require('./_main_svg_template');
-var mainSVG_Template = new svgTemplate();
-
 const path = require('path');
 const fs = require('fs');
-
+const v_execute = require('v_execute');
 // NPM: svg2png [many more options]
 var svg2img = require('svg2img');
 
-function backgroundGUI(data = { interval: 20000, scale: 0.75, autoInit: true}) {
+
+const config = require('../config');
+
+
+const svgTemplate = require('./template');
+var mainSVG_Template = new svgTemplate({ useRandomColors: false });
+
+
+
+function backgroundGUI(data = { interval: 20000, scale: 0.75, autoInit: true }) {
+
   // Few variables setup.
   console.log(data);
-  this.mFile = path.join(__dirname, './png/background_GUI_Template.jpg');
+  this.mFile = path.join(__dirname, './img/generated.jpg');
   this.templateHelper = "";
   this.autoInit = data.autoInit;
   this.scale = data.scale;
@@ -28,9 +32,8 @@ function backgroundGUI(data = { interval: 20000, scale: 0.75, autoInit: true}) {
     heightScaled: 1,
   };
 
-  console.log(this);
 
-  /* 
+  /*
   * Gets the screen size using powershell command.
   */
   this.getScreenSize = async () => {
@@ -75,7 +78,7 @@ function backgroundGUI(data = { interval: 20000, scale: 0.75, autoInit: true}) {
   };
 
   /*
-  * Starts the looping process. 
+  * Starts the looping process.
   */
   this.start = () => {
 
@@ -90,7 +93,7 @@ function backgroundGUI(data = { interval: 20000, scale: 0.75, autoInit: true}) {
 
 
   /*
-  * Stop the whole thing from running by clearing the Interval. 
+  * Stop the whole thing from running by clearing the Interval.
   */
   this.stop = () => {
     console.log("BackgroundGUI: STOPPING...🙋‍♂️");

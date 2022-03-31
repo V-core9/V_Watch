@@ -14,7 +14,7 @@ getNotifyTitle = () => ((config.notifications) ? "❌ Disable" : "✅ Enable") +
 
 getDebugTitle = () => ((config.debug) ? "❌ Disable" : "✅ Enable") + " Debug";
 
-getBackgroundTitle = () => ((config.backgroundUpdates) ? "❌ Disable" : "✅ Enable") + " vBackgroundGUI";
+getBackgroundTitle = () => ((config.backgroundUpdates) ? "❌ Disable" : "✅ Enable") + " wallpaperGUI";
 
 
 /*
