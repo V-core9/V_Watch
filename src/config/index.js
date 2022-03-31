@@ -2,6 +2,10 @@ const v_fs = require('v_file_system');
 const path = require('path');
 
 
+
+process.title = '-v-';
+
+
 const config = {
 
   /*
@@ -26,7 +30,7 @@ const config = {
   set backgroundUpdates(value) {
     if (typeof value === 'boolean') {
       config.bgUpdates = value;
-      require('../vWatch').setTaskStatus('vBackgroundGUI', value);
+      require('../v_watch/init').setTaskStatus('wallpaperGUI', value);
       return true;
     } else {
       return false;

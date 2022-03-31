@@ -1,16 +1,20 @@
+const path = require('path');
+const fs = require('fs');
 const v_execute = require('v_execute');
+// NPM: svg2png [many more options]
+var svg2img = require('svg2img');
+
+
 const config = require('../config');
+
 
 const svgTemplate = require('./template');
 var mainSVG_Template = new svgTemplate({ useRandomColors: false });
 
-const path = require('path');
-const fs = require('fs');
 
-// NPM: svg2png [many more options]
-var svg2img = require('svg2img');
 
 function backgroundGUI(data = { interval: 20000, scale: 0.75, autoInit: true }) {
+
   // Few variables setup.
   console.log(data);
   this.mFile = path.join(__dirname, './img/generated.jpg');
@@ -28,7 +32,6 @@ function backgroundGUI(data = { interval: 20000, scale: 0.75, autoInit: true }) 
     heightScaled: 1,
   };
 
-  console.log(this);
 
   /*
   * Gets the screen size using powershell command.

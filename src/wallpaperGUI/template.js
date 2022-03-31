@@ -2,6 +2,7 @@ const config = require('../config');
 
 function svgTemplate(data = {}) {
 
+
   const generateRandomColor = () => {
     return `#${Math.floor(Math.random() * 16777215).toString(16)}`;
   };
@@ -51,6 +52,8 @@ function svgTemplate(data = {}) {
   this.debugX = data.debugX || 980;
   this.debugY = data.debugY || 650;
 
+
+
   this.render = (val = {}) => {
     if (this.useRandomColors) this.randomColors();
     return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${this.helperWidth} ${this.helperHeight}"  height="${this.helperHeight}" width="${this.helperWidth}" class="${this.name}">
@@ -83,6 +86,8 @@ function svgTemplate(data = {}) {
 
   };
 
+
+
   this.randomColors = () => {
     try {
       this.main = generateRandomColor();
@@ -93,6 +98,8 @@ function svgTemplate(data = {}) {
       return error;
     }
   };
+
+
 
   this.debug = (val = {}) => {
     console.log(config);
@@ -119,10 +126,10 @@ function svgTemplate(data = {}) {
     return "";
   };
 
+
   return this.render();
+
 }
 
-//console.log(mainSVG_Template);
-//console.log(mainSVG_Template());
 
 module.exports = svgTemplate;
