@@ -11,7 +11,7 @@ vWatch.newTask("printToConsole", 500, () => console.log("printToConsole PRINT TO
 vWatch.newTask("justDoIt", 750, () => console.log("justDoIt PRINT TO CONSOLE TASK"));
 
 
-//! FEW REAL TASKS 
+//! FEW REAL TASKS
 
 // This will do the rendering of vBackgroundGUI.
 vWatch.newTask("vBackgroundGUI", 2000, async () => await vBackgroundGUI.render());

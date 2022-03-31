@@ -24,5 +24,5 @@ public class Params
 
 }
 
-Set-WallPaper -Image "C:\Users\v__V_\Desktop\V_Watch\src\V_BackgroundGUI\png\background_GUI_Template.jpg" -Style Fit
+Set-WallPaper -Image "C:\Users\v__V_\Desktop\V_Watch\src\V_BackgroundGUI\img\generated.jpg" -Style Fit
 
