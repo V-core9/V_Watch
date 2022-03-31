@@ -15,20 +15,7 @@ const wallpaperGUI = require('./src/wallpaperGUI/init');
 const vWatch = require('./src/v_watch/init');
 
 
-
-
-//* DEMO/SAMPLE TASKS TO RUN
-vWatch.newTask("printToConsole", 500, () => console.log("printToConsole PRINT TO CONSOLE TASK"));
-vWatch.newTask("justDoIt", 750, () => console.log("justDoIt PRINT TO CONSOLE TASK"));
-
-
-//! FEW REAL TASKS
-
-// This will do the rendering of wallpaperGUI.
-vWatch.newTask("wallpaperGUI", 30000, async () => await wallpaperGUI.render());
-// Setting Task status to match settings.
-vWatch.setTaskStatus("wallpaperGUI", config.backgroundUpdates);
-
+require('./src/sysTasks')(vWatch);
 
 
 
@@ -52,5 +39,5 @@ process.on('SIGINT', () => {
   notify.app.stopping();
 
   // Set timeout to wait for all tasks to finish
-  setTimeout(() => process.exit(0), 1000);
+  setTimeout(() => process.exit(0), config.exitTimeout);
 });

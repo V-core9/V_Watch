@@ -108,12 +108,20 @@ const config = {
     }
   },
 
+
+  // EXITING Timeout
+  exitingTimeout: 1000,
+
+  set exitTimeout (value) {
+    return (!isNaN(value)) ? config.exitingTimeout = value : false;
+  },
+
+  get exitTimeout () {
+    return config.exitingTimeout;
+  },
+
+
 };
 
-/*
-config.loadConfigFromFile();
-console.log(config.debug);
-console.log(config.notifications);
-*/
 
 module.exports = config;

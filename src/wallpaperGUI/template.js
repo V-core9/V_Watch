@@ -1,4 +1,5 @@
 const config = require('../config');
+const vCache = require('../vCache');
 
 function svgTemplate(data = {}) {
 
@@ -31,6 +32,18 @@ function svgTemplate(data = {}) {
     }
   };
 
+  function formatAMPM(date) {
+    var hours = date.getHours();
+    var minutes = date.getMinutes();
+    var ampm = hours >= 12 ? 'pm' : 'am';
+    hours = hours % 12;
+    hours = hours ? hours : 12; // the hour '0' should be '12'
+    minutes = minutes < 10 ? '0'+minutes : minutes;
+    var strTime = hours + ':' + minutes + ' ' + ampm;
+    return strTime;
+  }
+
+
 
   this.name = data.name || "customSVGdemoName";
   this.white = data.white || "#ffffff";
@@ -44,6 +57,7 @@ function svgTemplate(data = {}) {
   this.helperWidth = 1280;
   this.helperHeight = 720;
 
+  this.superFontSize = 45;
   this.mainFontSize = 30;
   this.subFontSize = 20;
   this.minFontSize = 11;
@@ -54,7 +68,7 @@ function svgTemplate(data = {}) {
 
 
 
-  this.render = (val = {}) => {
+  this.render = async (val = {}) => {
     if (this.useRandomColors) this.randomColors();
     return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${this.helperWidth} ${this.helperHeight}"  height="${this.helperHeight}" width="${this.helperWidth}" class="${this.name}">
               <path d="M 0 0 l ${this.helperWidth} 0 0 60 -20 20 0 ${(this.helperHeight - 180)}  20 20 0 60 -20 20 -160 0 -20 -20${-(this.helperWidth - 400)}  0 -20 20 -160 0 -20 -20 0 -60 20 -20 0 ${-(this.helperHeight - 280)}  -20 -20" stroke="none" stroke-width="${this.strokeWidth}" fill="${this.containerBackground}" ></path>
@@ -71,12 +85,12 @@ function svgTemplate(data = {}) {
 
               <g font-size="${this.mainFontSize}"  font-family="monospace" fill="${this.background}" stroke="none"  >
                 ${draw.text(20, 40, `DemoHeading Container Demo Heading Container`, this.backgroundAlt)}
-                ${draw.text(120, 120, `Last Update @ ${Date.now()}`)}
-                ${draw.text(220, 160, `Last Update @ ${Date.now()}`)}
+                ${draw.text(80, 120, `Last Update @ ${Date.now()}`)}
+                ${draw.text(80, 160, `Free RAM: ${await vCache.get('freemem')}GB (${await vCache.get('freememproc')}%) [Total: ${await vCache.get('totalmem')}GB]`)}
               </g>
 
-              <g font-size="${this.subFontSize}"  font-family="monospace" font-weight="bold" fill="${this.main}"  stroke="none" >
-                <text x="220" y="200" >Title @ ${val.title}</text>
+              <g font-size="${this.superFontSize}"  font-family="monospace" font-weight="bold" fill="${this.mainAlt}"  stroke="none" >
+                ${draw.text(this.helperWidth - 200, this.helperHeight - 45, `${formatAMPM(new Date)}`)}
               </g>
 
 
@@ -125,9 +139,6 @@ function svgTemplate(data = {}) {
     }
     return "";
   };
-
-
-  return this.render();
 
 }
 

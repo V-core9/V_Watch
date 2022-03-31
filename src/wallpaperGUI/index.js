@@ -73,7 +73,7 @@ function backgroundGUI(data = { interval: 20000, scale: 0.75, autoInit: true }) 
   this.render = async () => {
     var time_01 = Date.now();
     if (config.debug) console.log("RENDERING-->>");
-    svg2img(mainSVG_Template.render({ title: "YEAAA SOME TITLE OPTINOS", totalUpdates: this.totalUpdates, lastExecTimeVal: this.lastExecTimeVal }), { 'width': this.screen.widthScaled, 'height': this.screen.heightScaled, format: 'jpg', 'quality': 60 }, this.saveAndSetBackground);
+    svg2img(await mainSVG_Template.render({ title: "YEAAA SOME TITLE OPTINOS", totalUpdates: this.totalUpdates, lastExecTimeVal: this.lastExecTimeVal }), { 'width': this.screen.widthScaled, 'height': this.screen.heightScaled, format: 'jpg', 'quality': 60 }, this.saveAndSetBackground);
     this.lastExecTimeVal = Date.now() - time_01;
   };
 

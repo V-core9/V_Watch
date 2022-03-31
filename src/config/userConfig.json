@@ -1,5 +1,5 @@
 {
   "debug": false,
   "notifications": false,
-  "backgroundUpdates": false
+  "backgroundUpdates": true
 }
