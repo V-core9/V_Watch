@@ -90,7 +90,7 @@ function svgTemplate(data = {}) {
               </g>
 
               <g font-size="${this.superFontSize}"  font-family="monospace" font-weight="bold" fill="${this.mainAlt}"  stroke="none" >
-                ${draw.text(this.helperWidth - 200, this.helperHeight - 45, `${formatAMPM(new Date)}`)}
+                ${draw.text(this.helperWidth - 200, this.helperHeight - 45, formatAMPM(new Date))}
               </g>
 
 

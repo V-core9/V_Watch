@@ -1,44 +1,46 @@
-const notifList = {
+const notificationList = {
+
+
   example: {
       title: 'My notification',
       message: 'Hello, there!',
   },
+
+
   app : {
     starting: {
       appID: process.title,
-      title: 'v_watch - Starting',
+      title: 'Application Starting',
       message: 'OS Monitor STARTING...🚀',
     },
     stopping: {
         appID: process.title,
-        title: 'v_watch - Exiting',
+        title: 'Application Exiting',
         message: 'vOS Monitor STOPPING...🙋‍♂️',
     },
     lowsysmem: {
         appID: process.title,
-        title: 'v_watch - Starting',
+        title: 'WARNING: Low RAM',
         message: 'Your RAM is getting full.',
     }
   },
-  tray : {
-    backgroundContinue: {
+
+
+  wallpaperGUI: {
+    enabled: {
       appID: process.title,
-      title: 'v_watch - Background',
-      message: 'vOS Monitor is running in background.',
+      title: 'Wallpaper GUI -  ✅',
+      message: 'Wallpaper updates have been enabled.',
     },
-    firstItem: {
+    disabled: {
       appID: process.title,
-      title: 'v_watch - v_tray  _.:.:._  firstItem ',
-      message: 'You have clicked firstItem.'
-    },
-    secondItem: {
-        appID: process.title,
-        title: 'v_watch - v_tray  _.:.:._  secondItem ',
-        message: 'You have clicked secondItem.',
+      title: 'Wallpaper GUI - 🔻',
+      message: 'Wallpaper updates have been disabled.',
     }
-  }
+  },
+
+
 };
 
-console.log(notifList);
 
-module.exports = notifList;
+module.exports = notificationList;

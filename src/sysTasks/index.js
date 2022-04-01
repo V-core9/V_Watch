@@ -2,7 +2,7 @@ const config = require('../config');
 
 const vCache = require('../vCache');
 const v_os = require('../helpers/v_os');
-const wallpaperGUI = require('../wallpaperGUI/init');
+const wallpaperGUI = require('../wallpaperGUI');
 
 const { byteSizer } = require('v_file_system');
 
@@ -25,21 +25,18 @@ const vTimer = {
 };
 
 const roundNumber = (val, i = 0) => {
-  i = 10 ^ i;
+  i = Math.pow(10, i);
   return Math.round(val * i) / i;
 };
 
 
 const actions = {};
 
-// Demo 'justPrintIt' action
-actions.justPrintIt = async() => console.log('justPrintIt');
-
 actions.renderWallpaper =  async () => await wallpaperGUI.render();
 
 actions.freememproc = async () => await vCache.set("freememproc", v_os.freememproc());
 
-actions.freemem = async () => await vCache.set("freemem", roundNumber(byteSizer.byteToGiga(v_os.freemem())));
+actions.freemem = async () => await vCache.set("freemem", roundNumber(byteSizer.byteToGiga(v_os.freemem()), 2));
 
 actions.totalmem = async () => await vCache.set("totalmem", roundNumber(byteSizer.byteToGiga(v_os.totalmem())));
 
@@ -63,5 +60,4 @@ module.exports = sysTasks = (vWatch) => {
   vWatch.newTask("freemem", vTimer.seconds(), actions.freemem );
   vWatch.newTask("totalmem", vTimer.minutes(2), actions.totalmem);
 
-  vWatch.newTask("justPrintIt", 500, actions.justPrintIt);
 };

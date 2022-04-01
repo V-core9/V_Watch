@@ -9,10 +9,10 @@ notify.app.starting();
 const v_tray = require('./src/helpers/v_tray');
 
 // wallpaperGUI - Background GUI
-const wallpaperGUI = require('./src/wallpaperGUI/init');
+const wallpaperGUI = require('./src/wallpaperGUI');
 
 // vWatch - Tasks Runner
-const vWatch = require('./src/v_watch/init');
+const vWatch = require('./src/v_watch');
 
 
 require('./src/sysTasks')(vWatch);

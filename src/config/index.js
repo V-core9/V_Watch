@@ -30,7 +30,7 @@ const config = {
   set backgroundUpdates(value) {
     if (typeof value === 'boolean') {
       config.bgUpdates = value;
-      require('../v_watch/init').setTaskStatus('wallpaperGUI', value);
+      require('../v_watch').setTaskStatus('wallpaperGUI', value);
       return true;
     } else {
       return false;

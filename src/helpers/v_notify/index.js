@@ -2,21 +2,27 @@ const notifier = require('node-notifier');
 const notificationList = require('../../data/notifications.list');
 const config = require('../../config');
 
+
+const sendNotification = async (notification) => {
+  return config.notifications ? notifier.notify(notification) : null;
+};
+
+
 const notify = {
 
-  
+
   app: {
 
     starting: async () => {
-      return config.notifications ? notifier.notify(notificationList.app.starting) : null;
+      return sendNotification(notificationList.app.starting);
     },
 
     stopping: async() => {
-      return config.notifications ? notifier.notify(notificationList.app.stopping) : null;
+      return sendNotification(notificationList.app.stopping);
     },
 
     lowsysmem: async() => {
-      return config.notifications ? notifier.notify(notificationList.app.lowsysmem) : null;
+      return sendNotification(notificationList.app.lowsysmem);
     }
 
   },
@@ -25,18 +31,19 @@ const notify = {
   tray: {
 
     backgroundContinue : async () => {
-      return config.notifications ? notifier.notify(notificationList.tray.backgroundContinue) : null;
+      return sendNotification(notificationList.tray.backgroundContinue);
     },
     firstItem: async () => {
-      return config.notifications ? notifier.notify(notificationList.tray.firstItem) : null;
+      return sendNotification(notificationList.tray.firstItem);
     },
 
-    secondItem: async () => {
-      return config.notifications ? notifier.notify(notificationList.tray.secondItem) : null;
-    },
+  },
 
-  }
 
+  wallpaperGUI: async () => {
+    let notificationItem = (config.backgroundUpdates) ? notificationList.wallpaperGUI.enabled : notificationList.wallpaperGUI.disabled;
+    return sendNotification(notificationItem);
+  },
 
 };
 

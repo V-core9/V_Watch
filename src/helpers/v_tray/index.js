@@ -43,7 +43,7 @@ const menu = [
     exec: () => {
       config.toggleBackgroundUpdates();
       menu[2].title = getBackgroundTitle();
-      notify.tray.secondItem();
+      notify.wallpaperGUI();
     }
   },
   {
