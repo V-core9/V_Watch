@@ -90,6 +90,10 @@ function svgTemplate(data = {}) {
 
 
   this.printClock = () => {
+
+    const posX = 1105;
+    const posY = 675;
+
     var date = new Date();
     var hours = date.getHours();
     var minutes = date.getMinutes();
@@ -104,10 +108,13 @@ function svgTemplate(data = {}) {
 
     var strTime = hours + ':' + minutes + ':' + seconds ;
 
-    return `<g font-family="monospace" font-weight="bold"  >
-              ${draw.text(this.helperWidth - 147.5, this.helperHeight - 45, strTime, this.backgroundAlt, this.subFontSize)}
-              ${draw.text(this.helperWidth - 150, this.helperHeight - 30, datePrint, this.backgroundAlt, this.normalFontSize)}
-            </g>`;
+    return `
+            <path d="M ${(posX)}  ${(posY)}  l  20 -20 110 0 20 20 -10 0 -15 -15 -100 0 -15 15" stroke="none" stroke-width="${this.strokeWidth}" fill="${this.background}" ></path>
+            <g font-family="monospace" font-weight="bold"  >
+              ${draw.text(posX + 25, posY + 2.5, strTime, this.main, this.subFontSize)}
+              ${draw.text(posX + 22.5, posY + 15 , datePrint, this.backgroundAlt, this.normalFontSize)}
+            </g>
+            <path d="M ${(posX)}  ${(posY + 5)}  l  20 20 110 0 20 -20 -10 0 -15 15 -100 0 -15 -15" stroke="none" stroke-width="${this.strokeWidth}" fill="${this.background}" ></path>`;
   };
 
 
