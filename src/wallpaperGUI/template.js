@@ -8,6 +8,7 @@ function svgTemplate(data = {}) {
     return `#${Math.floor(Math.random() * 16777215).toString(16)}`;
   };
 
+
   const draw = {
     rect: (x, y, width, height, color) => {
       return `<rect x="${x}" y="${y}" width="${width}" height="${height}" fill="${color}" />`;
@@ -59,22 +60,11 @@ function svgTemplate(data = {}) {
   this.render = async (val = {}) => {
     if (this.useRandomColors) this.randomColors();
     return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${this.helperWidth} ${this.helperHeight}"  height="${this.helperHeight}" width="${this.helperWidth}" class="${this.name}">
-
-
-              <path d="M 0 0 l ${this.helperWidth} 0 0 60 -20 20 0 ${(this.helperHeight - 180)}  20 20 0 60 -20 20 -160 0 -20 -20${-(this.helperWidth - 400)}  0 -20 20 -160 0 -20 -20 0 -60 20 -20 0 ${-(this.helperHeight - 280)}  -20 -20" stroke="none" stroke-width="${this.strokeWidth}" fill="${this.containerBackground}" ></path>
-              <path d="M 0 0 l ${(this.helperWidth - 330)}  0 -20 60 ${-(this.helperWidth - 350)}  0" stroke="none" stroke-width="${this.strokeWidth}" fill="${this.main}" ></path>
-              <path d="M ${(this.helperWidth - 320)}  0 l 20 0 -20 60 -20 0" stroke="none" stroke-width="${this.strokeWidth}" fill="${this.main}" ></path>
-              <path d="M ${(this.helperWidth - 290)}  0 l 50 0 -15 45 -50 0" stroke="none" stroke-width="${this.strokeWidth}" fill="${this.main}" ></path>
-              <path d="M ${(this.helperWidth - 230)}  0 l 230 0 0 30 -240 0" stroke="none" stroke-width="${this.strokeWidth}" fill="${this.main}" ></path>
-
-              <path d="M 10 ${(this.helperHeight - 30)}  l  20 20 140 0 20 -20 -10 0 -15 15 -130 0 -15 -15" stroke="none" stroke-width="${this.strokeWidth}" fill="${this.background}" ></path>
-              <path d="M ${(this.helperWidth - 190)}  ${(this.helperHeight - 30)}  l  20 20 140 0 20 -20 -10 0 -15 15 -130 0 -15 -15" stroke="none" stroke-width="${this.strokeWidth}" fill="${this.background}" ></path>
-
+              ${this.bckLayerNew()}
               ${await this.printOsInfo()}
-
+              ${await this.printBotStats()}
               ${this.printClock()}
               ${this.debug(val)}
-
             </svg>`;
 
   };
@@ -82,17 +72,24 @@ function svgTemplate(data = {}) {
 
   this.printOsInfo = async () => {
     return `<g font-size="${this.mainFontSize}"  font-family="monospace" fill="${this.background}" stroke="none"  >
-              ${draw.text(20, 40, `DemoHeading Container Demo Heading Container`, this.backgroundAlt, this.mainFontSize)}
-              ${draw.text(80, 120, `Last Update @ ${Date.now()}`, this.main, this.mainFontSize)}
-              ${draw.text(80, 160, `Free RAM: ${await vCache.get('freemem')}GB (${await vCache.get('freememproc')}%) [Total: ${await vCache.get('totalmem')}GB]`, this.main, this.mainFontSize)}
+              <path d="M 170 2.5 l ${(this.helperWidth - 340)}  0 5 5 0 10 -5 5 ${-(this.helperWidth - 340)}  0 -5 -5 0 -10 5 -5" stroke="${this.main}80" stroke-width="1" fill="${this.main}50" ></path>
+              ${draw.text(180, 15, `Free RAM: ${await vCache.get('freemem')}GB (${await vCache.get('freememproc')}%) [Total: ${await vCache.get('totalmem')}GB]`, this.main, this.normalFontSize)}
+            </g>`;
+  };
+
+
+  this.printBotStats = async () => {
+    return `<g font-size="${this.mainFontSize}"  font-family="monospace" fill="${this.background}" stroke="none"  >
+              <path d="M 170 697.5 l ${(this.helperWidth - 340)}  0 5 5 0 10 -5 5 ${-(this.helperWidth - 340)}  0 -5 -5 0 -10 5 -5" stroke="${this.main}80" stroke-width="1" fill="${this.main}50" ></path>
+              ${draw.text(180, 710, `Free RAM: ${await vCache.get('freemem')}GB (${await vCache.get('freememproc')}%) [Total: ${await vCache.get('totalmem')}GB]`, this.main, this.normalFontSize)}
             </g>`;
   };
 
 
   this.printClock = () => {
 
-    const posX = 1105;
-    const posY = 675;
+    const posX = 1115;
+    const posY = 680;
 
     var date = new Date();
     var hours = date.getHours();
@@ -106,15 +103,29 @@ function svgTemplate(data = {}) {
     minutes = minutes < 10 ? '0' + minutes : minutes;
     seconds = seconds < 10 ? '0' + seconds : seconds;
 
-    var strTime = hours + ':' + minutes + ':' + seconds ;
+    var strTime = hours + ':' + minutes + ':' + seconds;
 
     return `
             <path d="M ${(posX)}  ${(posY)}  l  20 -20 110 0 20 20 -10 0 -15 -15 -100 0 -15 15 -10 0" stroke="#444" stroke-width="2" fill="${this.background}" ></path>
             <g font-family="monospace" font-weight="bold"  >
               ${draw.text(posX + 25, posY + 2.5, strTime, this.main, this.subFontSize)}
-              ${draw.text(posX + 22.5, posY + 15 , datePrint, this.backgroundAlt, this.normalFontSize)}
+              ${draw.text(posX + 22.5, posY + 15, datePrint, this.backgroundAlt, this.normalFontSize)}
             </g>
             <path d="M ${(posX)}  ${(posY + 5)}  l  20 20 110 0 20 -20 -10 0 -15 15 -100 0 -15 -15 -10 0" stroke="#444" stroke-width="2"  fill="${this.background}" ></path>`;
+  };
+
+
+  this.bckLayer = () => {
+    return `<path d="M 0 0 l ${this.helperWidth}  0 0 ${this.helperHeight} -${this.helperWidth} 0 -${this.helperWidth} -${this.helperHeight} " stroke="none" stroke-width="${this.strokeWidth}" fill="#000" ></path>
+            <path d="M 0 0 l ${this.helperWidth} 0 0 60 -20 20 0 ${(this.helperHeight - 180)}  20 20 0 60 -20 20 -160 0 -20 -20${-(this.helperWidth - 400)}  0 -20 20 -160 0 -20 -20 0 -60 20 -20 0 ${-(this.helperHeight - 280)}  -20 -20" stroke="none" stroke-width="${this.strokeWidth}" fill="${this.containerBackground}" ></path>
+            <path d="M 10 ${(this.helperHeight - 30)}  l  20 20 140 0 20 -20 -10 0 -15 15 -130 0 -15 -15" stroke="none" stroke-width="${this.strokeWidth}" fill="${this.background}" ></path>
+            <path d="M ${(this.helperWidth - 190)}  ${(this.helperHeight - 30)}  l  20 20 140 0 20 -20 -10 0 -15 15 -130 0 -15 -15" stroke="none" stroke-width="${this.strokeWidth}" fill="${this.background}" ></path>`;
+  };
+
+
+  this.bckLayerNew = () => {
+    return `<path d="M 0 0 l ${this.helperWidth}  0 0 ${this.helperHeight} -${this.helperWidth} 0 -${this.helperWidth} -${this.helperHeight} " stroke="none" stroke-width="${this.strokeWidth}" fill="#000" ></path>
+            <path d="M 30 10 l 120 0 20 20 ${this.helperWidth - 340} 0 20 -20 120 0 20 20 0 120 -20 20 0 ${this.helperHeight - 340} 20 20 0 120 -20 20 -120 0 -20 -20 -${this.helperWidth - 340} 0 -20 20 -120 0 -20 -20 0 -120 20 -20 0 -${this.helperHeight - 340} -20 -20 0 -120 20 -20" stroke="${this.main}50" stroke-width="${this.strokeWidth}" fill="${this.containerBackground}50" ></path>`;
   };
 
 
