@@ -110,7 +110,7 @@ const config = {
 
 
   // EXITING Timeout
-  exitingTimeout: 1000,
+  exitingTimeout: 100,
 
   set exitTimeout (value) {
     return (!isNaN(value)) ? config.exitingTimeout = value : false;

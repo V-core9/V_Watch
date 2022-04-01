@@ -15,8 +15,8 @@ function svgTemplate(data = {}) {
     circle: (x, y, radius, color) => {
       return `<circle cx="${x}" cy="${y}" r="${radius}" fill="${color}" />`;
     },
-    text: (x, y, text, color) => {
-      return `<text x="${x}" y="${y}" fill="${color || this.main}">${text}</text>`;
+    text: (x, y, text, color, size) => {
+      return `<text x="${x}" y="${y}" fill="${color || this.main}"  font-size="${size || this.normalFontSize}">${text}</text>`;
     },
     line: (x1, y1, x2, y2, color) => {
       return `<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke="${color}" />`;
@@ -31,18 +31,6 @@ function svgTemplate(data = {}) {
       return `<image x="${x}" y="${y}" width="${width}" height="${height}" xlink:href="${url}" />`;
     }
   };
-
-  function formatAMPM(date) {
-    var hours = date.getHours();
-    var minutes = date.getMinutes();
-    var ampm = hours >= 12 ? 'pm' : 'am';
-    hours = hours % 12;
-    hours = hours ? hours : 12; // the hour '0' should be '12'
-    minutes = minutes < 10 ? '0'+minutes : minutes;
-    var strTime = hours + ':' + minutes + ' ' + ampm;
-    return strTime;
-  }
-
 
 
   this.name = data.name || "customSVGdemoName";
@@ -60,7 +48,7 @@ function svgTemplate(data = {}) {
   this.superFontSize = 45;
   this.mainFontSize = 30;
   this.subFontSize = 20;
-  this.minFontSize = 11;
+  this.normalFontSize = 11;
   this.strokeWidth = 3;
 
   this.debugX = data.debugX || 980;
@@ -71,35 +59,69 @@ function svgTemplate(data = {}) {
   this.render = async (val = {}) => {
     if (this.useRandomColors) this.randomColors();
     return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${this.helperWidth} ${this.helperHeight}"  height="${this.helperHeight}" width="${this.helperWidth}" class="${this.name}">
+
+
               <path d="M 0 0 l ${this.helperWidth} 0 0 60 -20 20 0 ${(this.helperHeight - 180)}  20 20 0 60 -20 20 -160 0 -20 -20${-(this.helperWidth - 400)}  0 -20 20 -160 0 -20 -20 0 -60 20 -20 0 ${-(this.helperHeight - 280)}  -20 -20" stroke="none" stroke-width="${this.strokeWidth}" fill="${this.containerBackground}" ></path>
               <path d="M 0 0 l ${(this.helperWidth - 330)}  0 -20 60 ${-(this.helperWidth - 350)}  0" stroke="none" stroke-width="${this.strokeWidth}" fill="${this.main}" ></path>
               <path d="M ${(this.helperWidth - 320)}  0 l 20 0 -20 60 -20 0" stroke="none" stroke-width="${this.strokeWidth}" fill="${this.main}" ></path>
               <path d="M ${(this.helperWidth - 290)}  0 l 50 0 -15 45 -50 0" stroke="none" stroke-width="${this.strokeWidth}" fill="${this.main}" ></path>
               <path d="M ${(this.helperWidth - 230)}  0 l 230 0 0 30 -240 0" stroke="none" stroke-width="${this.strokeWidth}" fill="${this.main}" ></path>
-              <path d="M ${(this.helperWidth - 30)}  0 l 30 0 0 30 -40 0 10 -30" stroke="none" stroke-width="${this.strokeWidth}" fill="#3a0000" ></path>
-              <path d="M ${(this.helperWidth - 22)}  7 l 2 0 5 5 5 -5 2 0 0 2 -5 5 5 5 0 2 -2 0 -5 -5 -5 5 -2 0 0 -2 5 -5 -5 -5" stroke="none" stroke-width="${this.strokeWidth}" fill="gray" ></path>
-              <path d="M ${(this.helperWidth - 70)}  0 l 40 0 -10 30 -40 0 10 -30" stroke="none" stroke-width="${this.strokeWidth}" fill="#333333" ></path>
-              <path d="M ${(this.helperWidth - 62)}  20 l 15 0 0 2 -15 0" stroke="none" stroke-width="${this.strokeWidth}" ></path>
+
               <path d="M 10 ${(this.helperHeight - 30)}  l  20 20 140 0 20 -20 -10 0 -15 15 -130 0 -15 -15" stroke="none" stroke-width="${this.strokeWidth}" fill="${this.background}" ></path>
               <path d="M ${(this.helperWidth - 190)}  ${(this.helperHeight - 30)}  l  20 20 140 0 20 -20 -10 0 -15 15 -130 0 -15 -15" stroke="none" stroke-width="${this.strokeWidth}" fill="${this.background}" ></path>
 
-              <g font-size="${this.mainFontSize}"  font-family="monospace" fill="${this.background}" stroke="none"  >
-                ${draw.text(20, 40, `DemoHeading Container Demo Heading Container`, this.backgroundAlt)}
-                ${draw.text(80, 120, `Last Update @ ${Date.now()}`)}
-                ${draw.text(80, 160, `Free RAM: ${await vCache.get('freemem')}GB (${await vCache.get('freememproc')}%) [Total: ${await vCache.get('totalmem')}GB]`)}
-              </g>
+              ${await this.printOsInfo()}
 
-              <g font-size="${this.superFontSize}"  font-family="monospace" font-weight="bold" fill="${this.mainAlt}"  stroke="none" >
-                ${draw.text(this.helperWidth - 200, this.helperHeight - 45, formatAMPM(new Date))}
-              </g>
-
-
+              ${this.printClock()}
               ${this.debug(val)}
 
             </svg>`;
 
   };
 
+
+  this.printOsInfo = async () => {
+    return `<g font-size="${this.mainFontSize}"  font-family="monospace" fill="${this.background}" stroke="none"  >
+              ${draw.text(20, 40, `DemoHeading Container Demo Heading Container`, this.backgroundAlt, this.mainFontSize)}
+              ${draw.text(80, 120, `Last Update @ ${Date.now()}`, this.main, this.mainFontSize)}
+              ${draw.text(80, 160, `Free RAM: ${await vCache.get('freemem')}GB (${await vCache.get('freememproc')}%) [Total: ${await vCache.get('totalmem')}GB]`, this.main, this.mainFontSize)}
+            </g>`;
+  };
+
+
+  this.printClock = () => {
+    var date = new Date();
+    var hours = date.getHours();
+    var minutes = date.getMinutes();
+    var seconds = date.getSeconds();
+    var datePrint = String(date).split(' ');
+
+    datePrint = datePrint[0] + ' ' + datePrint[1] + ' ' + datePrint[2] + ' ' + datePrint[3];
+
+    hours = hours < 10 ? ' ' + hours : hours;
+    minutes = minutes < 10 ? '0' + minutes : minutes;
+    seconds = seconds < 10 ? '0' + seconds : seconds;
+
+    var strTime = hours + ':' + minutes + ':' + seconds ;
+
+    return `<g font-family="monospace" font-weight="bold"  >
+              ${draw.text(this.helperWidth - 147.5, this.helperHeight - 45, strTime, this.backgroundAlt, this.subFontSize)}
+              ${draw.text(this.helperWidth - 150, this.helperHeight - 30, datePrint, this.backgroundAlt, this.normalFontSize)}
+            </g>`;
+  };
+
+
+  // This is from the OLD thing where I used the original as a sample based SVG UI
+  this.minimizeButton = () => {
+    return `<path d="M ${(this.helperWidth - 70)}  0 l 40 0 -10 30 -40 0 10 -30" stroke="none" stroke-width="${this.strokeWidth}" fill="#333333" ></path>
+            <path d="M ${(this.helperWidth - 62)}  20 l 15 0 0 2 -15 0" stroke="none" stroke-width="${this.strokeWidth}" ></path>`;
+  };
+
+
+  this.printCloseButton = () => {
+    return `<path d="M ${(this.helperWidth - 30)}  0 l 30 0 0 30 -40 0 10 -30" stroke="none" stroke-width="${this.strokeWidth}" fill="#3a0000" ></path>
+            <path d="M ${(this.helperWidth - 22)}  7 l 2 0 5 5 5 -5 2 0 0 2 -5 5 5 5 0 2 -2 0 -5 -5 -5 5 -2 0 0 -2 5 -5 -5 -5" stroke="none" stroke-width="${this.strokeWidth}" fill="gray" ></path>`;
+  };
 
 
   this.randomColors = () => {
@@ -116,24 +138,23 @@ function svgTemplate(data = {}) {
 
 
   this.debug = (val = {}) => {
-    console.log(config);
     if (config.debug) {
 
       return `
               <path d="M ${this.debugX - 15} ${this.debugY - 15} l 300 0 0 75 -300 0" stroke="none" stroke-width="${this.strokeWidth}" fill="${this.background}" ></path>
               <g font-family="monospace" fill="#000000" stroke="1"  >
 
-                <text x="${this.debugX}" y="${this.debugY}" fill="${this.whiteText}" font-size="${this.minFontSize}" >Update TimeStamp </text>
-                <text x="${this.debugX + 140}" y="${this.debugY}" fill="${this.whiteText}" font-size="${this.minFontSize}" >[ <text fill="${this.main}">${Date.now()}</text> ]</text>
+                <text x="${this.debugX}" y="${this.debugY}" fill="${this.whiteText}" font-size="${this.normalFontSize}" >Update TimeStamp </text>
+                <text x="${this.debugX + 140}" y="${this.debugY}" fill="${this.whiteText}" font-size="${this.normalFontSize}" >[ <text fill="${this.main}">${Date.now()}</text> ]</text>
 
-                <text x="${this.debugX}" y="${this.debugY + 15}" fill="${this.whiteText}" font-size="${this.minFontSize}" >Loop Execution Time </text>
-                <text x="${this.debugX + 140}" y="${this.debugY + 15}" fill="${this.whiteText}" font-size="${this.minFontSize}" >[ <text fill="${this.main}">${val.lastExecTimeVal}</text> ms ]</text>
+                <text x="${this.debugX}" y="${this.debugY + 15}" fill="${this.whiteText}" font-size="${this.normalFontSize}" >Loop Execution Time </text>
+                <text x="${this.debugX + 140}" y="${this.debugY + 15}" fill="${this.whiteText}" font-size="${this.normalFontSize}" >[ <text fill="${this.main}">${val.lastExecTimeVal}</text> ms ]</text>
 
-                <text x="${this.debugX}" y="${this.debugY + 30}" fill="${this.whiteText}" font-size="${this.minFontSize}" >TotalUpdates </text>
-                <text x="${this.debugX + 140}" y="${this.debugY + 30}" fill="${this.whiteText}" font-size="${this.minFontSize}" >[ <text fill="${this.mainAlt}">${val.totalUpdates}</text> ]</text>
+                <text x="${this.debugX}" y="${this.debugY + 30}" fill="${this.whiteText}" font-size="${this.normalFontSize}" >TotalUpdates </text>
+                <text x="${this.debugX + 140}" y="${this.debugY + 30}" fill="${this.whiteText}" font-size="${this.normalFontSize}" >[ <text fill="${this.mainAlt}">${val.totalUpdates}</text> ]</text>
 
-                <text x="${this.debugX}" y="${this.debugY + 45}" fill="${this.whiteText}" font-size="${this.minFontSize}" >TotalUpdates </text>
-                <text x="${this.debugX + 140}" y="${this.debugY + 45}" fill="${this.whiteText}" font-size="${this.minFontSize}" >[ <text fill="${this.mainAlt}">${val.totalUpdates}</text> ]</text>
+                <text x="${this.debugX}" y="${this.debugY + 45}" fill="${this.whiteText}" font-size="${this.normalFontSize}" >TotalUpdates </text>
+                <text x="${this.debugX + 140}" y="${this.debugY + 45}" fill="${this.whiteText}" font-size="${this.normalFontSize}" >[ <text fill="${this.mainAlt}">${val.totalUpdates}</text> ]</text>
 
               </g>`;
     }

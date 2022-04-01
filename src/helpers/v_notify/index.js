@@ -28,22 +28,11 @@ const notify = {
   },
 
 
-  tray: {
-
-    backgroundContinue : async () => {
-      return sendNotification(notificationList.tray.backgroundContinue);
-    },
-    firstItem: async () => {
-      return sendNotification(notificationList.tray.firstItem);
-    },
-
-  },
-
-
   wallpaperGUI: async () => {
     let notificationItem = (config.backgroundUpdates) ? notificationList.wallpaperGUI.enabled : notificationList.wallpaperGUI.disabled;
     return sendNotification(notificationItem);
   },
+
 
 };
 

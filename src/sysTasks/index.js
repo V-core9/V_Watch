@@ -52,7 +52,7 @@ module.exports = sysTasks = (vWatch) => {
 
   // This will do the rendering of wallpaperGUI.
   // This Tasks status should match config.backgroundUpdates value.
-  vWatch.newTask("wallpaperGUI", 3000, actions.renderWallpaper);
+  vWatch.newTask("wallpaperGUI", 1000, actions.renderWallpaper);
   vWatch.setTaskStatus("wallpaperGUI", config.backgroundUpdates);
 
 
