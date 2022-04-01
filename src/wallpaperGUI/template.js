@@ -109,12 +109,12 @@ function svgTemplate(data = {}) {
     var strTime = hours + ':' + minutes + ':' + seconds ;
 
     return `
-            <path d="M ${(posX)}  ${(posY)}  l  20 -20 110 0 20 20 -10 0 -15 -15 -100 0 -15 15" stroke="none" stroke-width="${this.strokeWidth}" fill="${this.background}" ></path>
+            <path d="M ${(posX)}  ${(posY)}  l  20 -20 110 0 20 20 -10 0 -15 -15 -100 0 -15 15 -10 0" stroke="#444" stroke-width="2" fill="${this.background}" ></path>
             <g font-family="monospace" font-weight="bold"  >
               ${draw.text(posX + 25, posY + 2.5, strTime, this.main, this.subFontSize)}
               ${draw.text(posX + 22.5, posY + 15 , datePrint, this.backgroundAlt, this.normalFontSize)}
             </g>
-            <path d="M ${(posX)}  ${(posY + 5)}  l  20 20 110 0 20 -20 -10 0 -15 15 -100 0 -15 -15" stroke="none" stroke-width="${this.strokeWidth}" fill="${this.background}" ></path>`;
+            <path d="M ${(posX)}  ${(posY + 5)}  l  20 20 110 0 20 -20 -10 0 -15 15 -100 0 -15 -15 -10 0" stroke="#444" stroke-width="2"  fill="${this.background}" ></path>`;
   };
 
 
