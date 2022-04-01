@@ -20,4 +20,10 @@ This is actually using [windows-tray](https://github.com/AHgPuK/window-tray) to 
 3. Toggle wallpaperGUI task in V_Watch so it runs or stops.  
 
 
-![Example Running the thing](./Screenshot_1.png)
+## Example Showing Tray and Wallpaper
+![Example Running the thing](./Screenshot_1.png)  
+
+#
+
+## Last Generated ImageWallpaperGUI :
+![WallpaperGUI Last Generated Image](./src/wallpaperGUI/img/generated.jpg)
