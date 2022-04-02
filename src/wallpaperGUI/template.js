@@ -1,13 +1,9 @@
 const config = require('../config');
 const vCache = require('../vCache');
+const { byteSizer } = require('v_file_system');
+const { roundNumber, getRandomColor } = require('../helpers');
 
 function svgTemplate(data = {}) {
-
-
-  const generateRandomColor = () => {
-    return `#${Math.floor(Math.random() * 16777215).toString(16)}`;
-  };
-
 
   const draw = {
     rect: (x, y, width, height, color) => {
@@ -71,17 +67,21 @@ function svgTemplate(data = {}) {
 
 
   this.printOsInfo = async () => {
+    const cpuInfo = await vCache.get('cpuInfoStats');
     return `<g font-size="${this.mainFontSize}"  font-family="monospace" fill="${this.background}" stroke="none"  >
               <path d="M 170 2.5 l ${(this.helperWidth - 340)}  0 5 5 0 10 -5 5 ${-(this.helperWidth - 340)}  0 -5 -5 0 -10 5 -5" stroke="${this.main}80" stroke-width="1" fill="${this.main}50" ></path>
-              ${draw.text(180, 15, `Free RAM: ${await vCache.get('freemem')}GB (${await vCache.get('freememproc')}%) [Total: ${await vCache.get('totalmem')}GB]`, this.main, this.normalFontSize)}
+              ${draw.text(180, 15, `CPU: ${cpuInfo.cpuUsage}% [Count: ${cpuInfo.count}]`, this.main, this.normalFontSize)}
+              ${draw.text(640, 15, `RAM: ${await vCache.get('freemem')}GB (${await vCache.get('freememproc')}%) [Total: ${await vCache.get('totalmem')}GB]`, this.main, this.normalFontSize)}
             </g>`;
   };
 
 
   this.printBotStats = async () => {
+    const netSpeedTest = await vCache.get('netSpeedTest') || { download: {}, upload: {} };
     return `<g font-size="${this.mainFontSize}"  font-family="monospace" fill="${this.background}" stroke="none"  >
               <path d="M 170 697.5 l ${(this.helperWidth - 340)}  0 5 5 0 10 -5 5 ${-(this.helperWidth - 340)}  0 -5 -5 0 -10 5 -5" stroke="${this.main}80" stroke-width="1" fill="${this.main}50" ></path>
-              ${draw.text(180, 710, `Free RAM: ${await vCache.get('freemem')}GB (${await vCache.get('freememproc')}%) [Total: ${await vCache.get('totalmem')}GB]`, this.main, this.normalFontSize)}
+              ${draw.text(180, 710, `👤 ${await vCache.get('currentDeviceUserInfo')}`, this.main, this.normalFontSize)}
+              ${draw.text(640, 710, `📦 Net Speed [ D: ${roundNumber(byteSizer.byteToMega(netSpeedTest.download.bandwidth), 2)} Mbs || U:${roundNumber(byteSizer.byteToMega(netSpeedTest.upload.bandwidth), 2)} Mbs ]`, this.main, this.normalFontSize)}
             </g>`;
   };
 
@@ -144,15 +144,14 @@ function svgTemplate(data = {}) {
 
   this.randomColors = () => {
     try {
-      this.main = generateRandomColor();
-      this.background = generateRandomColor();
-      this.containerBackground = generateRandomColor();
+      this.main = getRandomColor();
+      this.background = getRandomColor();
+      this.containerBackground = getRandomColor();
       return true;
     } catch (error) {
       return error;
     }
   };
-
 
 
   this.debug = (val = {}) => {

@@ -38,6 +38,8 @@
     "@schlameel/native-idle-time": "^1.0.6",
     "glob-parent": ">=5.1.2",
     "node-notifier": "^10.0.0",
+    "node-os-utils": "^1.3.6",
+    "speedtest-net": "^2.2.0",
     "svg-to-png": "^4.0.0",
     "svg2img": "^0.9.3",
     "url-regex-safe": "^2.0.2",
