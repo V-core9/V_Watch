@@ -2,6 +2,9 @@ const config = require('../config');
 const vwTasks = {};
 
 function V_Watch(data = {}) {
+
+  this.version = "1.0.1";
+
   this.tickInterval = data.interval || 1000;
   this.autoStart = data.autoStart || true;
 
@@ -69,6 +72,65 @@ function V_Watch(data = {}) {
 
   this.getTask = (id) => {
     return vwTasks[id] || null;
+  };
+
+
+  this.tasksCount = async () => {
+    return Object.keys(vwTasks).length;
+  };
+
+
+  this.totalTasksCount = async () => this.tasksCount();
+
+
+  this.activeTasksCount = async () => {
+    let count = 0;
+    for (const taskId in vwTasks) {
+      if (vwTasks[taskId].enabled) {
+        count++;
+      }
+    }
+    return count;
+  };
+
+
+  this.disabledTasksCount = async () => {
+    let count = 0;
+    for (const taskId in vwTasks) {
+      if (!vwTasks[taskId].enabled) {
+        count++;
+      }
+    }
+    return count;
+  };
+
+
+  this.allTasks = async () => {
+    return vwTasks;
+  };
+
+
+  this.activeTasks = async () => {
+    const activeTasks = [];
+    for (const taskId in vwTasks) {
+      const task = vwTasks[taskId];
+      if (task.enabled) {
+        activeTasks.push(task);
+      }
+    }
+    return activeTasks;
+  };
+
+
+  this.disabledTasks = async () => {
+    const disabledTasks = [];
+    for (const taskId in vwTasks) {
+      const task = vwTasks[taskId];
+      if (!task.enabled) {
+        disabledTasks.push(task);
+      }
+    }
+    return disabledTasks;
   };
 
 

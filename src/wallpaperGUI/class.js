@@ -13,18 +13,18 @@ var mainSVG_Template = new svgTemplate({ useRandomColors: false });
 
 
 
-function backgroundGUI(data = { interval: 20000, scale: 0.75, autoInit: true }) {
+function backgroundGUI(data = {}) {
 
   // Few variables setup.
   console.log(data);
   this.mFile = path.join(__dirname, './img/generated.jpg');
   this.templateHelper = "";
-  this.autoInit = data.autoInit;
-  this.scale = data.scale;
+  this.autoInit = data.autoInit || false;
+  this.scale = data.scale || 1;
   this.totalUpdates = 0;
   this.lastExecTimeVal = 0;
   this.loopObj = null;
-  this.interval = data.interval;
+  this.interval = data.interval || 20000;
   this.screen = {
     width: 0,
     height: 0,
@@ -73,7 +73,7 @@ function backgroundGUI(data = { interval: 20000, scale: 0.75, autoInit: true }) 
   this.render = async () => {
     var time_01 = Date.now();
     if (config.debug) console.log("RENDERING-->>");
-    svg2img(await mainSVG_Template.render({ title: "YEAAA SOME TITLE OPTINOS", totalUpdates: this.totalUpdates, lastExecTimeVal: this.lastExecTimeVal }), { 'width': this.screen.widthScaled, 'height': this.screen.heightScaled, format: 'jpg', 'quality': 60 }, this.saveAndSetBackground);
+    svg2img(await mainSVG_Template.render({ totalUpdates: this.totalUpdates, lastExecTimeVal: this.lastExecTimeVal, running: (this.loopObj != null) ? true : false, imgLocation: this.mFile, scale: this.scale }), { 'width': this.screen.width * 2, 'height': this.screen.height * 2, format: 'jpg', 'quality': 100 }, this.saveAndSetBackground);
     this.lastExecTimeVal = Date.now() - time_01;
   };
 

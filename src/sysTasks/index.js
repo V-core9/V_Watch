@@ -48,7 +48,7 @@ actions.netSpeedTest = async () => {
 };
 
 
-const sampleReferenceInterval = vTimer.seconds(5);
+const sampleReferenceInterval = vTimer.seconds(1);
 
 actions.cpuInfoStats = async () => {
   const cpuUsage = await v_os.cpu.usage(sampleReferenceInterval);
@@ -74,10 +74,28 @@ module.exports = sysTasks = (vWatch) => {
   vWatch.newTask("freemem", vTimer.seconds(), actions.freemem);
   vWatch.newTask("totalmem", vTimer.minutes(2), actions.totalmem);
 
+  // Getting Current User&Device Info
   vWatch.newTask("currentDeviceUserInfo", vTimer.seconds(2), actions.currentDeviceUserInfo);
 
+  // Log HOSTNAME to Console
   vWatch.newTask("v_osHostname", vTimer.seconds(), () => console.log(v_os.hostname()));
+
   vWatch.newTask("netSpeedTest", vTimer.minutes(30), actions.netSpeedTest);
 
   vWatch.newTask("cpuInfoStats", sampleReferenceInterval, actions.cpuInfoStats);
+
+
+  vWatch.newTask("vWatchInfoData", vTimer.minutes(1), async () => {
+    await vCache.set("vWatchInfoData", {
+      status: ( vWatch.loopCore !== null) ? true : false,
+      tickInterval: vWatch.tickInterval, // in milliseconds
+      frequency: (1000 / vWatch.tickInterval),
+      autoStart: vWatch.autoStart,
+      disabledTasksCount: await vWatch.disabledTasksCount(),
+      activeTasksCount: await vWatch.activeTasksCount(),
+      totalTasksCount: await vWatch.totalTasksCount(),
+      vWatchVersion: vWatch.version,
+    });
+  });
+
 };
