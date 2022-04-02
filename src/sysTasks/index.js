@@ -22,7 +22,7 @@ module.exports = sysTasks = (vWatch) => {
   vWatch.newTask("systemInfoStats", vTime.seconds(1), actions.systemInfoStats);
 
 
-  vWatch.newTask("netSpeedTest", vTime.minutes(30), actions.netSpeedTest);
+  //vWatch.newTask("netSpeedTest", vTime.minutes(30), actions.netSpeedTest);
 
 
   vWatch.newTask("vWatchInfoData", vTime.minutes(1), async () => {

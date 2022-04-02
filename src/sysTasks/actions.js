@@ -1,7 +1,7 @@
 module.exports = actions = {
 
   //? Internet Speed Test
-  netSpeedTest : require('./internet-speed-test'),
+  // netSpeedTest : require('./internet-speed-test'),
 
   //? Trigger WallpaperGUI [re]Render
   renderWallpaperGUI : require('./render-wallpapergui'),

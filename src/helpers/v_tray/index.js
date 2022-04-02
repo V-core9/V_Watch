@@ -1,10 +1,11 @@
+const path = require('path');
+
 const config = require('../../config');
 const notify = require('../v_notify');
 const EventEmitter = require('events').EventEmitter;
-const NodeTray = require("../../../node_modules/windows-tray/build/Release/tray").NodeTray;
+const { NodeTray } = require("./build/Release/tray.node");
 const util = require('util');
 util.inherits(NodeTray, EventEmitter);
-const path = require("path");
 
 
 /*
