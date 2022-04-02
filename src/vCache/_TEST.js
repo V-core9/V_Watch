@@ -14,7 +14,7 @@ const vCache = require('.');
 
   console.log(await vCache.toString());
 
-  console.log(await vCache.toFile(path.join(__dirname, 'demo.json')));
+  console.log(await vCache.toFile('demo.json'));
 
 
   console.log(await vCache.set('test1', 11111));

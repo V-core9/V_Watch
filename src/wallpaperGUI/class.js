@@ -4,6 +4,7 @@ const v_execute = require('v_execute');
 // NPM: svg2png [many more options]
 var svg2img = require('svg2img');
 
+const vCache = require('../vCache');
 
 const config = require('../config');
 
@@ -73,7 +74,18 @@ function backgroundGUI(data = {}) {
   this.render = async () => {
     var time_01 = Date.now();
     if (config.debug) console.log("RENDERING-->>");
-    svg2img(await mainSVG_Template.render({ totalUpdates: this.totalUpdates, lastExecTimeVal: this.lastExecTimeVal, running: (this.loopObj != null) ? true : false, imgLocation: this.mFile, scale: this.scale }), { 'width': this.screen.width * 2, 'height': this.screen.height * 2, format: 'jpg', 'quality': 100 }, this.saveAndSetBackground);
+
+    const svgStats = {
+      totalUpdates: this.totalUpdates,
+      lastExecTimeVal: this.lastExecTimeVal,
+      running: (this.loopObj != null) ? true : false,
+      imgLocation: this.mFile,
+      scale: this.scale
+    };
+
+    await vCache.set('svgRenderDebugInfo', svgStats);
+
+    svg2img(await mainSVG_Template.render(), { width: this.screen.widthScaled, height: this.screen.heightScaled, format: 'jpg', 'quality': 100 }, this.saveAndSetBackground);
     this.lastExecTimeVal = Date.now() - time_01;
   };
 

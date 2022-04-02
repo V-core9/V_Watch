@@ -1,60 +1,8 @@
 const config = require('../config');
-
 const vCache = require('../vCache');
-const v_os = require('../helpers/v_os');
-const wallpaperGUI = require('../wallpaperGUI');
+const { vTime } = require('../helpers/');
+const actions = require('./actions');
 
-const { byteSizer } = require('v_file_system');
-
-const vTimer = {
-  seconds: (val = 1) => {
-    return val * 1000;
-  },
-  minutes: (val = 1) => {
-    return vTimer.seconds(val * 60);
-  },
-  hours: (val = 1) => {
-    return vTimer.minutes(val * 60);
-  },
-  days: (val = 1) => {
-    return vTimer.hours(val * 24);
-  },
-  weeks: (val = 1) => {
-    return vTimer.days(val * 7);
-  }
-};
-
-const { roundNumber } = require('../helpers');
-
-
-const speedTest = require('speedtest-net');
-
-const actions = {};
-
-actions.renderWallpaper = async () => await wallpaperGUI.render();
-
-actions.freememproc = async () => await vCache.set("freememproc", v_os.freememproc());
-
-actions.freemem = async () => await vCache.set("freemem", roundNumber(byteSizer.byteToGiga(v_os.freemem()), 2));
-
-actions.totalmem = async () => await vCache.set("totalmem", roundNumber(byteSizer.byteToGiga(v_os.totalmem())));
-
-actions.currentDeviceUserInfo = async () => await vCache.set("currentDeviceUserInfo", (process.env.USERNAME + " [ " + v_os.version() + " | " + v_os.platform() + process.arch + " ]"));
-
-actions.netSpeedTest = async () => {
-  const netStats = await speedTest({ acceptLicense: true });
-  console.log(netStats);
-  await vCache.set("netSpeedTest", netStats);
-};
-
-
-const sampleReferenceInterval = vTimer.seconds(1);
-
-actions.cpuInfoStats = async () => {
-  const cpuUsage = await v_os.cpu.usage(sampleReferenceInterval);
-  if (config.debug) console.log('cpuUSage: ' + cpuUsage);
-  await vCache.set("cpuInfoStats", {count: v_os.cpu.count(), cpuUsage: cpuUsage});
-};
 
 module.exports = sysTasks = (vWatch) => {
 
@@ -66,28 +14,20 @@ module.exports = sysTasks = (vWatch) => {
 
   // This will do the rendering of wallpaperGUI.
   // This Tasks status should match config.backgroundUpdates value.
-  vWatch.newTask("wallpaperGUI", sampleReferenceInterval, actions.renderWallpaper);
-  vWatch.setTaskStatus("wallpaperGUI", config.backgroundUpdates);
+  vWatch.newTask("renderWallpaperGUI", vTime.seconds(2), actions.renderWallpaperGUI);
+  vWatch.setTaskStatus("renderWallpaperGUI", config.backgroundUpdates);
 
-
-  vWatch.newTask("freememproc", sampleReferenceInterval, actions.freememproc);
-  vWatch.newTask("freemem", vTimer.seconds(), actions.freemem);
-  vWatch.newTask("totalmem", vTimer.minutes(2), actions.totalmem);
 
   // Getting Current User&Device Info
-  vWatch.newTask("currentDeviceUserInfo", vTimer.seconds(2), actions.currentDeviceUserInfo);
-
-  // Log HOSTNAME to Console
-  vWatch.newTask("v_osHostname", vTimer.seconds(), () => console.log(v_os.hostname()));
-
-  vWatch.newTask("netSpeedTest", vTimer.minutes(30), actions.netSpeedTest);
-
-  vWatch.newTask("cpuInfoStats", sampleReferenceInterval, actions.cpuInfoStats);
+  vWatch.newTask("systemInfoStats", vTime.seconds(1), actions.systemInfoStats);
 
 
-  vWatch.newTask("vWatchInfoData", vTimer.minutes(1), async () => {
+  vWatch.newTask("netSpeedTest", vTime.minutes(30), actions.netSpeedTest);
+
+
+  vWatch.newTask("vWatchInfoData", vTime.minutes(1), async () => {
     await vCache.set("vWatchInfoData", {
-      status: ( vWatch.loopCore !== null) ? true : false,
+      status: (vWatch.loopCore !== null) ? true : false,
       tickInterval: vWatch.tickInterval, // in milliseconds
       frequency: (1000 / vWatch.tickInterval),
       autoStart: vWatch.autoStart,
