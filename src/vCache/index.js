@@ -1,4 +1,5 @@
 const v_fs = require('v_file_system');
+const path = require("path");
 
 function V_Cache() {
 
@@ -36,7 +37,7 @@ function V_Cache() {
     return Object.entries(this.cache);
   };
 
-  this.toJSON = async () => {
+  this.toJSON = () => {
     return JSON.stringify(this.cache);
   };
 
@@ -52,12 +53,12 @@ function V_Cache() {
     this.fromJSON(string);
   };
 
-  this.toFile = async (file) => {
-    return v_fs.writeSy(file, this.toJSON());
+  this.toFile = (file) => {
+    return v_fs.writeSy(path.join(__dirname, file), this.toJSON());
   };
 
-  this.fromFile = async (file) => {
-    return this.fromJSON(v_fs.readSy(file));
+  this.fromFile = (file) => {
+    return this.fromJSON(v_fs.readSy(path.join(__dirname, file)));
   };
 
 }

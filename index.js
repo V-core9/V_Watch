@@ -1,29 +1,27 @@
-const config = require('./src/config');
+const vCache = require("./src/vCache");
+const config = require("./src/config");
+const notify = require("./src/helpers/v_notify");
+
 config.loadConfigFromFile();
-
-const notify = require('./src/helpers/v_notify');
 notify.app.starting();
-
+vCache.fromFile("sample.json");
 
 // Windows System Tray Icon and Menu
-const v_tray = require('./src/helpers/v_tray');
+const v_tray = require("./src/helpers/v_tray");
 
 // wallpaperGUI - Background GUI
-const wallpaperGUI = require('./src/wallpaperGUI');
+const wallpaperGUI = require("./src/wallpaperGUI");
 
 // vWatch - Tasks Runner
-const vWatch = require('./src/v_watch');
+const vWatch = require("./src/v_watch");
 
-
-require('./src/sysTasks')(vWatch);
-
-
+require("./src/sysTasks")(vWatch);
 
 // Exit Handler
-process.on('SIGINT', () => {
+process.on("SIGINT", async () => {
   console.log("Caught interrupt signal");
 
-
+  vCache.toFile('sample.json');
   config.saveConfigToFile();
 
   // wallpaperGUI Terminate
