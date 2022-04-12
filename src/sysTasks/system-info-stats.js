@@ -11,7 +11,7 @@ module.exports = async () => {
     ram: {
       freememproc: v_os.freememproc(),
 
-      freemem: roundNumber(byteSizer.byteToGiga(v_os.freemem()), 2),
+      freemem: roundNumber(byteSizer.byteToGiga(v_os.freemem()), 5),
 
       totalmem: roundNumber(byteSizer.byteToGiga(v_os.totalmem())),
     },
@@ -20,7 +20,7 @@ module.exports = async () => {
 
     cpu: {
       count: v_os.cpu.count(),
-      usage: await v_os.cpu.usage(vTime.seconds(2)),
+      usage: await v_os.cpu.usage(vTime.seconds(5)),
     },
 
   };

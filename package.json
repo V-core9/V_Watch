@@ -4,7 +4,7 @@
   "description": "v_watch is hopefully gonna become useful OS Monitor[ing] tool based on Node.js",
   "main": "index.js",
   "scripts": {
-    "test": "test",
+    "test": "jest",
     "start": "bash -c \" pm2 start index.js \" && bash -c \" pm2 save \" ",
     "setup": "powershell -c \" Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1')) \" && powershell -c \"choco install visualstudio2017buildtools -A \"  && bash -c \" npm config set msvs_version 2017 \" ",
     "preinstall": "bash -c \" npm install -g pm2 pm2-windows-startup \" && bash -c \" pm2-startup install \" && bash -c \" npm install -g node-gyp \" ",
@@ -47,5 +47,8 @@
     "v_file_system": "^1.0.5",
     "v_req": "https://github.com/V-core9/__v_req",
     "windows-tray": "github:AHgPuK/window-tray"
+  },
+  "devDependencies": {
+    "jest": "^27.5.1"
   }
 }

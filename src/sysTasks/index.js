@@ -14,12 +14,12 @@ module.exports = sysTasks = (vWatch) => {
 
   // This will do the rendering of wallpaperGUI.
   // This Tasks status should match config.backgroundUpdates value.
-  vWatch.newTask("renderWallpaperGUI", vTime.seconds(2), actions.renderWallpaperGUI);
+  vWatch.newTask("renderWallpaperGUI", vTime.seconds(5), actions.renderWallpaperGUI);
   vWatch.setTaskStatus("renderWallpaperGUI", config.backgroundUpdates);
 
 
   // Getting Current User&Device Info
-  vWatch.newTask("systemInfoStats", vTime.seconds(1), actions.systemInfoStats);
+  vWatch.newTask("systemInfoStats", vTime.seconds(5), actions.systemInfoStats);
 
 
   vWatch.newTask("netSpeedTest", vTime.minutes(30), actions.netSpeedTest);
