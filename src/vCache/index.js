@@ -11,12 +11,32 @@ function V_Cache() {
 
 
   this.get = get = async (key = null) => {
-    return this.cache[key] || false;
+    console.group("vCache.get()");
+
+    let data = this.cache[key];
+
+    console.log(data);
+    console.groupEnd("vCache.get()");
+
+
+    return (data != undefined) ? ((data.expires > Date.now() || data.expires == false) ? data.value : null) : null;
   };
 
 
-  this.set = async (key, value) => {
-    return (this.cache[key] = value) || false;
+  this.set = async (key, value, expires = null) => {
+    console.group("vCache.set()");
+
+    let data = {
+      name: key,
+      value: value,
+      expires: (isNaN(expires) || expires == null) ? false : (Date.now() + expires)
+    };
+
+    console.log(data);
+    console.groupEnd("vCache.set()");
+    this.cache[key] = data;
+
+    return this.get(key);
   };
 
 
@@ -75,7 +95,8 @@ function V_Cache() {
 
 
   this.fromFile = (file) => {
-    return this.fromJSON(v_fs.readSy(path.join(__dirname, file)));
+    const data = v_fs.readSy(path.join(__dirname, file));
+    return (data !== false) ? this.fromJSON(data) : false;
   };
 
 }

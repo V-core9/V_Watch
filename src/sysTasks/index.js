@@ -1,8 +1,18 @@
 const config = require('../config');
 const vCache = require('../vCache');
-const { vTime } = require('../helpers/');
-const actions = require('./actions');
 
+const { vTime } = require('../helpers/');
+
+const {
+  renderWallpaperGUI,
+  systemInfoStats,
+  netSpeedTest
+} = require('./actions');
+
+
+const constTimes = {
+  sec5: vTime.seconds(5)
+};
 
 module.exports = sysTasks = (vWatch) => {
 
@@ -14,19 +24,20 @@ module.exports = sysTasks = (vWatch) => {
 
   // This will do the rendering of wallpaperGUI.
   // This Tasks status should match config.backgroundUpdates value.
-  vWatch.newTask("renderWallpaperGUI", vTime.seconds(5), actions.renderWallpaperGUI);
+  vWatch.newTask("renderWallpaperGUI", constTimes.sec5, renderWallpaperGUI);
   vWatch.setTaskStatus("renderWallpaperGUI", config.backgroundUpdates);
 
 
   // Getting Current User&Device Info
-  vWatch.newTask("systemInfoStats", vTime.seconds(5), actions.systemInfoStats);
+  vWatch.newTask("systemInfoStats", constTimes.sec5, async () => await systemInfoStats(constTimes.sec5));
 
 
-  vWatch.newTask("netSpeedTest", vTime.minutes(30), actions.netSpeedTest);
+  vWatch.newTask("netSpeedTest", vTime.minutes(30), netSpeedTest);
 
 
   vWatch.newTask("vWatchInfoData", vTime.minutes(1), async () => {
-    await vCache.set("vWatchInfoData", {
+
+    let vwDbgInfo = {
       status: (vWatch.loopCore !== null) ? true : false,
       tickInterval: vWatch.tickInterval, // in milliseconds
       frequency: (1000 / vWatch.tickInterval),
@@ -35,7 +46,10 @@ module.exports = sysTasks = (vWatch) => {
       activeTasksCount: await vWatch.activeTasksCount(),
       totalTasksCount: await vWatch.totalTasksCount(),
       vWatchVersion: vWatch.version,
-    });
+    };
+
+    await vCache.set("vWatchInfoData", vwDbgInfo);
+
   });
 
 };

@@ -1,17 +1,17 @@
 const vCache = require('../vCache');
 const v_os = require('../helpers/v_os');
 const { byteSizer } = require('v_file_system');
-const { roundNumber, vTime } = require('../helpers');
+const { roundNumber } = require('../helpers');
 
 
-module.exports = async () => {
+module.exports = async (timeLen = 1000) => {
 
   const result = {
 
     ram: {
       freememproc: v_os.freememproc(),
 
-      freemem: roundNumber(byteSizer.byteToGiga(v_os.freemem()), 5),
+      freemem: roundNumber(byteSizer.byteToGiga(v_os.freemem()), 2),
 
       totalmem: roundNumber(byteSizer.byteToGiga(v_os.totalmem())),
     },
@@ -20,7 +20,7 @@ module.exports = async () => {
 
     cpu: {
       count: v_os.cpu.count(),
-      usage: await v_os.cpu.usage(vTime.seconds(5)),
+      usage: await v_os.cpu.usage(timeLen),
     },
 
   };

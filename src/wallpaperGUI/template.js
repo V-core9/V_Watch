@@ -66,7 +66,7 @@ function svgTemplate(data = {}) {
       svgStats: await vCache.get('svgRenderDebugInfo') || { lastExecTimeVal: 0, totalUpdates: 0, scale: 1, running: false },
     };
 
-    console.log(this.cacheData);
+    //console.log(this.cacheData);
 
     return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${this.helperWidth} ${this.helperHeight}"  height="${this.helperHeight}" width="${this.helperWidth}" class="${this.name}"  shape-rendering="geometricPrecision" >
               ${await this.bckLayerNew()}
