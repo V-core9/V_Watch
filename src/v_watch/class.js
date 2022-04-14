@@ -11,7 +11,7 @@ function V_Watch(data = {}) {
   this.loopCore = null;
 
 
-  this.tick = () => {
+  this.tick = async () => {
 
     for (const taskId in vwTasks) {
       const task = vwTasks[taskId];
@@ -29,20 +29,20 @@ function V_Watch(data = {}) {
   };
 
 
-  this.start = () => {
+  this.start = async () => {
     if (config.debug) console.log("V_Watch: STARTING >>>");
     this.loopCore = setInterval(this.tick, this.tickInterval);
   };
 
 
-  this.stop = () => {
+  this.stop = async () => {
     if (config.debug) console.log("V_Watch: STOPPING ...");
     clearInterval(this.loopCore);
     this.loopCore = null;
   };
 
 
-  this.newTask = (id, interval, callback, description = "") => {
+  this.newTask = async (id, interval, callback, description = "") => {
     vwTasks[id] = {
       interval: interval || this.tickInterval,
       callback: callback,
@@ -54,17 +54,17 @@ function V_Watch(data = {}) {
   };
 
 
-  this.disableTask = (id) => {
-    return this.setTaskStatus(id, false);
+  this.disableTask = async (id) => {
+    return await this.setTaskStatus(id, false);
   };
 
 
-  this.enableTask = (id) => {
-    return this.setTaskStatus(id, true);
+  this.enableTask = async (id) => {
+    return await this.setTaskStatus(id, true);
   };
 
 
-  this.setTaskStatus = (id, value) => {
+  this.setTaskStatus = async (id, value) => {
     if (typeof value === "boolean") {
       if (vwTasks[id]) {
         vwTasks[id].enabled = value;

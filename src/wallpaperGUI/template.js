@@ -1,33 +1,19 @@
 const config = require('../config');
 const vCache = require('../vCache');
 
-const { byteSizer } = require('v_file_system');
-const { roundNumber, getRandomColor } = require('../helpers');
+
+const { getRandomColor } = require('../helpers');
 
 function svgTemplate(data = {}) {
 
   const draw = {
-    rect: async (x, y, width, height, color) => {
-      return `<rect x="${x}" y="${y}" width="${width}" height="${height}" fill="${color}" />`;
-    },
-    circle: async (x, y, radius, color) => {
-      return `<circle cx="${x}" cy="${y}" r="${radius}" fill="${color}" />`;
-    },
-    text: async (x, y, text, color, size) => {
-      return `<text x="${x}" y="${y}" fill="${color || this.main}"  text-rendering="geometricPrecision" font-size="${size || this.normalFontSize}">${text}</text>`;
-    },
-    line: async (x1, y1, x2, y2, color) => {
-      return `<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke="${color}" />`;
-    },
-    polygon: async (points, color) => {
-      return `<polygon points="${points}" fill="${color}" />`;
-    },
-    path: async (d, color) => {
-      return `<path d="${d}" fill="${color}" />`;
-    },
-    image: async (x, y, width, height, url) => {
-      return `<image x="${x}" y="${y}" width="${width}" height="${height}" xlink:href="${url}" />`;
-    }
+    rect: async (x, y, width, height, color) => `<rect x="${x}" y="${y}" width="${width}" height="${height}" fill="${color}" />`,
+    circle: async (x, y, radius, color) => `<circle cx="${x}" cy="${y}" r="${radius}" fill="${color}" />`,
+    text: async (x, y, text, color, size) => `<text x="${x}" y="${y}" fill="${color || this.main}"  text-rendering="geometricPrecision" font-size="${size || this.normalFontSize}">${text}</text>`,
+    line: async (x1, y1, x2, y2, color) => `<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke="${color}" />`,
+    polygon: async (points, color) => `<polygon points="${points}" fill="${color}" />`,
+    path: async (d, color) => `<path d="${d}" fill="${color}" />`,
+    image: async (x, y, width, height, url) => `<image x="${x}" y="${y}" width="${width}" height="${height}" xlink:href="${url}" />`
   };
 
 
@@ -61,14 +47,35 @@ function svgTemplate(data = {}) {
     posY: 680
   };
 
-  this.render = async (val = {}) => {
+  this.helpDim = {
+    X: this.debugX + 20,
+    X300: this.debugX + 20 + 300,
+    X500: this.debugX + 20 + 500,
+    X840: this.debugX + 20 + 840,
+    Y: this.debugY + this.mainFontSize,
+    Y60: this.debugY + this.mainFontSize + 60,
+    Y75: this.debugY + this.mainFontSize + 75,
+    Y90: this.debugY + this.mainFontSize + 90,
+    Y105: this.debugY + this.mainFontSize + 105,
+    Y140: this.debugY + this.mainFontSize + 140,
+    Y155: this.debugY + this.mainFontSize + 155,
+    Y170: this.debugY + this.mainFontSize + 170,
+    Y185: this.debugY + this.mainFontSize + 185,
+    Y200: this.debugY + this.mainFontSize + 200,
+    Y215: this.debugY + this.mainFontSize + 215,
+    Y230: this.debugY + this.mainFontSize + 230,
+    Y245: this.debugY + this.mainFontSize + 245,
+  };
+
+  this.render = async () => {
     if (this.useRandomColors) this.randomColors();
 
     this.cacheData = {
       clock: await vCache.get('clock') || { strTime: "", datePrint: "" },
       system: await vCache.get('system') || { cpu: {}, ram: {}, deviceUserInfo: {} },
-      netSpeed: await vCache.get('netSpeed') || { download: {}, upload: {} },
-      svgStats: await vCache.get('svgStats') || { lastExecTimeVal: 0, totalUpdates: 0, scale: 1, running: false },
+      netSpeed: await vCache.get('netSpeed') || { download: 0, upload: 0 },
+      svgStats: await vCache.get('svgStats') || { lastExecTimeVal: 0, totalUpdates: 0, scale: 1, running: false, quality: 75 },
+      vWatch: (config.debug) ? await vCache.get("vWatchDBG") : {},
     };
 
     //console.log(this.cacheData);
@@ -78,7 +85,7 @@ function svgTemplate(data = {}) {
               ${await this.printOsInfo()}
               ${await this.printBotStats()}
               ${await this.printClock()}
-              ${await this.debug(val)}
+              ${await this.debug()}
             </svg>`;
 
   };
@@ -87,7 +94,7 @@ function svgTemplate(data = {}) {
   this.printOsInfo = async () => {
     const cpu = this.cacheData.system.cpu || { usage: -1, count: 0 };
     const ram = this.cacheData.system.ram;
-    return `<g font-size="${this.mainFontSize}"  font-family="monospace" fill="${this.background}" stroke="none"  >
+    return `<g font-size="${this.mainFontSize}" font-family="monospace" fill="${this.background}" stroke="none"  >
               <path d="M 170 2.5 l ${(this.helperWidth - 340)}  0 5 5 0 10 -5 5 ${-(this.helperWidth - 340)}  0 -5 -5 0 -10 5 -5" stroke="${this.main}80" stroke-width="1" fill="${this.main}50" ></path>
               ${await draw.text(180, 15, `CPU: ${cpu.usage}% [Count: ${cpu.count}]`, this.main, this.normalFontSize)}
               ${await draw.text(640, 15, `RAM: ${ram.freemem}GB (${ram.freememproc}%) [Total: ${ram.totalmem}GB]`, this.main, this.normalFontSize)}
@@ -96,17 +103,15 @@ function svgTemplate(data = {}) {
 
 
   this.printBotStats = async () => {
-    const netSpeed = this.cacheData.netSpeed;
-    return `<g font-size="${this.mainFontSize}"  font-family="monospace" fill="${this.background}" stroke="none"  >
+    return `<g font-size="${this.mainFontSize}" font-family="monospace" fill="${this.background}" stroke="none"  >
               <path d="M 170 697.5 l ${(this.helperWidth - 340)}  0 5 5 0 10 -5 5 ${-(this.helperWidth - 340)}  0 -5 -5 0 -10 5 -5" stroke="${this.main}80" stroke-width="1" fill="${this.main}50" ></path>
-              ${await draw.text(180, 710, `👤 ${await vCache.get('currentDeviceUserInfo')}`, this.main, this.normalFontSize)}
-              ${await draw.text(640, 710, `📦 Net Speed [ D: ${roundNumber(byteSizer.byteToMega(netSpeed.download.bandwidth), 2)} Mbs || U:${roundNumber(byteSizer.byteToMega(netSpeed.upload.bandwidth), 2)} Mbs ]`, this.main, this.normalFontSize)}
+              ${await draw.text(180, 710, `👤 ${this.cacheData.system.deviceUserInfo}`, this.main, this.normalFontSize)}
+              ${await draw.text(640, 710, `📦 Net Speed [ D: ${this.cacheData.netSpeed.download} Mbs || U:${this.cacheData.netSpeed.upload} Mbs ]`, this.main, this.normalFontSize)}
             </g>`;
   };
 
 
   this.printClock = async () => {
-
     return `
             <path d="M ${(this.clock.posX)}  ${(this.clock.posY)}  l  20 -20 110 0 20 20 -10 0 -15 -15 -100 0 -15 15 -10 0" stroke="#444" stroke-width="2" fill="${this.background}" ></path>
             <g font-family="monospace" font-weight="bold"  >
@@ -155,169 +160,123 @@ function svgTemplate(data = {}) {
     }
   };
 
+  this.placeholder = async () => {
+    let taskVIEW = "";
 
-  this.debug = async (val = {}) => {
+    let tasks = this.cacheData.vWatch.tasks;
+
+    let taskNames = Object.keys(tasks);
+
+    for (let i = 0; i < taskNames.length; i++) {
+      taskVIEW += await draw.text(this.helpDim.X500, this.helpDim.Y + 340 + i * 30, `${taskNames[i]}`, this.white, this.normalFontSize);
+      taskVIEW += await draw.text(this.helpDim.X840, this.helpDim.Y + 340 + i * 30, `[ ${(tasks[taskNames[i]].enabled) ? "✔ Enabled" : "❌ Disabled"} ]`, this.main, this.normalFontSize);
+      taskVIEW += await draw.text(this.helpDim.X500, this.helpDim.Y + 350 + i * 30, `Θ ${tasks[taskNames[i]].description}`, this.white, 8);
+      taskVIEW += await draw.text(this.helpDim.X840, this.helpDim.Y + 350 + i * 30, `[ Δ ${tasks[taskNames[i]].interval}ms | Σ ${tasks[taskNames[i]].runs} ]`, this.main, 8);
+    }
+
+    console.log(tasks);
+
+
+    return `
+            <path d="M ${this.debugX + 520} ${this.debugY + 320} l 460 0 10 10 0 230 -10 10 -460 0 -10 -10  0 -230 10 -10" stroke="${this.main}" stroke-width="1" fill="#203040" ></path>
+            ${await draw.text(this.helpDim.X500, this.helpDim.Y + 312.5, "vWatch Tasks:", this.main, this.subFontSize)}
+
+            ${taskVIEW}`;
+  };
+
+  this.vWatchDBG = async () => {
+    return `<path d="M ${this.helpDim.X} ${this.debugY + 320} l 460 0 10 10 0 230 -10 10 -460 0 -10 -10  0 -230 10 -10" stroke="${this.main}" stroke-width="1" fill="#203040" ></path>
+            ${await draw.text(this.helpDim.X, this.helpDim.Y + 312.5, "vWatch Tasks Runner:", this.main, this.subFontSize)}
+
+            ${await draw.text(this.helpDim.X, this.helpDim.Y + 330, "Running Status", this.white, this.normalFontSize)}
+            ${await draw.text(this.helpDim.X300, this.helpDim.Y + 330, `[ ${(this.cacheData.vWatch.status) ? '<text fill="' + this.mainSuccess + '">ACTIVE</text>' : '<text fill="' + this.mainWarn + '">STOPPED</text>'} ]`, this.white, this.normalFontSize)}
+
+            ${await draw.text(this.helpDim.X, this.helpDim.Y + 345, "Total Tasks Count", this.white, this.normalFontSize)}
+            ${await draw.text(this.helpDim.X300, this.helpDim.Y + 345, `[ <text fill="${this.main}">${this.cacheData.vWatch.totalTasksCount}</text> ]`, this.white, this.normalFontSize)}
+
+            ${await draw.text(this.helpDim.X, this.helpDim.Y + 360, "Active Tasks ", this.white, this.normalFontSize)}
+            ${await draw.text(this.helpDim.X300, this.helpDim.Y + 360, `[ <text fill="${this.mainAlt}">${this.cacheData.vWatch.activeTasksCount}</text> ]`, this.white, this.normalFontSize)}
+
+            ${await draw.text(this.helpDim.X, this.helpDim.Y + 375, "Disabled Tasks ", this.white, this.normalFontSize)}
+            ${await draw.text(this.helpDim.X300, this.helpDim.Y + 375, `[ ${this.cacheData.vWatch.disabledTasksCount} ]`, this.white, this.normalFontSize)}
+
+            ${await draw.text(this.helpDim.X, this.helpDim.Y + 390, "Tick Interval ", this.white, this.normalFontSize)}
+            ${await draw.text(this.helpDim.X300, this.helpDim.Y + 390, `[ ${this.cacheData.vWatch.tickInterval}ms ]`, this.white, this.normalFontSize)}
+
+            ${await draw.text(this.helpDim.X, this.helpDim.Y + 405, "Tick Frequency ", this.white, this.normalFontSize)}
+            ${await draw.text(this.helpDim.X300, this.helpDim.Y + 405, `[ ${this.cacheData.vWatch.frequency}Hz ]`, this.white, this.normalFontSize)}
+
+            ${await draw.text(this.helpDim.X, this.helpDim.Y + 420, "AutoStart Option ", this.white, this.normalFontSize)}
+            ${await draw.text(this.helpDim.X300, this.helpDim.Y + 420, `[ ${this.cacheData.vWatch.autoStart} ]`, this.white, this.normalFontSize)}`;
+  };
+
+  this.vCacheDBG = async () => {
+
+    return `<path d="M ${this.debugX + 520} ${this.debugY + 50} l 460 0 10 10 0 230 -10 10 -460 0 -10 -10  0 -230 10 -10" stroke="${this.main}" stroke-width="1" fill="#203040" ></path>
+            ${await draw.text(this.helpDim.X500, this.helpDim.Y + 42.5, "vCache Info Stats:", this.main, this.subFontSize)}
+
+            ${await draw.text(this.helpDim.X500, this.helpDim.Y60, "Items in Cache", this.white, this.normalFontSize)}
+            ${await draw.text(this.helpDim.X840, this.helpDim.Y60, `[ <text fill="${this.main}">${await vCache.size()}</text> ]`, this.white, this.normalFontSize)}`;
+
+  };
+
+  this.wallGuiDBG = async () => {
+    return `<path d="M ${this.helpDim.X} ${this.debugY + 50} l 460 0 10 10 0 230 -10 10 -460 0 -10 -10  0 -230 10 -10" stroke="${this.main}" stroke-width="1" fill="#203040" ></path>
+            ${await draw.text(this.helpDim.X, this.helpDim.Y + 42.5, "WallpaperGUI", this.main, this.subFontSize)}
+
+            ${await draw.text(this.helpDim.X, this.helpDim.Y60, "Update TimeStamp", this.white, this.normalFontSize)}
+            ${await draw.text(this.helpDim.X300, this.helpDim.Y60, `[ <text fill="${this.main}">${Date.now()}</text> ]`, this.white, this.normalFontSize)}
+
+            ${await draw.text(this.helpDim.X, this.helpDim.Y75, "Render Exec. Time ", this.white, this.normalFontSize)}
+            ${await draw.text(this.helpDim.X300, this.helpDim.Y75, `[ <text fill="${this.main}">${this.cacheData.svgStats.lastExecTimeVal}</text> ms ]`, this.white, this.normalFontSize)}
+
+            ${await draw.text(this.helpDim.X, this.helpDim.Y90, "TotalUpdates ", this.white, this.normalFontSize)}
+            ${await draw.text(this.helpDim.X300, this.helpDim.Y90, `[ <text fill="${this.main}">${this.cacheData.svgStats.totalUpdates}</text> ]`, this.white, this.normalFontSize)}
+
+            ${await draw.text(this.helpDim.X, this.helpDim.Y105, "Running Looping Render ", this.white, this.normalFontSize)}
+            ${await draw.text(this.helpDim.X300, this.helpDim.Y105, (this.cacheData.svgStats.running) ? '[ <text fill="' + this.mainSuccess + '">ACTIVE</text> ]' : '[ <text fill="' + this.mainWarn + '">DISABLED</text> ]', this.white, this.normalFontSize)}
+
+
+
+            ${await draw.text(this.helpDim.X, this.helpDim.Y140, "SVG Template Info ", this.main, this.subFontSize)}
+
+            ${await draw.text(this.helpDim.X, this.helpDim.Y155, "Name ", this.white, this.normalFontSize)}
+            ${await draw.text(this.helpDim.X300, this.helpDim.Y155, `[ <text fill="${this.main}">${this.name}</text> ]`, this.white, this.normalFontSize)}
+
+            ${await draw.text(this.helpDim.X, this.helpDim.Y170, "Random Colors ", this.white, this.normalFontSize)}
+            ${await draw.text(this.helpDim.X300, this.helpDim.Y170, (this.useRandomColors) ? '[ <text fill="' + this.mainSuccess + '">ENABLED</text> ]' : '[ <text fill="' + this.mainWarn + '">DISABLED</text> ]', this.white, this.normalFontSize)}
+
+            ${await draw.text(this.helpDim.X, this.helpDim.Y185, "Render Height ", this.white, this.normalFontSize)}
+            ${await draw.text(this.helpDim.X300, this.helpDim.Y185, `[ <text fill="${this.main}">${this.helperHeight}</text> ]`, this.white, this.normalFontSize)}
+
+            ${await draw.text(this.helpDim.X, this.helpDim.Y200, "Render Width ", this.white, this.normalFontSize)}
+            ${await draw.text(this.helpDim.X300, this.helpDim.Y200, `[ <text fill="${this.main}">${this.helperWidth}</text> ]`, this.white, this.normalFontSize)}
+
+            ${await draw.text(this.helpDim.X, this.helpDim.Y215, "Debug Position (x,y)", this.white, this.normalFontSize)}
+            ${await draw.text(this.helpDim.X300, this.helpDim.Y215, `[ <text fill="${this.main}">${this.debugX}, ${this.debugY}</text> ]`, this.white, this.normalFontSize)}
+
+            ${await draw.text(this.helpDim.X, this.helpDim.Y230, "Scale ", this.white, this.normalFontSize)}
+            ${await draw.text(this.helpDim.X300, this.helpDim.Y230, `[ <text fill="${this.main}">${this.cacheData.svgStats.scale}</text> ]`, this.white, this.normalFontSize)}
+
+            ${await draw.text(this.helpDim.X, this.helpDim.Y245, "Quality ", this.white, this.normalFontSize)}
+            ${await draw.text(this.helpDim.X300, this.helpDim.Y245, `[ <text fill="${this.main}">${this.cacheData.svgStats.quality}</text> ]`, this.white, this.normalFontSize)}`;
+  };
+
+  this.debug = async () => {
     if (config.debug) {
-      const helpDim = {
-        X: this.debugX + 20,
-        X300: this.debugX + 20 + 300,
-        X500: this.debugX + 20 + 500,
-        X840: this.debugX + 20 + 840,
-        Y: this.debugY + this.mainFontSize,
-        Y60: this.debugY + this.mainFontSize + 60,
-        Y75: this.debugY + this.mainFontSize + 75,
-        Y90: this.debugY + this.mainFontSize + 90,
-        Y105: this.debugY + this.mainFontSize + 105,
-        Y140: this.debugY + this.mainFontSize + 140,
-        Y155: this.debugY + this.mainFontSize + 155,
-        Y170: this.debugY + this.mainFontSize + 170,
-        Y185: this.debugY + this.mainFontSize + 185,
-        Y200: this.debugY + this.mainFontSize + 200,
-        Y215: this.debugY + this.mainFontSize + 215,
-        Y230: this.debugY + this.mainFontSize + 230,
-      };
-
-      const vWatchInfoData = await vCache.get("vWatchInfoData");
-
-      const svgStats = this.cacheData.svgStats;
-
-      console.log(vWatchInfoData);
 
       return `<g font-family="monospace" fill="#000000" stroke="1"  >
-                <path d="M ${helpDim.X} ${this.debugY} l 960 0 20 20 0 540 -20 20 -960 0 -20 -20 0 -540 20 -20" stroke="#203040" stroke-width="1" fill="#203040A0" ></path>
-                <path d="M ${helpDim.X} ${this.debugY} l 960 0 20 20  -20 20 -960 0 -20 -20 20 -20" stroke="#203040" stroke-width="1" fill="#101520" ></path>
-                ${await draw.text(helpDim.X + 5, helpDim.Y, "DEBUG INFO PANEL:", this.white, this.mainFontSize)}
+                <path d="M ${this.helpDim.X} ${this.debugY} l 960 0 20 20 0 540 -20 20 -960 0 -20 -20 0 -540 20 -20" stroke="#203040" stroke-width="1" fill="#203040A0" ></path>
+                <path d="M ${this.helpDim.X} ${this.debugY} l 960 0 20 20  -20 20 -960 0 -20 -20 20 -20" stroke="#203040" stroke-width="1" fill="#101520" ></path>
+                ${await draw.text(this.helpDim.X + 5, this.helpDim.Y, "DEBUG INFO PANEL:", this.white, this.mainFontSize)}
 
-
-
-                <path d="M ${helpDim.X} ${this.debugY + 50} l 460 0 10 10 0 230 -10 10 -460 0 -10 -10  0 -230 10 -10" stroke="${this.main}" stroke-width="1" fill="#203040" ></path>
-                ${await draw.text(helpDim.X, helpDim.Y + 42.5, "WallpaperGUI", this.main, this.subFontSize)}
-
-                ${await draw.text(helpDim.X, helpDim.Y60, "Update TimeStamp", this.white, this.normalFontSize)}
-                ${await draw.text(helpDim.X300, helpDim.Y60, `[ <text fill="${this.main}">${Date.now()}</text> ]`, this.white, this.normalFontSize)}
-
-                ${await draw.text(helpDim.X, helpDim.Y75, "Render Exec. Time ", this.white, this.normalFontSize)}
-                ${await draw.text(helpDim.X300, helpDim.Y75, `[ <text fill="${this.main}">${svgStats.lastExecTimeVal}</text> ms ]`, this.white, this.normalFontSize)}
-
-                ${await draw.text(helpDim.X, helpDim.Y90, "TotalUpdates ", this.white, this.normalFontSize)}
-                ${await draw.text(helpDim.X300, helpDim.Y90, `[ <text fill="${this.main}">${svgStats.totalUpdates}</text> ]`, this.white, this.normalFontSize)}
-
-                ${await draw.text(helpDim.X, helpDim.Y105, "Running Looping Render ", this.white, this.normalFontSize)}
-                ${await draw.text(helpDim.X300, helpDim.Y105, (svgStats.running) ? '[ <text fill="' + this.mainSuccess + '">ACTIVE</text> ]' : '[ <text fill="' + this.mainWarn + '">DISABLED</text> ]', this.white, this.normalFontSize)}
-
-
-
-                ${await draw.text(helpDim.X, helpDim.Y140, "SVG Template Info ", this.main, this.subFontSize)}
-
-                ${await draw.text(helpDim.X, helpDim.Y155, "Name ", this.white, this.normalFontSize)}
-                ${await draw.text(helpDim.X300, helpDim.Y155, `[ <text fill="${this.main}">${this.name}</text> ]`, this.white, this.normalFontSize)}
-
-                ${await draw.text(helpDim.X, helpDim.Y170, "Random Colors ", this.white, this.normalFontSize)}
-                ${await draw.text(helpDim.X300, helpDim.Y170, (this.useRandomColors) ? '[ <text fill="' + this.mainSuccess + '">ENABLED</text> ]' : '[ <text fill="' + this.mainWarn + '">DISABLED</text> ]', this.white, this.normalFontSize)}
-
-                ${await draw.text(helpDim.X, helpDim.Y185, "Render Height ", this.white, this.normalFontSize)}
-                ${await draw.text(helpDim.X300, helpDim.Y185, `[ <text fill="${this.main}">${this.helperHeight}</text> ]`, this.white, this.normalFontSize)}
-
-                ${await draw.text(helpDim.X, helpDim.Y200, "Render Width ", this.white, this.normalFontSize)}
-                ${await draw.text(helpDim.X300, helpDim.Y200, `[ <text fill="${this.main}">${this.helperWidth}</text> ]`, this.white, this.normalFontSize)}
-
-                ${await draw.text(helpDim.X, helpDim.Y215, "Debug Position (x,y)", this.white, this.normalFontSize)}
-                ${await draw.text(helpDim.X300, helpDim.Y215, `[ <text fill="${this.main}">${this.debugX}, ${this.debugY}</text> ]`, this.white, this.normalFontSize)}
-
-                ${await draw.text(helpDim.X, helpDim.Y230, "Scale ", this.white, this.normalFontSize)}
-                ${await draw.text(helpDim.X300, helpDim.Y230, `[ <text fill="${this.main}">${svgStats.scale}</text> ]`, this.white, this.normalFontSize)}
-
-
-
-
-
-                <path d="M ${this.debugX + 520} ${this.debugY + 50} l 460 0 10 10 0 230 -10 10 -460 0 -10 -10  0 -230 10 -10" stroke="${this.main}" stroke-width="1" fill="#203040" ></path>
-                ${await draw.text(helpDim.X500, helpDim.Y + 42.5, "vCache Info Stats:", this.main, this.subFontSize)}
-
-                ${await draw.text(helpDim.X500, helpDim.Y60, "Items in Cache", this.white, this.normalFontSize)}
-                ${await draw.text(helpDim.X840, helpDim.Y60, `[ <text fill="${this.main}">${await vCache.size()}</text> ]`, this.white, this.normalFontSize)}
-
-
-
-
-
-                <path d="M ${helpDim.X} ${this.debugY + 320} l 460 0 10 10 0 230 -10 10 -460 0 -10 -10  0 -230 10 -10" stroke="${this.main}" stroke-width="1" fill="#203040" ></path>
-                ${await draw.text(helpDim.X, helpDim.Y + 312.5, "vWatch Tasks Runner:", this.main, this.subFontSize)}
-
-                ${await draw.text(helpDim.X, helpDim.Y + 330, "Running Status", this.white, this.normalFontSize)}
-                ${await draw.text(helpDim.X300, helpDim.Y + 330, `[ ${(vWatchInfoData.status) ? '<text fill="' + this.mainSuccess + '">ACTIVE</text>' : '<text fill="' + this.mainWarn + '">STOPPED</text>'} ]`, this.white, this.normalFontSize)}
-
-                ${await draw.text(helpDim.X, helpDim.Y + 345, "Total Tasks Count", this.white, this.normalFontSize)}
-                ${await draw.text(helpDim.X300, helpDim.Y + 345, `[ <text fill="${this.main}">${vWatchInfoData.totalTasksCount}</text> ]`, this.white, this.normalFontSize)}
-
-                ${await draw.text(helpDim.X, helpDim.Y + 360, "Active Tasks ", this.white, this.normalFontSize)}
-                ${await draw.text(helpDim.X300, helpDim.Y + 360, `[ <text fill="${this.mainAlt}">${vWatchInfoData.activeTasksCount}</text> ]`, this.white, this.normalFontSize)}
-
-                ${await draw.text(helpDim.X, helpDim.Y + 375, "Disabled Tasks ", this.white, this.normalFontSize)}
-                ${await draw.text(helpDim.X300, helpDim.Y + 375, `[ ${vWatchInfoData.disabledTasksCount} ]`, this.white, this.normalFontSize)}
-
-                ${await draw.text(helpDim.X, helpDim.Y + 390, "Tick Interval ", this.white, this.normalFontSize)}
-                ${await draw.text(helpDim.X300, helpDim.Y + 390, `[ ${vWatchInfoData.tickInterval}ms ]`, this.white, this.normalFontSize)}
-
-                ${await draw.text(helpDim.X, helpDim.Y + 405, "Tick Frequency ", this.white, this.normalFontSize)}
-                ${await draw.text(helpDim.X300, helpDim.Y + 405, `[ ${vWatchInfoData.frequency}Hz ]`, this.white, this.normalFontSize)}
-
-                ${await draw.text(helpDim.X, helpDim.Y + 420, "AutoStart Option ", this.white, this.normalFontSize)}
-                ${await draw.text(helpDim.X300, helpDim.Y + 420, `[ ${vWatchInfoData.autoStart} ]`, this.white, this.normalFontSize)}
-
-                ${await draw.text(helpDim.X, helpDim.Y + 435, "Placeholder ", this.white, this.normalFontSize)}
-                ${await draw.text(helpDim.X300, helpDim.Y + 435, `[ WWWWW ]`, this.white, this.normalFontSize)}
-
-                ${await draw.text(helpDim.X, helpDim.Y + 450, "Placeholder ", this.white, this.normalFontSize)}
-                ${await draw.text(helpDim.X300, helpDim.Y + 450, `[ 0 ]`, this.white, this.normalFontSize)}
-
-                ${await draw.text(helpDim.X, helpDim.Y + 465, "Placeholder ", this.white, this.normalFontSize)}
-                ${await draw.text(helpDim.X300, helpDim.Y + 465, `[ 12 ]`, this.white, this.normalFontSize)}
-
-                ${await draw.text(helpDim.X, helpDim.Y + 480, "Placeholder ", this.white, this.normalFontSize)}
-                ${await draw.text(helpDim.X300, helpDim.Y + 480, `[ 5555 ]`, this.white, this.normalFontSize)}
-
-                ${await draw.text(helpDim.X, helpDim.Y + 495, "Placeholder ", this.white, this.normalFontSize)}
-                ${await draw.text(helpDim.X300, helpDim.Y + 495, `[ 4444 ]`, this.white, this.normalFontSize)}
-
-                ${await draw.text(helpDim.X, helpDim.Y + 510, "Placeholder ", this.white, this.normalFontSize)}
-                ${await draw.text(helpDim.X300, helpDim.Y + 510, `[ 3333 ]`, this.white, this.normalFontSize)}
-
-                ${await draw.text(helpDim.X, helpDim.Y + 525, "Placeholder ", this.white, this.normalFontSize)}
-                ${await draw.text(helpDim.X300, helpDim.Y + 525, `[ 123 ]`, this.white, this.normalFontSize)}
-
-
-
-
-
-                <path d="M ${this.debugX + 520} ${this.debugY + 320} l 460 0 10 10 0 230 -10 10 -460 0 -10 -10  0 -230 10 -10" stroke="${this.main}" stroke-width="1" fill="#203040" ></path>
-                ${await draw.text(helpDim.X500, helpDim.Y + 312.5, "PLACEHOLDER Block:", this.main, this.subFontSize)}
-
-                ${await draw.text(helpDim.X500, helpDim.Y + 330, "Placeholder ", this.white, this.normalFontSize)}
-                ${await draw.text(helpDim.X840, helpDim.Y + 330, `[ XXXXXXX ]`, this.white, this.normalFontSize)}
-
-                ${await draw.text(helpDim.X500, helpDim.Y + 345, "Placeholder ", this.white, this.normalFontSize)}
-                ${await draw.text(helpDim.X840, helpDim.Y + 345, `[ XXXXXXX ]`, this.white, this.normalFontSize)}
-
-                ${await draw.text(helpDim.X500, helpDim.Y + 360, "Placeholder ", this.white, this.normalFontSize)}
-                ${await draw.text(helpDim.X840, helpDim.Y + 360, `[ XXXXXXX ]`, this.white, this.normalFontSize)}
-
-                ${await draw.text(helpDim.X500, helpDim.Y + 375, "Placeholder ", this.white, this.normalFontSize)}
-                ${await draw.text(helpDim.X840, helpDim.Y + 375, `[ XXXXXXX ]`, this.white, this.normalFontSize)}
-
-                ${await draw.text(helpDim.X500, helpDim.Y + 390, "Placeholder ", this.white, this.normalFontSize)}
-                ${await draw.text(helpDim.X840, helpDim.Y + 390, `[ XXXXXXX ]`, this.white, this.normalFontSize)}
-
-                ${await draw.text(helpDim.X500, helpDim.Y + 405, "Placeholder ", this.white, this.normalFontSize)}
-                ${await draw.text(helpDim.X840, helpDim.Y + 405, `[ XXXXXXX ]`, this.white, this.normalFontSize)}
-
-                ${await draw.text(helpDim.X500, helpDim.Y + 420, "Placeholder ", this.white, this.normalFontSize)}
-                ${await draw.text(helpDim.X840, helpDim.Y + 420, `[ XXXXXXX ]`, this.white, this.normalFontSize)}
-
-
+                ${await this.wallGuiDBG()}
+                ${await this.vCacheDBG()}
+                ${await this.vWatchDBG()}
+                ${await this.placeholder()}
               </g>`;
     }
-    return "";
+    return `${await draw.text(1130, 20, `[ <text fill="${this.main}">${this.cacheData.svgStats.lastExecTimeVal}</text> ms | ${this.cacheData.svgStats.totalUpdates} @ ${this.cacheData.svgStats.scale} ]`, this.white, this.normalFontSize)}`;
   };
 
 }

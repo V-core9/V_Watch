@@ -4,39 +4,40 @@ const vCache = require('../vCache');
 const { vTime } = require('../helpers/');
 
 const {
-  renderWallpaperGUI,
+  wallpaperGUI,
   systemInfoStats,
   netSpeedTest,
   clockUpdate,
 } = require('./actions');
 
 
-const redrawTime = vTime.seconds(1);
+const redrawTime = vTime.seconds(5);
 
-module.exports = sysTasks = (vWatch) => {
+module.exports = sysTasks = async (vWatch) => {
 
   //* DEMO/SAMPLE TASKS TO RUN
-  //vWatch.newTask("justDoIt", 750, () => console.log("justDoIt PRINT TO CONSOLE TASK"));
+  await vWatch.newTask("justDoIt", 750, async () => console.log("justDoIt PRINT TO CONSOLE TASK"), "Demo Task Description Placeholder");
+  await vWatch.disableTask("justDoIt");
 
 
   //! FEW REAL TASKS
 
-  vWatch.newTask("clock", vTime.seconds(), clockUpdate );
+  await vWatch.newTask("clock", vTime.seconds(), clockUpdate, "vWatch task that updates Clock in vCache");
 
   // This will do the rendering of wallpaperGUI.
+  await vWatch.newTask("wallpaperGUI", redrawTime, wallpaperGUI, "This will do the rendering of wallpaperGUI");
   // This Tasks status should match config.backgroundUpdates value.
-  vWatch.newTask("renderWallpaperGUI", redrawTime, renderWallpaperGUI);
-  vWatch.setTaskStatus("renderWallpaperGUI", config.backgroundUpdates);
+  await vWatch.setTaskStatus("wallpaperGUI", config.backgroundUpdates);
 
 
   // Getting Current User&Device Info
-  vWatch.newTask("systemInfoStats", redrawTime, async () => await systemInfoStats(redrawTime));
+  await vWatch.newTask("systemInfoStats", redrawTime, async () => await systemInfoStats(redrawTime), "Getting Current User and System Info");
 
+  // Internet Speed Test
+  await vWatch.newTask("netSpeedTest", vTime.minutes(30), netSpeedTest, "Internet Speed Test");
 
-  vWatch.newTask("netSpeedTest", vTime.minutes(30), netSpeedTest);
-
-
-  vWatch.newTask("vWatchInfoData", vTime.minutes(1), async () => {
+  // vWatch Info Cache
+  await vWatch.newTask("vWatchDBG", vTime.minutes(1), async () => {
 
     let vwDbgInfo = {
       status: (vWatch.loopCore !== null) ? true : false,
@@ -47,10 +48,11 @@ module.exports = sysTasks = (vWatch) => {
       activeTasksCount: await vWatch.activeTasksCount(),
       totalTasksCount: await vWatch.totalTasksCount(),
       vWatchVersion: vWatch.version,
+      tasks: await vWatch.allTasks(),
     };
 
-    await vCache.set("vWatchInfoData", vwDbgInfo);
+    await vCache.set("vWatchDBG", vwDbgInfo);
 
-  });
+  }, "vWatch Info Cache");
 
 };

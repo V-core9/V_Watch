@@ -22,6 +22,7 @@ function backgroundGUI(data = {}) {
   this.templateHelper = "";
   this.autoInit = data.autoInit || false;
   this.scale = data.scale || 1;
+  this.quality = data.quality || 75;
   this.totalUpdates = 0;
   this.lastExecTimeVal = 0;
   this.loopObj = null;
@@ -80,12 +81,13 @@ function backgroundGUI(data = {}) {
       lastExecTimeVal: this.lastExecTimeVal,
       running: (this.loopObj != null) ? true : false,
       imgLocation: this.mFile,
-      scale: this.scale
+      scale: this.scale,
+      quality: this.quality,
     };
 
     await vCache.set('svgStats', svgStats);
 
-    svg2img(await mainSVG_Template.render(), { width: this.screen.widthScaled, height: this.screen.heightScaled, format: 'jpg', 'quality': 100 }, this.saveAndSetBackground);
+    svg2img(await mainSVG_Template.render(), { width: this.screen.widthScaled, height: this.screen.heightScaled, format: 'jpg', 'quality': this.quality }, this.saveAndSetBackground);
     this.lastExecTimeVal = Date.now() - time_01;
   };
 
