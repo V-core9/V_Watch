@@ -19,7 +19,6 @@ require("./src/sysTasks")(vWatch);
 
 // Exit Handler
 process.on("SIGINT", async () => {
-  console.log("Caught interrupt signal");
 
   vCache.toFile('sample.json');
   config.saveConfigToFile();

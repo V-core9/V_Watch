@@ -10,6 +10,7 @@ function V_Watch(data = {}) {
 
   this.loopCore = null;
 
+
   this.tick = () => {
 
     for (const taskId in vwTasks) {
@@ -27,16 +28,19 @@ function V_Watch(data = {}) {
 
   };
 
+
   this.start = () => {
     if (config.debug) console.log("V_Watch: STARTING >>>");
     this.loopCore = setInterval(this.tick, this.tickInterval);
   };
+
 
   this.stop = () => {
     if (config.debug) console.log("V_Watch: STOPPING ...");
     clearInterval(this.loopCore);
     this.loopCore = null;
   };
+
 
   this.newTask = (id, interval, callback, description = "") => {
     vwTasks[id] = {
@@ -49,13 +53,16 @@ function V_Watch(data = {}) {
     };
   };
 
+
   this.disableTask = (id) => {
     return this.setTaskStatus(id, false);
   };
 
+
   this.enableTask = (id) => {
     return this.setTaskStatus(id, true);
   };
+
 
   this.setTaskStatus = (id, value) => {
     if (typeof value === "boolean") {
