@@ -56,14 +56,19 @@ function svgTemplate(data = {}) {
 
   this.cacheData = {};
 
+  this.clock = {
+    posX: 1115,
+    posY: 680
+  };
 
   this.render = async (val = {}) => {
     if (this.useRandomColors) this.randomColors();
 
     this.cacheData = {
-      system: await vCache.get('systemInfoStats') || { cpu: {}, ram: {}, deviceUserInfo: {} },
-      netSpeed: await vCache.get('netSpeedTest') || { download: {}, upload: {} },
-      svgStats: await vCache.get('svgRenderDebugInfo') || { lastExecTimeVal: 0, totalUpdates: 0, scale: 1, running: false },
+      clock: await vCache.get('clock') || { strTime: "", datePrint: "" },
+      system: await vCache.get('system') || { cpu: {}, ram: {}, deviceUserInfo: {} },
+      netSpeed: await vCache.get('netSpeed') || { download: {}, upload: {} },
+      svgStats: await vCache.get('svgStats') || { lastExecTimeVal: 0, totalUpdates: 0, scale: 1, running: false },
     };
 
     //console.log(this.cacheData);
@@ -102,30 +107,13 @@ function svgTemplate(data = {}) {
 
   this.printClock = async () => {
 
-    const posX = 1115;
-    const posY = 680;
-
-    var date = new Date();
-    var hours = date.getHours();
-    var minutes = date.getMinutes();
-    var seconds = date.getSeconds();
-    var datePrint = String(date).split(' ');
-
-    datePrint = datePrint[0] + ' ' + datePrint[1] + ' ' + datePrint[2] + ' ' + datePrint[3];
-
-    hours = hours < 10 ? ' ' + hours : hours;
-    minutes = minutes < 10 ? '0' + minutes : minutes;
-    seconds = seconds < 10 ? '0' + seconds : seconds;
-
-    var strTime = hours + ':' + minutes + ':' + seconds;
-
     return `
-            <path d="M ${(posX)}  ${(posY)}  l  20 -20 110 0 20 20 -10 0 -15 -15 -100 0 -15 15 -10 0" stroke="#444" stroke-width="2" fill="${this.background}" ></path>
+            <path d="M ${(this.clock.posX)}  ${(this.clock.posY)}  l  20 -20 110 0 20 20 -10 0 -15 -15 -100 0 -15 15 -10 0" stroke="#444" stroke-width="2" fill="${this.background}" ></path>
             <g font-family="monospace" font-weight="bold"  >
-              ${await draw.text(posX + 25, posY + 2.5, strTime, this.main, this.subFontSize)}
-              ${await draw.text(posX + 22.5, posY + 15, datePrint, this.backgroundAlt, this.normalFontSize)}
+              ${await draw.text(this.clock.posX + 25, this.clock.posY + 2.5, this.cacheData.clock.strTime, this.main, this.subFontSize)}
+              ${await draw.text(this.clock.posX + 22.5, this.clock.posY + 15, this.cacheData.clock.datePrint, this.backgroundAlt, this.normalFontSize)}
             </g>
-            <path d="M ${(posX)}  ${(posY + 5)}  l  20 20 110 0 20 -20 -10 0 -15 15 -100 0 -15 -15 -10 0" stroke="#444" stroke-width="2"  fill="${this.background}" ></path>`;
+            <path d="M ${(this.clock.posX)}  ${(this.clock.posY + 5)}  l  20 20 110 0 20 -20 -10 0 -15 15 -100 0 -15 -15 -10 0" stroke="#444" stroke-width="2"  fill="${this.background}" ></path>`;
   };
 
 

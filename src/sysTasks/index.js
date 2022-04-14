@@ -6,13 +6,12 @@ const { vTime } = require('../helpers/');
 const {
   renderWallpaperGUI,
   systemInfoStats,
-  netSpeedTest
+  netSpeedTest,
+  clockUpdate,
 } = require('./actions');
 
 
-const constTimes = {
-  sec5: vTime.seconds(5)
-};
+const redrawTime = vTime.seconds(1);
 
 module.exports = sysTasks = (vWatch) => {
 
@@ -22,14 +21,16 @@ module.exports = sysTasks = (vWatch) => {
 
   //! FEW REAL TASKS
 
+  vWatch.newTask("clock", vTime.seconds(), clockUpdate );
+
   // This will do the rendering of wallpaperGUI.
   // This Tasks status should match config.backgroundUpdates value.
-  vWatch.newTask("renderWallpaperGUI", constTimes.sec5, renderWallpaperGUI);
+  vWatch.newTask("renderWallpaperGUI", redrawTime, renderWallpaperGUI);
   vWatch.setTaskStatus("renderWallpaperGUI", config.backgroundUpdates);
 
 
   // Getting Current User&Device Info
-  vWatch.newTask("systemInfoStats", constTimes.sec5, async () => await systemInfoStats(constTimes.sec5));
+  vWatch.newTask("systemInfoStats", redrawTime, async () => await systemInfoStats(redrawTime));
 
 
   vWatch.newTask("netSpeedTest", vTime.minutes(30), netSpeedTest);

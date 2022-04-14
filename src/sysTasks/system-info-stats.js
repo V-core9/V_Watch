@@ -25,6 +25,6 @@ module.exports = async (timeLen = 1000) => {
 
   };
 
-  await vCache.set("systemInfoStats", result);
+  await vCache.set("system", result);
 
 };

@@ -1,11 +1,14 @@
 module.exports = actions = {
 
   //? Internet Speed Test
-  netSpeedTest : require('./internet-speed-test'),
+  netSpeedTest: require('./internet-speed-test'),
 
   //? Trigger WallpaperGUI [re]Render
-  renderWallpaperGUI : require('./render-wallpapergui'),
+  renderWallpaperGUI: require('./render-wallpapergui'),
 
   //? System Info Stats
-  systemInfoStats : require('./system-info-stats'),
+  systemInfoStats: require('./system-info-stats'),
+
+  //? Clock Update
+  clockUpdate: require('./clock-update'),
 };

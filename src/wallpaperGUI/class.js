@@ -83,7 +83,7 @@ function backgroundGUI(data = {}) {
       scale: this.scale
     };
 
-    await vCache.set('svgRenderDebugInfo', svgStats);
+    await vCache.set('svgStats', svgStats);
 
     svg2img(await mainSVG_Template.render(), { width: this.screen.widthScaled, height: this.screen.heightScaled, format: 'jpg', 'quality': 100 }, this.saveAndSetBackground);
     this.lastExecTimeVal = Date.now() - time_01;
