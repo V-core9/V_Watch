@@ -15,6 +15,7 @@ const items = [
   "v_sitemap",
   "v_shortkeys",
   "x-powered-by-random",
+  "v_core_cache",
 ];
 
 let results = {};
