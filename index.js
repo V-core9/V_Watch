@@ -1,26 +1,42 @@
-const vCache = require("./src/vCache");
+//? Config
 const config = require("./src/config");
-const notify = require("./src/helpers/v_notify");
-
 config.loadConfigFromFile();
-notify.app.starting();
-vCache.fromFile("sample.json");
 
-// Windows System Tray Icon and Menu
+//! Starting App Notification
+const notify = require("./src/helpers/v_notify");
+notify.app.starting();
+
+//* Init and load cache if available
+const cache = require("./src/cache");
+cache.fromFile("./src/cache/$.json");
+
+
+
+//? Windows System Tray Icon and Menu
 const v_tray = require("./src/helpers/v_tray");
 
-// wallpaperGUI - Background GUI
+
+//? wallpaperGUI - Background GUI
 const wallpaperGUI = require("./src/wallpaperGUI");
 
-// vWatch - Tasks Runner
-const vWatch = require("./src/v_watch");
 
+//? vWatch - Tasks Runner
+const vWatch = require("./src/v_watch");
+//* Init tasks
 require("./src/sysTasks")(vWatch);
 
-// Exit Handler
+
+
+//! Exit Handler
 process.on("SIGINT", async () => {
 
-  vCache.toFile('sample.json');
+  // Send Notification that we are about to stop running
+  notify.app.stopping();
+
+  // Save Cache
+  cache.toFile("./src/cache/$.json");
+
+  // Save Config
   config.saveConfigToFile();
 
   // wallpaperGUI Terminate
@@ -32,9 +48,7 @@ process.on("SIGINT", async () => {
   // vWatch Terminate
   vWatch.stop();
 
-  // Send Notification that we are about to stop running
-  notify.app.stopping();
-
   // Set timeout to wait for all tasks to finish
   setTimeout(() => process.exit(0), config.exitTimeout);
+
 });

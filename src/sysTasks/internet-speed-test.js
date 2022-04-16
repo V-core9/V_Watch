@@ -1,6 +1,6 @@
 const speedTest = require('speedtest-net');
 
-const vCache = require('../vCache');
+const cache = require('../cache');
 const { byteSizer } = require('v_file_system');
 const { roundNumber } = require('../helpers');
 
@@ -8,12 +8,12 @@ const { roundNumber } = require('../helpers');
 module.exports = async () => {
   const netStats = await speedTest({ acceptLicense: true });
 
-  await vCache.set("netSpeedDBG", netStats);
+  await cache.set("netSpeedDBG", netStats);
 
   const data = {
     download: roundNumber(byteSizer.byteToMega(netStats.download.bandwidth), 2),
     upload: roundNumber(byteSizer.byteToMega(netStats.upload.bandwidth), 2)
   };
 
-  await vCache.set("netSpeed", data);
+  await cache.set("netSpeed", data);
 };

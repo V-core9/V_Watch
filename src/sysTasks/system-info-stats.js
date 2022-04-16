@@ -1,4 +1,4 @@
-const vCache = require('../vCache');
+const cache = require('../cache');
 const v_os = require('../helpers/v_os');
 const { byteSizer } = require('v_file_system');
 const { roundNumber } = require('../helpers');
@@ -25,6 +25,6 @@ module.exports = async (timeLen = 1000) => {
 
   };
 
-  await vCache.set("system", result);
+  await cache.set("system", result);
 
 };

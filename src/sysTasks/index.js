@@ -1,5 +1,5 @@
 const config = require('../config');
-const vCache = require('../vCache');
+const cache = require('../cache');
 
 const { vTime } = require('../helpers/');
 
@@ -22,7 +22,7 @@ module.exports = sysTasks = async (vWatch) => {
 
   //! FEW REAL TASKS
 
-  await vWatch.newTask("clock", vTime.seconds(), clockUpdate, "vWatch task that updates Clock in vCache");
+  await vWatch.newTask("clock", vTime.seconds(), clockUpdate, "vWatch task that updates Clock in cache");
 
   // This will do the rendering of wallpaperGUI.
   await vWatch.newTask("wallpaperGUI", redrawTime, wallpaperGUI, "This will do the rendering of wallpaperGUI");
@@ -51,7 +51,7 @@ module.exports = sysTasks = async (vWatch) => {
       tasks: await vWatch.allTasks(),
     };
 
-    await vCache.set("vWatchDBG", vwDbgInfo);
+    await cache.set("vWatchDBG", vwDbgInfo);
 
   }, "vWatch Info Cache");
 

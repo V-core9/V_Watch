@@ -4,7 +4,7 @@ const v_execute = require('v_execute');
 // NPM: svg2png [many more options]
 var svg2img = require('svg2img');
 
-const vCache = require('../vCache');
+const cache = require('../cache');
 
 const config = require('../config');
 
@@ -85,7 +85,7 @@ function backgroundGUI(data = {}) {
       quality: this.quality,
     };
 
-    await vCache.set('svgStats', svgStats);
+    await cache.set('svgStats', svgStats);
 
     svg2img(await mainSVG_Template.render(), { width: this.screen.widthScaled, height: this.screen.heightScaled, format: 'jpg', 'quality': this.quality }, this.saveAndSetBackground);
     this.lastExecTimeVal = Date.now() - time_01;

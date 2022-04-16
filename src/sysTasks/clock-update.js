@@ -1,4 +1,4 @@
-const vCache = require('../vCache');
+const cache = require('../cache');
 
 module.exports = clockUpdate = async () => {
 
@@ -16,6 +16,6 @@ module.exports = clockUpdate = async () => {
 
   var strTime = hours + ':' + minutes + ':' + seconds;
 
-  await vCache.set("clock", {strTime: strTime, datePrint: datePrint});
+  await cache.set("clock", {strTime: strTime, datePrint: datePrint});
 
 };

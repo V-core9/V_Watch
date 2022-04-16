@@ -1,5 +1,5 @@
 const config = require('../config');
-const vCache = require('../vCache');
+const cache = require('../cache');
 
 
 const { getRandomColor } = require('../helpers');
@@ -71,11 +71,11 @@ function svgTemplate(data = {}) {
     if (this.useRandomColors) this.randomColors();
 
     this.cacheData = {
-      clock: await vCache.get('clock') || { strTime: "", datePrint: "" },
-      system: await vCache.get('system') || { cpu: {}, ram: {}, deviceUserInfo: {} },
-      netSpeed: await vCache.get('netSpeed') || { download: 0, upload: 0 },
-      svgStats: await vCache.get('svgStats') || { lastExecTimeVal: 0, totalUpdates: 0, scale: 1, running: false, quality: 75 },
-      vWatch: (config.debug) ? await vCache.get("vWatchDBG") : {},
+      clock: await cache.get('clock') || { strTime: "", datePrint: "" },
+      system: await cache.get('system') || { cpu: {}, ram: {}, deviceUserInfo: {} },
+      netSpeed: await cache.get('netSpeed') || { download: 0, upload: 0 },
+      svgStats: await cache.get('svgStats') || { lastExecTimeVal: 0, totalUpdates: 0, scale: 1, running: false, quality: 75 },
+      vWatch: (config.debug) ? await cache.get("vWatchDBG") : {},
     };
 
     //console.log(this.cacheData);
@@ -168,14 +168,11 @@ function svgTemplate(data = {}) {
     let taskNames = Object.keys(tasks);
 
     for (let i = 0; i < taskNames.length; i++) {
-      taskVIEW += await draw.text(this.helpDim.X500, this.helpDim.Y + 340 + i * 30, `${taskNames[i]}`, this.white, this.normalFontSize);
-      taskVIEW += await draw.text(this.helpDim.X840, this.helpDim.Y + 340 + i * 30, `[ ${(tasks[taskNames[i]].enabled) ? "✔ Enabled" : "❌ Disabled"} ]`, this.main, this.normalFontSize);
-      taskVIEW += await draw.text(this.helpDim.X500, this.helpDim.Y + 350 + i * 30, `Θ ${tasks[taskNames[i]].description}`, this.white, 8);
-      taskVIEW += await draw.text(this.helpDim.X840, this.helpDim.Y + 350 + i * 30, `[ Δ ${tasks[taskNames[i]].interval}ms | Σ ${tasks[taskNames[i]].runs} ]`, this.main, 8);
+      taskVIEW += `${await draw.text(this.helpDim.X500, this.helpDim.Y + 340 + i * 30, `${taskNames[i]}`, this.white, this.normalFontSize)}
+                   ${await draw.text(this.helpDim.X840, this.helpDim.Y + 340 + i * 30, `[ ${(tasks[taskNames[i]].enabled) ? "✔ Enabled" : "❌ Disabled"} ]`, this.main, this.normalFontSize)}
+                   ${await draw.text(this.helpDim.X500, this.helpDim.Y + 350 + i * 30, `${tasks[taskNames[i]].description}`, this.white, 8)}
+                   ${await draw.text(this.helpDim.X840, this.helpDim.Y + 350 + i * 30, `[ Δ ${tasks[taskNames[i]].interval}ms | Σ ${tasks[taskNames[i]].runs} ]`, this.main, 8)}`;
     }
-
-    console.log(tasks);
-
 
     return `
             <path d="M ${this.debugX + 520} ${this.debugY + 320} l 460 0 10 10 0 230 -10 10 -460 0 -10 -10  0 -230 10 -10" stroke="${this.main}" stroke-width="1" fill="#203040" ></path>
@@ -210,13 +207,13 @@ function svgTemplate(data = {}) {
             ${await draw.text(this.helpDim.X300, this.helpDim.Y + 420, `[ ${this.cacheData.vWatch.autoStart} ]`, this.white, this.normalFontSize)}`;
   };
 
-  this.vCacheDBG = async () => {
+  this.cacheDBG = async () => {
 
     return `<path d="M ${this.debugX + 520} ${this.debugY + 50} l 460 0 10 10 0 230 -10 10 -460 0 -10 -10  0 -230 10 -10" stroke="${this.main}" stroke-width="1" fill="#203040" ></path>
-            ${await draw.text(this.helpDim.X500, this.helpDim.Y + 42.5, "vCache Info Stats:", this.main, this.subFontSize)}
+            ${await draw.text(this.helpDim.X500, this.helpDim.Y + 42.5, "cache Info Stats:", this.main, this.subFontSize)}
 
             ${await draw.text(this.helpDim.X500, this.helpDim.Y60, "Items in Cache", this.white, this.normalFontSize)}
-            ${await draw.text(this.helpDim.X840, this.helpDim.Y60, `[ <text fill="${this.main}">${await vCache.size()}</text> ]`, this.white, this.normalFontSize)}`;
+            ${await draw.text(this.helpDim.X840, this.helpDim.Y60, `[ <text fill="${this.main}">${await cache.size()}</text> ]`, this.white, this.normalFontSize)}`;
 
   };
 
@@ -271,7 +268,7 @@ function svgTemplate(data = {}) {
                 ${await draw.text(this.helpDim.X + 5, this.helpDim.Y, "DEBUG INFO PANEL:", this.white, this.mainFontSize)}
 
                 ${await this.wallGuiDBG()}
-                ${await this.vCacheDBG()}
+                ${await this.cacheDBG()}
                 ${await this.vWatchDBG()}
                 ${await this.placeholder()}
               </g>`;
