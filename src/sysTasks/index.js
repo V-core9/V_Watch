@@ -1,58 +1,52 @@
 const config = require('../config');
-const cache = require('../cache');
+const vWatch = require("../v_watch");
+const { vTime } = require('../helpers');
 
-const { vTime } = require('../helpers/');
 
+//! System actions [ functions to call/use in vWatch Tasks List ]
 const {
-  wallpaperGUI,
-  systemInfoStats,
-  netSpeedTest,
+  justDoIt,
   clockUpdate,
+  wallpaperGUI,
+  netSpeedTest,
+  systemInfoStats,
+  vWatchDebug,
 } = require('./actions');
 
 
-const redrawTime = vTime.seconds(5);
+module.exports = sysTasks = async () => {
 
-module.exports = sysTasks = async (vWatch) => {
-
-  //* DEMO/SAMPLE TASKS TO RUN
-  await vWatch.newTask("justDoIt", 750, async () => console.log("justDoIt PRINT TO CONSOLE TASK"), "Demo Task Description Placeholder");
-  await vWatch.disableTask("justDoIt");
-
-
-  //! FEW REAL TASKS
-
-  await vWatch.newTask("clock", vTime.seconds(), clockUpdate, "vWatch task that updates Clock in cache");
-
-  // This will do the rendering of wallpaperGUI.
-  await vWatch.newTask("wallpaperGUI", redrawTime, wallpaperGUI, "This will do the rendering of wallpaperGUI");
+  //* This will do the rendering of wallpaperGUI.
+  await vWatch.newTask("wallpaperGUI", vTime.seconds(config.redrawTime), wallpaperGUI, "This will do the rendering of wallpaperGUI");
   // This Tasks status should match config.backgroundUpdates value.
   await vWatch.setTaskStatus("wallpaperGUI", config.backgroundUpdates);
 
 
-  // Getting Current User&Device Info
-  await vWatch.newTask("systemInfoStats", redrawTime, async () => await systemInfoStats(redrawTime), "Getting Current User and System Info");
 
-  // Internet Speed Test
+  //* DEMO/SAMPLE TASKS TO have [DISABLED]
+  await vWatch.newTask("justDoIt", 750, justDoIt, "Demo Task Description Placeholder");
+  await vWatch.disableTask("justDoIt");
+
+
+
+  //* CLOCK Task
+  await vWatch.newTask("clock", vTime.seconds(config.redrawTime), clockUpdate, "vWatch task that updates Clock in cache");
+
+
+
+  //* Getting Current User&Device Info
+  await vWatch.newTask("systemInfoStats", vTime.seconds(config.redrawTime), async () => await systemInfoStats(vTime.seconds(config.redrawTime)), "Getting Current User and System Info");
+
+
+
+  //* Internet Speed Test
   await vWatch.newTask("netSpeedTest", vTime.minutes(30), netSpeedTest, "Internet Speed Test");
+  await vWatch.disableTask("netSpeedTest");
 
-  // vWatch Info Cache
-  await vWatch.newTask("vWatchDBG", vTime.minutes(1), async () => {
 
-    let vwDbgInfo = {
-      status: (vWatch.loopCore !== null) ? true : false,
-      tickInterval: vWatch.tickInterval, // in milliseconds
-      frequency: (1000 / vWatch.tickInterval),
-      autoStart: vWatch.autoStart,
-      disabledTasksCount: await vWatch.disabledTasksCount(),
-      activeTasksCount: await vWatch.activeTasksCount(),
-      totalTasksCount: await vWatch.totalTasksCount(),
-      vWatchVersion: vWatch.version,
-      tasks: await vWatch.allTasks(),
-    };
 
-    await cache.set("vWatchDBG", vwDbgInfo);
+  //* vWatch Info Cache
+  await vWatch.newTask("vWatchDBG", vTime.minutes(1), vWatchDebug, "vWatch Info Cache");
 
-  }, "vWatch Info Cache");
 
 };

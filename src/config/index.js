@@ -8,6 +8,7 @@ process.title = '-v-';
 
 const config = {
 
+
   /*
   * Debug Enable/Disable
   */
@@ -25,6 +26,11 @@ const config = {
     config.debug = !config.debug;
   },
 
+
+
+  /*
+  * BackgroundUpdates Status
+  */
   bgUpdates: true,
 
   set backgroundUpdates(value) {
@@ -45,6 +51,9 @@ const config = {
     config.backgroundUpdates = !config.backgroundUpdates;
   },
 
+
+
+
   /*
   * Notifications Enable/Disable
   */
@@ -54,15 +63,15 @@ const config = {
     return (typeof value === 'boolean') ? config.notify = value : false;
   },
 
-
   get notifications() {
     return config.notify;
   },
 
-
   toggleNotifications() {
     config.notifications = !config.notifications;
   },
+
+
 
 
   /*
@@ -78,6 +87,12 @@ const config = {
     }
   },
 
+
+
+
+  /*
+  * FILE - Save/Read Config
+  */
   fileLocation: path.join(__dirname, './userConfig.json'),
 
   saveConfigToFile() {
@@ -86,6 +101,7 @@ const config = {
       debug: config.debug,
       notifications: config.notifications,
       backgroundUpdates: config.backgroundUpdates,
+      extendedInfo: config.extendedInfoStatus,
     };
 
     return v_fs.writeSy(config.fileLocation, `${JSON.stringify(data, null, 2)}`);
@@ -100,6 +116,7 @@ const config = {
       if (userConfig.debug !== undefined) config.debug = userConfig.debug;
       if (userConfig.notifications !== undefined) config.notifications = userConfig.notifications;
       if (userConfig.backgroundUpdates !== undefined) config.backgroundUpdates = userConfig.backgroundUpdates;
+      if (userConfig.extendedInfo !== undefined) config.extendedInfo = userConfig.extendedInfo;
 
       return userConfig;
     } catch (error) {
@@ -109,18 +126,46 @@ const config = {
   },
 
 
-  // EXITING Timeout
+
+
+  /*
+  ! EXITING Timeout
+  */
   exitingTimeout: 100,
 
-  set exitTimeout (value) {
+  set exitTimeout(value) {
     return (!isNaN(value)) ? config.exitingTimeout = value : false;
   },
 
-  get exitTimeout () {
+  get exitTimeout() {
     return config.exitingTimeout;
   },
 
 
+
+
+  /*
+  * Redraw Interval / System Stats Gathering Interval
+  */
+  redrawTime: 1,
+
+
+  /*
+  * extendedInfo Enable/Disable
+  */
+  extendedInfoStatus: false,
+
+  set extendedInfo(value) {
+    return (typeof value === 'boolean') ? config.extendedInfoStatus = value : false;
+  },
+
+  get extendedInfo() {
+    return config.extendedInfoStatus;
+  },
+
+  toggleExtendedInfo() {
+    config.extendedInfo = !config.extendedInfo;
+  },
 };
 
 

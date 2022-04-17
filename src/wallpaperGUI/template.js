@@ -31,21 +31,26 @@ function svgTemplate(data = {}) {
   this.helperWidth = 1280;
   this.helperHeight = 720;
 
+
   this.superFontSize = 45;
   this.mainFontSize = 30;
   this.subFontSize = 20;
   this.normalFontSize = 11;
   this.strokeWidth = 3;
 
+
   this.debugX = data.debugX || 140;
   this.debugY = data.debugY || 45;
 
+
   this.cacheData = {};
+
 
   this.clock = {
     posX: 1115,
     posY: 680
   };
+
 
   this.helpDim = {
     X: this.debugX + 20,
@@ -67,6 +72,7 @@ function svgTemplate(data = {}) {
     Y245: this.debugY + this.mainFontSize + 245,
   };
 
+
   this.render = async () => {
     if (this.useRandomColors) this.randomColors();
 
@@ -85,6 +91,8 @@ function svgTemplate(data = {}) {
               ${await this.printOsInfo()}
               ${await this.printBotStats()}
               ${await this.printClock()}
+              ${await this.extendedInfoPanel()}
+
               ${await this.debug()}
             </svg>`;
 
@@ -160,10 +168,11 @@ function svgTemplate(data = {}) {
     }
   };
 
+
   this.placeholder = async () => {
     let taskVIEW = "";
 
-    let tasks = this.cacheData.vWatch.tasks;
+    let tasks = this.cacheData.vWatch.tasks || {};
 
     let taskNames = Object.keys(tasks);
 
@@ -180,6 +189,7 @@ function svgTemplate(data = {}) {
 
             ${taskVIEW}`;
   };
+
 
   this.vWatchDBG = async () => {
     return `<path d="M ${this.helpDim.X} ${this.debugY + 320} l 460 0 10 10 0 230 -10 10 -460 0 -10 -10  0 -230 10 -10" stroke="${this.main}" stroke-width="1" fill="#203040" ></path>
@@ -207,6 +217,7 @@ function svgTemplate(data = {}) {
             ${await draw.text(this.helpDim.X300, this.helpDim.Y + 420, `[ ${this.cacheData.vWatch.autoStart} ]`, this.white, this.normalFontSize)}`;
   };
 
+
   this.cacheDBG = async () => {
 
     return `<path d="M ${this.debugX + 520} ${this.debugY + 50} l 460 0 10 10 0 230 -10 10 -460 0 -10 -10  0 -230 10 -10" stroke="${this.main}" stroke-width="1" fill="#203040" ></path>
@@ -216,6 +227,7 @@ function svgTemplate(data = {}) {
             ${await draw.text(this.helpDim.X840, this.helpDim.Y60, `[ <text fill="${this.main}">${await cache.size()}</text> ]`, this.white, this.normalFontSize)}`;
 
   };
+
 
   this.wallGuiDBG = async () => {
     return `<path d="M ${this.helpDim.X} ${this.debugY + 50} l 460 0 10 10 0 230 -10 10 -460 0 -10 -10  0 -230 10 -10" stroke="${this.main}" stroke-width="1" fill="#203040" ></path>
@@ -259,6 +271,7 @@ function svgTemplate(data = {}) {
             ${await draw.text(this.helpDim.X300, this.helpDim.Y245, `[ <text fill="${this.main}">${this.cacheData.svgStats.quality}</text> ]`, this.white, this.normalFontSize)}`;
   };
 
+
   this.debug = async () => {
     if (config.debug) {
 
@@ -275,6 +288,51 @@ function svgTemplate(data = {}) {
     }
     return `${await draw.text(1130, 20, `[ <text fill="${this.main}">${this.cacheData.svgStats.lastExecTimeVal}</text> ms | ${this.cacheData.svgStats.totalUpdates} @ ${this.cacheData.svgStats.scale} ]`, this.white, this.normalFontSize)}`;
   };
+
+
+
+  this.extendedInfoPanel = async () => {
+
+    return (config.extendedInfo) ? `
+              <g >
+                <path d="M 35 15 l 110 0  20 20   -130 130  -20 -20  0 -110  20 -20" stroke="${this.main}" stroke-width="1" fill="#101520" ></path>
+                ${await draw.text(35, 40, "💻 EIP#1", this.white, this.subFontSize)}
+
+              </g>
+
+
+              <g>
+                <path d="M 35 705 l 110 0   20 -20   -130 -130  -20 20   0 110   20 20" stroke="${this.main}" stroke-width="1" fill="#101520" ></path>
+                ${await draw.text(35, 695, "💻 EIP#2", this.white, this.subFontSize)}
+              </g>
+
+
+              <g>
+                <path d="M 1135 15 l 110 0   20 20   0 110   -20 20   -130 -130  20 -20" stroke="${this.main}" stroke-width="1" fill="#101520" ></path>
+                ${await draw.text(1140, 40, "💻 EIP#3", this.white, this.subFontSize)}
+              </g>
+
+
+              <g>
+                <path d="M 1135 705 l 110 0   20 -20   0 -110 -20 -20 -130 130  20 20 " stroke="${this.main}" stroke-width="1" fill="#101520" ></path>
+                ${await draw.text(1140, 695, "💻 EIP#4", this.white, this.subFontSize)}
+              </g>
+
+
+              <g>
+                <path d="M 5 145 l   25 25   0 380   -25 25   0 -430  " stroke="${this.main}" stroke-width="1" fill="#101520" ></path>
+                ${await draw.text(10, 185, "🆒", this.main, this.normalFontSize)}
+              </g>
+
+
+              <g>
+                <path d="M 1275 145 l   -25 25   0 380   25 25   0 -430  " stroke="${this.main}" stroke-width="1" fill="#101520" ></path>
+                ${await draw.text(1255, 545, "🆓", this.main, this.normalFontSize)}
+              </g>
+
+              ` : ``;
+  };
+
 
 }
 

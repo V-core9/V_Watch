@@ -33,6 +33,11 @@ const notify = {
     return sendNotification(notificationItem);
   },
 
+  extendedInfoToggle : async () => {
+    let notificationItem = (config.extendedInfo) ? notificationList.extendedInfo.enabled : notificationList.extendedInfo.disabled;
+    return sendNotification(notificationItem);
+  }
+
 
 };
 

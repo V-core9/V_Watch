@@ -1,5 +1,8 @@
 module.exports = actions = {
 
+  // Example [justDoIt()]
+  justDoIt: require('./justDoIt'),
+
   //? Internet Speed Test
   netSpeedTest: require('./internet-speed-test'),
 
@@ -11,4 +14,9 @@ module.exports = actions = {
 
   //? Clock Update
   clockUpdate: require('./clock-update'),
+
+  //? Debugging
+  vWatchDebug : require('./vWatchDebug'),
+
+
 };

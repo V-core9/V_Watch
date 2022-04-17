@@ -27,6 +27,7 @@ function backgroundGUI(data = {}) {
   this.lastExecTimeVal = 0;
   this.loopObj = null;
   this.interval = data.interval || 20000;
+
   this.screen = {
     width: 0,
     height: 0,
@@ -91,6 +92,7 @@ function backgroundGUI(data = {}) {
     this.lastExecTimeVal = Date.now() - time_01;
   };
 
+
   /*
   * Starts the looping process.
   */
@@ -121,6 +123,8 @@ function backgroundGUI(data = {}) {
 
   if (this.autoInit) this.start();
 
+
 }
+
 
 module.exports = backgroundGUI;

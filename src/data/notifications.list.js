@@ -2,26 +2,26 @@ const notificationList = {
 
 
   example: {
-      title: 'My notification',
-      message: 'Hello, there!',
+    title: 'My notification',
+    message: 'Hello, there!',
   },
 
 
-  app : {
+  app: {
     starting: {
       appID: process.title,
       title: 'Application Starting',
       message: 'OS Monitor STARTING...🚀',
     },
     stopping: {
-        appID: process.title,
-        title: 'Application Exiting',
-        message: 'vOS Monitor STOPPING...🙋‍♂️',
+      appID: process.title,
+      title: 'Application Exiting',
+      message: 'vOS Monitor STOPPING...🙋‍♂️',
     },
     lowsysmem: {
-        appID: process.title,
-        title: 'WARNING: Low RAM',
-        message: 'Your RAM is getting full.',
+      appID: process.title,
+      title: 'WARNING: Low RAM',
+      message: 'Your RAM is getting full.',
     }
   },
 
@@ -38,6 +38,23 @@ const notificationList = {
       message: 'Wallpaper updates have been disabled.',
     }
   },
+
+  extendedInfo: {
+
+    enabled: {
+      appID: process.title,
+      title: 'Extended Info -  ✅',
+      message: 'Extended info has been enabled.',
+    },
+
+    disabled: {
+      appID: process.title,
+      title: 'Extended Info - 🔻',
+      message: 'Extended info has been disabled.',
+
+    },
+
+  }
 
 
 };

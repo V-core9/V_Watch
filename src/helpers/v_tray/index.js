@@ -16,6 +16,8 @@ getDebugTitle = () => ((config.debug) ? "❌ Disable" : "✅ Enable") + " Debug"
 
 getBackgroundTitle = () => ((config.backgroundUpdates) ? "❌ Disable" : "✅ Enable") + " wallpaperGUI";
 
+extendedInfoTitle = () => ((config.extendedInfo) ? "❌ Disable" : "✅ Enable") + " Extended Info";
+
 
 /*
 * Tray MENU
@@ -44,6 +46,16 @@ const menu = [
       config.toggleBackgroundUpdates();
       menu[2].title = getBackgroundTitle();
       notify.wallpaperGUI();
+    }
+  },
+  {
+    id: 25,
+    title: extendedInfoTitle(),
+    exec: () => {
+      config.toggleExtendedInfo();
+      console.log("Extended Info");
+      menu[3].title = extendedInfoTitle();
+      notify.extendedInfoToggle();
     }
   },
   {
