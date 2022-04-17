@@ -1,6 +1,6 @@
 {
-  "debug": false,
+  "debug": true,
   "notifications": false,
   "backgroundUpdates": true,
-  "extendedInfo": false
+  "extendedInfo": true
 }
