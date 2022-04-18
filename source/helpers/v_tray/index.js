@@ -1,5 +1,5 @@
 const config = require('../../config');
-const notify = require('../v_notify');
+const notify  = require('../v_notify');
 const EventEmitter = require('events').EventEmitter;
 const NodeTray = require("../../../node_modules/windows-tray/build/Release/tray").NodeTray;
 const util = require('util');
@@ -89,12 +89,14 @@ const v_tray = new NodeTray(path.join(__dirname, "../../ASSETS/icon/rick.ico"));
 
 v_tray.setToolTip(process.title);
 
+
 /*
 v_tray.on('click', () => {
   let result = v_tray.toggleWindow(process.title);
   console.log("click, result = ", result);
 });
 */
+
 
 v_tray.on('right-click', () => {
   v_tray.showPopup(menu, (err, result) => {

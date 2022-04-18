@@ -9,7 +9,7 @@ const {
 loadConfigFromFile();
 
 //! Starting App Notification
-const notify = require("./helpers/v_notify");
+const { notify, v_tray } = require("./helpers");
 notify.app.starting();
 
 //? vWatch - Tasks Runner
@@ -18,14 +18,11 @@ const { cache, vWatch } = require("./core");
 //* Init and load cache if available
 cache.fromFile(cacheFilePath);
 
-//* Init the tasks
-require("./tasks")();
-
-//? Windows System Tray Icon and Menu
-const v_tray = require("./helpers/v_tray");
-
 //? wallpaperGUI - Background GUI
 const wallpaperGUI = require("./wallpaperGUI");
+
+//* Init the tasks
+require("./tasks")();
 
 
 //! Exit Handler

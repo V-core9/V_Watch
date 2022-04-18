@@ -1,7 +1,6 @@
 const { cache } = require('../core');
-const v_os = require('../helpers/v_os');
 const { byteSizer } = require('v_file_system');
-const { roundNumber } = require('../helpers');
+const { v_os, roundNumber } = require('../helpers');
 
 
 module.exports = async (timeLen = 1000) => {

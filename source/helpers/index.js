@@ -1,5 +1,12 @@
 module.exports = {
 
+  notify: require('./v_notify'),
+
+  v_tray: require('./v_tray'),
+
+  v_os: require('./v_os'),
+
+  vTime: require('./vTime'),
 
   roundNumber: (val, i = 0) => {
     i = Math.pow(10, i);
@@ -21,7 +28,6 @@ module.exports = {
     return `#${Math.floor(Math.random() * 16777215).toString(16)}`;
   },
 
-  vTime: require('./vTime'),
 
 
 };
