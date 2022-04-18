@@ -4,7 +4,7 @@ const v_execute = require('v_execute');
 // NPM: svg2png [many more options]
 var svg2img = require('svg2img');
 
-const cache = require('../cache');
+const { cache } = require('../core');
 
 const config = require('../config');
 

@@ -2,7 +2,6 @@ const v_fs = require('v_file_system');
 const path = require('path');
 
 
-
 process.title = '-v-';
 
 
@@ -35,8 +34,9 @@ const config = {
 
   set backgroundUpdates(value) {
     if (typeof value === 'boolean') {
+      const { vWatch } = require('../core');
       config.bgUpdates = value;
-      require('../v_watch').setTaskStatus('wallpaperGUI', value);
+      vWatch.setTaskStatus('wallpaperGUI', value);
       return true;
     } else {
       return false;
@@ -102,6 +102,7 @@ const config = {
       notifications: config.notifications,
       backgroundUpdates: config.backgroundUpdates,
       extendedInfo: config.extendedInfoStatus,
+      cacheFilePath: config.cacheFilePath,
     };
 
     return v_fs.writeSy(config.fileLocation, `${JSON.stringify(data, null, 2)}`);
@@ -117,6 +118,7 @@ const config = {
       if (userConfig.notifications !== undefined) config.notifications = userConfig.notifications;
       if (userConfig.backgroundUpdates !== undefined) config.backgroundUpdates = userConfig.backgroundUpdates;
       if (userConfig.extendedInfo !== undefined) config.extendedInfo = userConfig.extendedInfo;
+      if (userConfig.cacheFilePath !== undefined) config.cacheFilePath = userConfig.cacheFilePath;
 
       return userConfig;
     } catch (error) {
@@ -166,6 +168,11 @@ const config = {
   toggleExtendedInfo() {
     config.extendedInfo = !config.extendedInfo;
   },
+
+
+  cacheFilePath: path.join(__dirname, "../core/$_cache.json"),
+
+
 };
 
 

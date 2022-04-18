@@ -1,6 +1,5 @@
-const cache = require('../cache');
+const { cache, vWatch } = require('../core');
 
-const vWatch = require("../v_watch");
 
 module.exports = vWatchDebug = async () => {
 

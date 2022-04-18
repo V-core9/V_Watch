@@ -1,6 +1,6 @@
 const speedTest = require('speedtest-net');
 
-const cache = require('../cache');
+const { cache } = require('../core');
 const { byteSizer } = require('v_file_system');
 const { roundNumber } = require('../helpers');
 

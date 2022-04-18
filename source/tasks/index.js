@@ -1,17 +1,30 @@
-const config = require('../config');
-const vWatch = require("../v_watch");
-const { vTime } = require('../helpers');
 
 
 //! System actions [ functions to call/use in vWatch Tasks List ]
-const {
-  justDoIt,
-  clockUpdate,
-  wallpaperGUI,
-  netSpeedTest,
-  systemInfoStats,
-  vWatchDebug,
-} = require('./actions');
+// Example [justDoIt()]
+const justDoIt = require('./justDoIt');
+
+//? Internet Speed Test
+const netSpeedTest = require('./internet-speed-test');
+
+//? Trigger WallpaperGUI [re]Render
+const wallpaperGUI = require('./render-wallpapergui');
+
+//? System Info Stats
+const systemInfoStats = require('./system-info-stats');
+
+//? Clock Update
+const clockUpdate = require('./clock-update');
+
+//? Debugging
+const vWatchDebug = require('./vWatchDebug');
+
+
+
+const config = require('../config');
+const { vWatch } = require("../core");
+const { vTime } = require('../helpers');
+
 
 
 module.exports = sysTasks = async () => {

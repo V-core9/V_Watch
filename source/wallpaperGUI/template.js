@@ -1,5 +1,5 @@
 const config = require('../config');
-const cache = require('../cache');
+const { cache } = require('../core');
 
 
 const { getRandomColor } = require('../helpers');

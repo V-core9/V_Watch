@@ -1,4 +1,4 @@
-const cache = require('../cache');
+const { cache } = require('../core');
 const v_os = require('../helpers/v_os');
 const { byteSizer } = require('v_file_system');
 const { roundNumber } = require('../helpers');

@@ -1,30 +1,31 @@
 //? Config
-const config = require("./config");
-config.loadConfigFromFile();
+const {
+  exitTimeout,
+  cacheFilePath,
+  saveConfigToFile,
+  loadConfigFromFile,
+} = require("./config");
+
+loadConfigFromFile();
 
 //! Starting App Notification
 const notify = require("./helpers/v_notify");
 notify.app.starting();
 
+//? vWatch - Tasks Runner
+const { cache, vWatch } = require("./core");
+
 //* Init and load cache if available
-const cache = require("./cache");
-cache.fromFile("./cache/$.json");
+cache.fromFile(cacheFilePath);
 
-
+//* Init the tasks
+require("./tasks")();
 
 //? Windows System Tray Icon and Menu
 const v_tray = require("./helpers/v_tray");
 
-
 //? wallpaperGUI - Background GUI
 const wallpaperGUI = require("./wallpaperGUI");
-
-
-//? vWatch - Tasks Runner
-const vWatch = require("./v_watch");
-//* Init tasks
-require("./sysTasks")(vWatch);
-
 
 
 //! Exit Handler
@@ -34,10 +35,10 @@ process.on("SIGINT", async () => {
   notify.app.stopping();
 
   // Save Cache
-  cache.toFile("./cache/$.json");
+  cache.toFile(cacheFilePath);
 
   // Save Config
-  config.saveConfigToFile();
+  saveConfigToFile();
 
   // wallpaperGUI Terminate
   wallpaperGUI.stop();
@@ -49,6 +50,6 @@ process.on("SIGINT", async () => {
   vWatch.stop();
 
   // Set timeout to wait for all tasks to finish
-  setTimeout(() => process.exit(0), config.exitTimeout);
+  setTimeout(() => process.exit(0), exitTimeout);
 
 });
