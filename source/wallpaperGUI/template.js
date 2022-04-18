@@ -275,8 +275,10 @@ function svgTemplate(data = {}) {
   this.debug = async () => {
     if (config.debug) {
 
+      // <path d="M 0 0 l 1280 0   0 720   -1280 0   0 -720" stroke="${this.main}40" stroke-width="6" fill="#000000A0" stroke-dasharray="10 5"></path>
+
       return `<g font-family="monospace" fill="#000000" stroke="1"  >
-                <path d="M 0 0 l 1280 0   0 720   -1280 0   0 -720" stroke="${this.main}40" stroke-width="6" fill="#000000A0" stroke-dasharray="10 5"></path>
+
                 <path d="M ${this.helpDim.X} ${this.debugY} l 960 0 20 20 0 540 -20 20 -960 0 -20 -20 0 -540 20 -20" stroke="#203040" stroke-width="2" fill="#203040A0" ></path>
                 <path d="M ${this.helpDim.X} ${this.debugY} l 960 0 20 20  -20 20 -960 0 -20 -20 20 -20" stroke="#203040" stroke-width="2" fill="#101520" ></path>
                 ${await draw.text(this.helpDim.X + 5, this.helpDim.Y, "Debug Panel:", this.white, this.mainFontSize)}
