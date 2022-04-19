@@ -54,7 +54,7 @@ module.exports = sysTasks = async () => {
 
   //* Internet Speed Test
   await vWatch.newTask("netSpeedTest", vTime.minutes(30), netSpeedTest, "Internet Speed Test");
-  await vWatch.disableTask("netSpeedTest");
+  //await vWatch.disableTask("netSpeedTest");
 
 
 

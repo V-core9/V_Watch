@@ -44,7 +44,7 @@
     "svg-to-png": "^4.0.0",
     "svg2img": "^0.9.3",
     "url-regex-safe": "^2.0.2",
-    "v_core_cache": "^1.0.2",
+    "v_core_cache": "^1.0.4",
     "v_execute": "^1.0.2",
     "v_file_system": "^1.0.5",
     "windows-tray": "github:AHgPuK/window-tray"

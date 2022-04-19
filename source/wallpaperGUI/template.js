@@ -17,6 +17,17 @@ function svgTemplate(data = {}) {
   };
 
 
+  const randomColors = async () => {
+    try {
+      this.main = getRandomColor();
+      this.background = getRandomColor();
+      this.containerBackground = getRandomColor();
+      return true;
+    } catch (error) {
+      return error;
+    }
+  };
+
   this.name = data.name || "customSVGdemoName";
   this.white = data.white || "#ffffff";
   this.main = data.main || "#a0c0ff";
@@ -74,7 +85,7 @@ function svgTemplate(data = {}) {
 
 
   this.render = async () => {
-    if (this.useRandomColors) this.randomColors();
+    if (this.useRandomColors) await randomColors();
 
     this.cacheData = {
       clock: await cache.get('clock') || { strTime: "", datePrint: "" },
@@ -87,13 +98,13 @@ function svgTemplate(data = {}) {
     //console.log(this.cacheData);
 
     return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${this.helperWidth} ${this.helperHeight}"  height="${this.helperHeight}" width="${this.helperWidth}" class="${this.name}"  shape-rendering="geometricPrecision" >
-              ${await this.bckLayerNew()}
+              ${await this.bckLayer()}
               ${await this.printOsInfo()}
               ${await this.printBotStats()}
               ${await this.printClock()}
-              ${await this.extendedInfoPanel()}
+              ${(config.extendedInfo) ? await this.extendedInfoPanel() : ''}
 
-              ${await this.debug()}
+              ${(config.debug) ? await this.debug() : `${await draw.text(1125, 25, `<text fill="${this.main}">${this.cacheData.svgStats.lastExecTimeVal}</text>ms | ${this.cacheData.svgStats.totalUpdates} @ ${this.cacheData.svgStats.scale}`, this.white, this.normalFontSize)}`}
             </svg>`;
 
   };
@@ -130,43 +141,14 @@ function svgTemplate(data = {}) {
   };
 
 
+
   this.bckLayer = async () => {
-    return `<path d="M 0 0 l ${this.helperWidth}  0 0 ${this.helperHeight} -${this.helperWidth} 0 -${this.helperWidth} -${this.helperHeight} " stroke="none" stroke-width="${this.strokeWidth}" fill="#000" ></path>
-            <path d="M 0 0 l ${this.helperWidth} 0 0 60 -20 20 0 ${(this.helperHeight - 180)}  20 20 0 60 -20 20 -160 0 -20 -20${-(this.helperWidth - 400)}  0 -20 20 -160 0 -20 -20 0 -60 20 -20 0 ${-(this.helperHeight - 280)}  -20 -20" stroke="none" stroke-width="${this.strokeWidth}" fill="${this.containerBackground}" ></path>
-            <path d="M 10 ${(this.helperHeight - 30)}  l  20 20 140 0 20 -20 -10 0 -15 15 -130 0 -15 -15" stroke="none" stroke-width="${this.strokeWidth}" fill="${this.background}" ></path>
-            <path d="M ${(this.helperWidth - 190)}  ${(this.helperHeight - 30)}  l  20 20 140 0 20 -20 -10 0 -15 15 -130 0 -15 -15" stroke="none" stroke-width="${this.strokeWidth}" fill="${this.background}" ></path>`;
-  };
-
-
-  this.bckLayerNew = async () => {
     return `<path d="M 0 0 l ${this.helperWidth}  0 0 ${this.helperHeight} -${this.helperWidth} 0 -${this.helperWidth} -${this.helperHeight} " stroke="none" stroke-width="${this.strokeWidth}" fill="#000" ></path>
             <path d="M 30 10 l 120 0 20 20 ${this.helperWidth - 340} 0 20 -20 120 0 20 20 0 120 -20 20 0 ${this.helperHeight - 340} 20 20 0 120 -20 20 -120 0 -20 -20 -${this.helperWidth - 340} 0 -20 20 -120 0 -20 -20 0 -120 20 -20 0 -${this.helperHeight - 340} -20 -20 0 -120 20 -20" stroke="${this.main}50" stroke-width="${this.strokeWidth}" fill="${this.containerBackground}50" ></path>`;
   };
 
 
-  // This is from the OLD thing where I used the original as a sample based SVG UI
-  this.minimizeButton = () => {
-    return `<path d="M ${(this.helperWidth - 70)}  0 l 40 0 -10 30 -40 0 10 -30" stroke="none" stroke-width="${this.strokeWidth}" fill="#333333" ></path>
-            <path d="M ${(this.helperWidth - 62)}  20 l 15 0 0 2 -15 0" stroke="none" stroke-width="${this.strokeWidth}" ></path>`;
-  };
 
-
-  this.printCloseButton = () => {
-    return `<path d="M ${(this.helperWidth - 30)}  0 l 30 0 0 30 -40 0 10 -30" stroke="none" stroke-width="${this.strokeWidth}" fill="#3a0000" ></path>
-            <path d="M ${(this.helperWidth - 22)}  7 l 2 0 5 5 5 -5 2 0 0 2 -5 5 5 5 0 2 -2 0 -5 -5 -5 5 -2 0 0 -2 5 -5 -5 -5" stroke="none" stroke-width="${this.strokeWidth}" fill="gray" ></path>`;
-  };
-
-
-  this.randomColors = () => {
-    try {
-      this.main = getRandomColor();
-      this.background = getRandomColor();
-      this.containerBackground = getRandomColor();
-      return true;
-    } catch (error) {
-      return error;
-    }
-  };
 
 
   this.placeholder = async () => {
@@ -273,67 +255,52 @@ function svgTemplate(data = {}) {
 
 
   this.debug = async () => {
-    if (config.debug) {
-
       // <path d="M 0 0 l 1280 0   0 720   -1280 0   0 -720" stroke="${this.main}40" stroke-width="6" fill="#000000A0" stroke-dasharray="10 5"></path>
 
-      return `<g font-family="monospace" fill="#000000" stroke="1"  >
-
-                <path d="M ${this.helpDim.X} ${this.debugY} l 960 0 20 20 0 540 -20 20 -960 0 -20 -20 0 -540 20 -20" stroke="#203040" stroke-width="2" fill="#203040A0" ></path>
+      return `  <path d="M ${this.helpDim.X} ${this.debugY} l 960 0 20 20 0 540 -20 20 -960 0 -20 -20 0 -540 20 -20" stroke="#203040" stroke-width="2" fill="#203040A0" ></path>
                 <path d="M ${this.helpDim.X} ${this.debugY} l 960 0 20 20  -20 20 -960 0 -20 -20 20 -20" stroke="#203040" stroke-width="2" fill="#101520" ></path>
                 ${await draw.text(this.helpDim.X + 5, this.helpDim.Y, "Debug Panel:", this.white, this.mainFontSize)}
 
                 ${await this.wallGuiDBG()}
                 ${await this.cacheDBG()}
                 ${await this.vWatchDBG()}
-                ${await this.placeholder()}
-              </g>`;
-    }
-    return `${await draw.text(1130, 20, `[ <text fill="${this.main}">${this.cacheData.svgStats.lastExecTimeVal}</text> ms | ${this.cacheData.svgStats.totalUpdates} @ ${this.cacheData.svgStats.scale} ]`, this.white, this.normalFontSize)}`;
+                ${await this.placeholder()}`;
   };
 
 
+  this.renderEIP = async () => {
+    return `
+              <path d="M 35 15 l 110 0  20 20   -130 130  -20 -20  0 -110  20 -20" stroke="${this.main}" stroke-width="1" fill="#101520" ></path>
+              ${await draw.text(35, 40, "💻 EIP#1", this.white, this.subFontSize)}
+
+              <path d="M 35 705 l 110 0   20 -20   -130 -130  -20 20   0 110   20 20" stroke="${this.main}" stroke-width="1" fill="#101520" ></path>
+              ${await draw.text(35, 695, "💻 EIP#2", this.white, this.subFontSize)}
+
+              <path d="M 1135 15 l 110 0   20 20   0 110   -20 20   -130 -130  20 -20" stroke="${this.main}" stroke-width="1" fill="#101520" ></path>
+              ${await draw.text(1140, 40, "💻 EIP#3", this.white, this.subFontSize)}
+
+              <path d="M 1135 705 l 110 0   20 -20   0 -110 -20 -20 -130 130  20 20 " stroke="${this.main}" stroke-width="1" fill="#101520" ></path>
+              ${await draw.text(1140, 695, "💻 EIP#4", this.white, this.subFontSize)}
+
+              <path d="M 5 145 l   25 25   0 380   -25 25   0 -430  " stroke="${this.main}" stroke-width="1" fill="#101520" ></path>
+              ${await draw.text(10, 185, "🆒", this.main, this.normalFontSize)}
+
+              <path d="M 1275 145 l   -25 25   0 380   25 25   0 -430  " stroke="${this.main}" stroke-width="1" fill="#101520" ></path>
+              ${await draw.text(1255, 545, "🆓", this.main, this.normalFontSize)}
+
+        `;
+
+  };
 
   this.extendedInfoPanel = async () => {
+    let item = await cache.get('ExtendedInfoPanel');
 
-    return (config.extendedInfo) ? `
-              <g >
-                <path d="M 35 15 l 110 0  20 20   -130 130  -20 -20  0 -110  20 -20" stroke="${this.main}" stroke-width="1" fill="#101520" ></path>
-                ${await draw.text(35, 40, "💻 EIP#1", this.white, this.subFontSize)}
+    if (item === undefined) {
+      item = await this.renderEIP();
+      await cache.set('ExtendedInfoPanel', item);
+    }
 
-              </g>
-
-
-              <g>
-                <path d="M 35 705 l 110 0   20 -20   -130 -130  -20 20   0 110   20 20" stroke="${this.main}" stroke-width="1" fill="#101520" ></path>
-                ${await draw.text(35, 695, "💻 EIP#2", this.white, this.subFontSize)}
-              </g>
-
-
-              <g>
-                <path d="M 1135 15 l 110 0   20 20   0 110   -20 20   -130 -130  20 -20" stroke="${this.main}" stroke-width="1" fill="#101520" ></path>
-                ${await draw.text(1140, 40, "💻 EIP#3", this.white, this.subFontSize)}
-              </g>
-
-
-              <g>
-                <path d="M 1135 705 l 110 0   20 -20   0 -110 -20 -20 -130 130  20 20 " stroke="${this.main}" stroke-width="1" fill="#101520" ></path>
-                ${await draw.text(1140, 695, "💻 EIP#4", this.white, this.subFontSize)}
-              </g>
-
-
-              <g>
-                <path d="M 5 145 l   25 25   0 380   -25 25   0 -430  " stroke="${this.main}" stroke-width="1" fill="#101520" ></path>
-                ${await draw.text(10, 185, "🆒", this.main, this.normalFontSize)}
-              </g>
-
-
-              <g>
-                <path d="M 1275 145 l   -25 25   0 380   25 25   0 -430  " stroke="${this.main}" stroke-width="1" fill="#101520" ></path>
-                ${await draw.text(1255, 545, "🆓", this.main, this.normalFontSize)}
-              </g>
-
-              ` : ``;
+    return item;
   };
 
 
