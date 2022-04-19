@@ -98,15 +98,26 @@ function svgTemplate(data = {}) {
     //console.log(this.cacheData);
 
     return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${this.helperWidth} ${this.helperHeight}"  height="${this.helperHeight}" width="${this.helperWidth}" class="${this.name}"  shape-rendering="geometricPrecision" >
-              ${await this.bckLayer()}
-              ${await this.printOsInfo()}
-              ${await this.printBotStats()}
-              ${await this.printClock()}
-              ${(config.extendedInfo) ? await this.extendedInfoPanel() : ''}
-
-              ${(config.debug) ? await this.debug() : `${await draw.text(1125, 25, `<text fill="${this.main}">${this.cacheData.svgStats.lastExecTimeVal}</text>ms | ${this.cacheData.svgStats.totalUpdates} @ ${this.cacheData.svgStats.scale}`, this.white, this.normalFontSize)}`}
+              ${(!config.exiting) ?
+        `${await this.bckLayer()}
+                ${await this.printOsInfo()}
+                ${await this.printBotStats()}
+                ${await this.printClock()}
+                ${(config.extendedInfo) ? await this.extendedInfoPanel() : ''}
+                ${(config.debug) ? await this.debug() : `${await draw.text(1125, 25, `<text fill="${this.main}">${this.cacheData.svgStats.lastExecTimeVal}</text>ms | ${this.cacheData.svgStats.totalUpdates} @ ${this.cacheData.svgStats.scale}`, this.white, this.normalFontSize)}`}
+                ` : await this.offlineNotice()}
             </svg>`;
 
+  };
+
+  this.offlineNotice = async () => {
+    return `
+
+          <g font-size="${this.mainFontSize}" font-family="monospace" fill="${this.background}" stroke="none"  >
+            <path d="M 170 697.5 l ${(this.helperWidth - 340)}  0 5 5 0 10 -5 5 ${-(this.helperWidth - 340)}  0 -5 -5 0 -10 5 -5" stroke="${this.main}80" stroke-width="1" fill="${this.main}50" ></path>
+            ${await draw.text(180, 710, `V_WATCH: [OFFLINE]`, "#000000", this.normalFontSize)}
+            ${await draw.text(640, 710, `Restart application to get it running`, "#000000", this.normalFontSize)}
+          </g>`;
   };
 
 
@@ -201,12 +212,19 @@ function svgTemplate(data = {}) {
 
 
   this.cacheDBG = async () => {
+    let stats = await cache.stats();
 
     return `<path d="M ${this.debugX + 520} ${this.debugY + 50} l 460 0 10 10 0 230 -10 10 -460 0 -10 -10  0 -230 10 -10" stroke="${this.main}" stroke-width="1" fill="#203040" ></path>
             ${await draw.text(this.helpDim.X500, this.helpDim.Y + 42.5, "cache Info Stats:", this.main, this.subFontSize)}
 
             ${await draw.text(this.helpDim.X500, this.helpDim.Y60, "Items in Cache", this.white, this.normalFontSize)}
-            ${await draw.text(this.helpDim.X840, this.helpDim.Y60, `[ <text fill="${this.main}">${await cache.size()}</text> ]`, this.white, this.normalFontSize)}`;
+            ${await draw.text(this.helpDim.X840, this.helpDim.Y60, `[ <text fill="${this.main}">${stats.size}</text> ]`, this.white, this.normalFontSize)}
+
+            ${await draw.text(this.helpDim.X500, this.helpDim.Y75, "Hits Count", this.white, this.normalFontSize)}
+            ${await draw.text(this.helpDim.X840, this.helpDim.Y75, `[ <text fill="${this.main}">${stats.hits}</text> ]`, this.white, this.normalFontSize)}
+
+            ${await draw.text(this.helpDim.X500, this.helpDim.Y90, "Misses Count:", this.white, this.normalFontSize)}
+            ${await draw.text(this.helpDim.X840, this.helpDim.Y90, `[ <text fill="${this.main}">${stats.misses}</text> ]`, this.white, this.normalFontSize)}`;
 
   };
 
@@ -255,9 +273,9 @@ function svgTemplate(data = {}) {
 
 
   this.debug = async () => {
-      // <path d="M 0 0 l 1280 0   0 720   -1280 0   0 -720" stroke="${this.main}40" stroke-width="6" fill="#000000A0" stroke-dasharray="10 5"></path>
+    // <path d="M 0 0 l 1280 0   0 720   -1280 0   0 -720" stroke="${this.main}40" stroke-width="6" fill="#000000A0" stroke-dasharray="10 5"></path>
 
-      return `  <path d="M ${this.helpDim.X} ${this.debugY} l 960 0 20 20 0 540 -20 20 -960 0 -20 -20 0 -540 20 -20" stroke="#203040" stroke-width="2" fill="#203040A0" ></path>
+    return `  <path d="M ${this.helpDim.X} ${this.debugY} l 960 0 20 20 0 540 -20 20 -960 0 -20 -20 0 -540 20 -20" stroke="#203040" stroke-width="2" fill="#203040A0" ></path>
                 <path d="M ${this.helpDim.X} ${this.debugY} l 960 0 20 20  -20 20 -960 0 -20 -20 20 -20" stroke="#203040" stroke-width="2" fill="#101520" ></path>
                 ${await draw.text(this.helpDim.X + 5, this.helpDim.Y, "Debug Panel:", this.white, this.mainFontSize)}
 

@@ -1,10 +1,11 @@
 //? Config
+const config = require("./config");
 const {
   exitTimeout,
   cacheFilePath,
   saveConfigToFile,
   loadConfigFromFile,
-} = require("./config");
+} = config;
 
 loadConfigFromFile();
 
@@ -28,25 +29,26 @@ require("./tasks")();
 //! Exit Handler
 process.on("SIGINT", async () => {
 
+  config.exiting = true;
   // Send Notification that we are about to stop running
-  notify.app.stopping();
+  await notify.app.stopping();
 
   // Save Cache
-  cache.toFile(cacheFilePath);
+  await cache.toFile(cacheFilePath);
 
   // Save Config
-  saveConfigToFile();
+  await saveConfigToFile();
 
   // wallpaperGUI Terminate
-  wallpaperGUI.stop();
+  await wallpaperGUI.stop();
 
   // v_tray Terminate
-  v_tray.destroy();
+  await v_tray.destroy();
 
   // vWatch Terminate
-  vWatch.stop();
+  await vWatch.stop();
 
   // Set timeout to wait for all tasks to finish
-  setTimeout(() => process.exit(0), exitTimeout);
+  setTimeout(() => process.exit(0), 1000);
 
 });

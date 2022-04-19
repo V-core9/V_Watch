@@ -149,7 +149,7 @@ const config = {
   /*
   * Redraw Interval / System Stats Gathering Interval
   */
-  redrawTime: 5,
+  redrawTime: 1,
 
 
   /*
@@ -171,6 +171,18 @@ const config = {
 
 
   cacheFilePath: path.join(__dirname, "../core/$_cache.json"),
+
+
+
+  _exiting: false,
+
+  set exiting(value) {
+    return (typeof value === 'boolean') ? config._exiting = value : false;
+  },
+
+  get exiting() {
+    return config._exiting;
+  },
 
 
 };

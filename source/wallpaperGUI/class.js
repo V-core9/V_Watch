@@ -111,8 +111,9 @@ function backgroundGUI(data = {}) {
   /*
   * Stop the whole thing from running by clearing the Interval.
   */
-  this.stop = () => {
+  this.stop = async () => {
     console.log("BackgroundGUI: STOPPING...🙋‍♂️");
+    await this.render();
     clearInterval(this.loopObj);
     this.loopObj = null;
     return this.loopObj;
