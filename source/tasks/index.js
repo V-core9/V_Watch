@@ -19,6 +19,7 @@ const clockUpdate = require('./clock-update');
 //? Debugging
 const vWatchDebug = require('./vWatchDebug');
 
+const totalDownloads = require('./total-downloads');
 
 
 const config = require('../config');
@@ -61,5 +62,7 @@ module.exports = sysTasks = async () => {
   //* vWatch Info Cache
   await vWatch.newTask("vWatchDBG", vTime.minutes(1), vWatchDebug, "vWatch Info Cache");
 
+
+  await vWatch.newTask("totalDownloads", vTime.days(1), totalDownloads, "Total Downloads");
 
 };

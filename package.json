@@ -47,6 +47,7 @@
     "v_core_cache": "^1.0.4",
     "v_execute": "^1.0.2",
     "v_file_system": "^1.0.5",
+    "wallpaper": "^5.0.1",
     "windows-tray": "github:AHgPuK/window-tray"
   },
   "devDependencies": {

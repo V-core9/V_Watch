@@ -1,20 +1,21 @@
 const config = require('../config');
 const { cache } = require('../core');
-
-
 const { getRandomColor } = require('../helpers');
 
-function svgTemplate(data = {}) {
 
-  const draw = {
-    rect: async (x, y, width, height, color) => `<rect x="${x}" y="${y}" width="${width}" height="${height}" fill="${color}" />`,
-    circle: async (x, y, radius, color) => `<circle cx="${x}" cy="${y}" r="${radius}" fill="${color}" />`,
-    text: async (x, y, text, color, size) => `<text x="${x}" y="${y}" fill="${color || this.main}"  text-rendering="geometricPrecision" font-size="${size || this.normalFontSize}">${text}</text>`,
-    line: async (x1, y1, x2, y2, color) => `<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke="${color}" />`,
-    polygon: async (points, color) => `<polygon points="${points}" fill="${color}" />`,
-    path: async (d, color) => `<path d="${d}" fill="${color}" />`,
-    image: async (x, y, width, height, url) => `<image x="${x}" y="${y}" width="${width}" height="${height}" xlink:href="${url}" />`
-  };
+const draw = {
+  rect: async (x, y, width, height, color) => `<rect x="${x}" y="${y}" width="${width}" height="${height}" fill="${color}" />`,
+  circle: async (x, y, radius, color) => `<circle cx="${x}" cy="${y}" r="${radius}" fill="${color}" />`,
+  text: async (x, y, text, color, size) => `<text x="${x}" y="${y}" fill="${color || this.main}"  text-rendering="geometricPrecision" font-size="${size || this.normalFontSize}">${text}</text>`,
+  line: async (x1, y1, x2, y2, color) => `<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke="${color}" />`,
+  polygon: async (points, color) => `<polygon points="${points}" fill="${color}" />`,
+  path: async (d, color) => `<path d="${d}" fill="${color}" />`,
+  image: async (x, y, width, height, url) => `<image x="${x}" y="${y}" width="${width}" height="${height}" xlink:href="${url}" />`
+};
+
+
+
+function svgTemplate(data = {}) {
 
 
   const randomColors = async () => {
@@ -27,6 +28,7 @@ function svgTemplate(data = {}) {
       return error;
     }
   };
+
 
   this.name = data.name || "customSVGdemoName";
   this.white = data.white || "#ffffff";
@@ -97,7 +99,7 @@ function svgTemplate(data = {}) {
 
     //console.log(this.cacheData);
 
-    return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${this.helperWidth} ${this.helperHeight}"  height="${this.helperHeight}" width="${this.helperWidth}" class="${this.name}"  shape-rendering="geometricPrecision" >
+    return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${this.helperWidth} ${this.helperHeight}"  height="${this.helperHeight}" width="${this.helperWidth}" class="${this.name}"  shape-rendering="geometricPrecision" font-family="monospace" >
               ${(!config.exiting) ?
         `${await this.bckLayer()}
                 ${await this.printOsInfo()}
@@ -110,44 +112,37 @@ function svgTemplate(data = {}) {
 
   };
 
-  this.offlineNotice = async () => {
-    return `
 
-          <g font-size="${this.mainFontSize}" font-family="monospace" fill="${this.background}" stroke="none"  >
-            <path d="M 170 697.5 l ${(this.helperWidth - 340)}  0 5 5 0 10 -5 5 ${-(this.helperWidth - 340)}  0 -5 -5 0 -10 5 -5" stroke="${this.main}80" stroke-width="1" fill="${this.main}50" ></path>
+
+  this.offlineNotice = async () => {
+    return `<path d="M 170 697.5 l ${(this.helperWidth - 340)}  0 5 5 0 10 -5 5 ${-(this.helperWidth - 340)}  0 -5 -5 0 -10 5 -5" stroke="${this.main}80" stroke-width="1" fill="${this.main}50" ></path>
             ${await draw.text(180, 710, `V_WATCH: [OFFLINE]`, "#000000", this.normalFontSize)}
-            ${await draw.text(640, 710, `Restart application to get it running`, "#000000", this.normalFontSize)}
-          </g>`;
+            ${await draw.text(640, 710, `Restart application to get it running`, "#000000", this.normalFontSize)}`;
   };
 
 
   this.printOsInfo = async () => {
     const cpu = this.cacheData.system.cpu || { usage: -1, count: 0 };
     const ram = this.cacheData.system.ram;
-    return `<g font-size="${this.mainFontSize}" font-family="monospace" fill="${this.background}" stroke="none"  >
-              <path d="M 170 2.5 l ${(this.helperWidth - 340)}  0 5 5 0 10 -5 5 ${-(this.helperWidth - 340)}  0 -5 -5 0 -10 5 -5" stroke="${this.main}80" stroke-width="1" fill="${this.main}50" ></path>
+    return `<path d="M 170 2.5 l ${(this.helperWidth - 340)}  0 5 5 0 10 -5 5 ${-(this.helperWidth - 340)}  0 -5 -5 0 -10 5 -5" stroke="${this.main}80" stroke-width="1" fill="${this.main}50" ></path>
               ${await draw.text(180, 15, `CPU: ${cpu.usage}% [Count: ${cpu.count}]`, this.main, this.normalFontSize)}
-              ${await draw.text(640, 15, `RAM: ${ram.freemem}GB (${ram.freememproc}%) [Total: ${ram.totalmem}GB]`, this.main, this.normalFontSize)}
-            </g>`;
+              ${await draw.text(640, 15, `RAM: ${ram.freemem}GB (${ram.freememproc}%) [Total: ${ram.totalmem}GB]`, this.main, this.normalFontSize)}`;
   };
+
 
 
   this.printBotStats = async () => {
-    return `<g font-size="${this.mainFontSize}" font-family="monospace" fill="${this.background}" stroke="none"  >
-              <path d="M 170 697.5 l ${(this.helperWidth - 340)}  0 5 5 0 10 -5 5 ${-(this.helperWidth - 340)}  0 -5 -5 0 -10 5 -5" stroke="${this.main}80" stroke-width="1" fill="${this.main}50" ></path>
-              ${await draw.text(180, 710, `👤 ${this.cacheData.system.deviceUserInfo}`, this.main, this.normalFontSize)}
-              ${await draw.text(640, 710, `📦 Net Speed [ D: ${this.cacheData.netSpeed.download} Mbs || U:${this.cacheData.netSpeed.upload} Mbs ]`, this.main, this.normalFontSize)}
-            </g>`;
+    return `<path d="M 170 697.5 l ${(this.helperWidth - 340)}  0 5 5 0 10 -5 5 ${-(this.helperWidth - 340)}  0 -5 -5 0 -10 5 -5" stroke="${this.main}80" stroke-width="1" fill="${this.main}50" ></path>
+            ${await draw.text(180, 710, `👤 ${this.cacheData.system.deviceUserInfo}`, this.main, this.normalFontSize)}
+            ${await draw.text(640, 710, `📦 Net Speed [ D: ${this.cacheData.netSpeed.download} Mbs || U:${this.cacheData.netSpeed.upload} Mbs ]`, this.main, this.normalFontSize)}`;
   };
 
 
+
   this.printClock = async () => {
-    return `
-            <path d="M ${(this.clock.posX)}  ${(this.clock.posY)}  l  20 -20 110 0 20 20 -10 0 -15 -15 -100 0 -15 15 -10 0" stroke="#444" stroke-width="2" fill="${this.background}" ></path>
-            <g font-family="monospace" font-weight="bold"  >
-              ${await draw.text(this.clock.posX + 25, this.clock.posY + 2.5, this.cacheData.clock.strTime, this.main, this.subFontSize)}
-              ${await draw.text(this.clock.posX + 22.5, this.clock.posY + 15, this.cacheData.clock.datePrint, this.backgroundAlt, this.normalFontSize)}
-            </g>
+    return `<path d="M ${(this.clock.posX)}  ${(this.clock.posY)}  l  20 -20 110 0 20 20 -10 0 -15 -15 -100 0 -15 15 -10 0" stroke="#444" stroke-width="2" fill="${this.background}" ></path>
+            ${await draw.text(this.clock.posX + 25, this.clock.posY + 2.5, this.cacheData.clock.strTime, this.main, this.subFontSize)}
+            ${await draw.text(this.clock.posX + 22.5, this.clock.posY + 15, this.cacheData.clock.datePrint, this.backgroundAlt, this.normalFontSize)}
             <path d="M ${(this.clock.posX)}  ${(this.clock.posY + 5)}  l  20 20 110 0 20 -20 -10 0 -15 15 -100 0 -15 -15 -10 0" stroke="#444" stroke-width="2"  fill="${this.background}" ></path>`;
   };
 
@@ -157,8 +152,6 @@ function svgTemplate(data = {}) {
     return `<path d="M 0 0 l ${this.helperWidth}  0 0 ${this.helperHeight} -${this.helperWidth} 0 -${this.helperWidth} -${this.helperHeight} " stroke="none" stroke-width="${this.strokeWidth}" fill="#000" ></path>
             <path d="M 30 10 l 120 0 20 20 ${this.helperWidth - 340} 0 20 -20 120 0 20 20 0 120 -20 20 0 ${this.helperHeight - 340} 20 20 0 120 -20 20 -120 0 -20 -20 -${this.helperWidth - 340} 0 -20 20 -120 0 -20 -20 0 -120 20 -20 0 -${this.helperHeight - 340} -20 -20 0 -120 20 -20" stroke="${this.main}50" stroke-width="${this.strokeWidth}" fill="${this.containerBackground}50" ></path>`;
   };
-
-
 
 
 
@@ -176,12 +169,11 @@ function svgTemplate(data = {}) {
                    ${await draw.text(this.helpDim.X840, this.helpDim.Y + 350 + i * 30, `[ Δ ${tasks[taskNames[i]].interval}ms | Σ ${tasks[taskNames[i]].runs} ]`, this.main, 8)}`;
     }
 
-    return `
-            <path d="M ${this.debugX + 520} ${this.debugY + 320} l 460 0 10 10 0 230 -10 10 -460 0 -10 -10  0 -230 10 -10" stroke="${this.main}" stroke-width="1" fill="#203040" ></path>
+    return `<path d="M ${this.debugX + 520} ${this.debugY + 320} l 460 0 10 10 0 230 -10 10 -460 0 -10 -10  0 -230 10 -10" stroke="${this.main}" stroke-width="1" fill="#203040" ></path>
             ${await draw.text(this.helpDim.X500, this.helpDim.Y + 312.5, "vWatch Tasks:", this.main, this.subFontSize)}
-
             ${taskVIEW}`;
   };
+
 
 
   this.vWatchDBG = async () => {
@@ -211,6 +203,7 @@ function svgTemplate(data = {}) {
   };
 
 
+
   this.cacheDBG = async () => {
     let stats = await cache.stats();
 
@@ -227,6 +220,7 @@ function svgTemplate(data = {}) {
             ${await draw.text(this.helpDim.X840, this.helpDim.Y90, `[ <text fill="${this.main}">${stats.misses}</text> ]`, this.white, this.normalFontSize)}`;
 
   };
+
 
 
   this.wallGuiDBG = async () => {
@@ -272,6 +266,7 @@ function svgTemplate(data = {}) {
   };
 
 
+
   this.debug = async () => {
     // <path d="M 0 0 l 1280 0   0 720   -1280 0   0 -720" stroke="${this.main}40" stroke-width="6" fill="#000000A0" stroke-dasharray="10 5"></path>
 
@@ -286,6 +281,7 @@ function svgTemplate(data = {}) {
   };
 
 
+
   this.renderEIP = async () => {
     return `
               <path d="M 35 15 l 110 0  20 20   -130 130  -20 -20  0 -110  20 -20" stroke="${this.main}" stroke-width="1" fill="#101520" ></path>
@@ -295,7 +291,7 @@ function svgTemplate(data = {}) {
               ${await draw.text(35, 695, "💻 EIP#2", this.white, this.subFontSize)}
 
               <path d="M 1135 15 l 110 0   20 20   0 110   -20 20   -130 -130  20 -20" stroke="${this.main}" stroke-width="1" fill="#101520" ></path>
-              ${await draw.text(1140, 40, "💻 EIP#3", this.white, this.subFontSize)}
+              ${await draw.text(1140, 40, "💹 " + await cache.get('npmTotalDownloads'), this.white, this.subFontSize)}
 
               <path d="M 1135 705 l 110 0   20 -20   0 -110 -20 -20 -130 130  20 20 " stroke="${this.main}" stroke-width="1" fill="#101520" ></path>
               ${await draw.text(1140, 695, "💻 EIP#4", this.white, this.subFontSize)}
@@ -310,13 +306,12 @@ function svgTemplate(data = {}) {
 
   };
 
-  this.extendedInfoPanel = async () => {
-    let item = await cache.get('ExtendedInfoPanel');
 
-    if (item === undefined) {
-      item = await this.renderEIP();
-      await cache.set('ExtendedInfoPanel', item);
-    }
+  this.extendedInfoPanel = async () => {
+    if (await cache.has('ExtendedInfoPanel')) return await cache.get('ExtendedInfoPanel');
+
+    item = await this.renderEIP();
+    await cache.set('ExtendedInfoPanel', item, 10000);
 
     return item;
   };

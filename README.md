@@ -26,4 +26,4 @@ This is actually using [windows-tray](https://github.com/AHgPuK/window-tray) to 
 #
 
 ## Last Generated ImageWallpaperGUI :
-![WallpaperGUI Last Generated Image](./src/wallpaperGUI/img/generated.jpg)
+![WallpaperGUI Last Generated Image](./source/wallpaperGUI/img/generated.jpg)

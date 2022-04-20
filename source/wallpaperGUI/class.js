@@ -13,6 +13,8 @@ const svgTemplate = require('./template');
 var mainSVG_Template = new svgTemplate({ useRandomColors: false });
 
 
+const wallpaper = require('wallpaper');
+
 
 function backgroundGUI(data = {}) {
 
@@ -64,7 +66,7 @@ function backgroundGUI(data = {}) {
   this.saveAndSetBackground = async (error, buffer) => {
     try {
       fs.writeFileSync(this.mFile, buffer);
-      await v_execute(" powershell -c \" powershell.exe -ExecutionPolicy Bypass  -NoProfile -WindowStyle Hidden -File " + path.join(__dirname, 'setBackground.ps1') + " \" ");
+      await wallpaper.set(this.mFile);;
       this.totalUpdates++;
       return this;
     } catch (err) {
