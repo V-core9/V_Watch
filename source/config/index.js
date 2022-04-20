@@ -149,7 +149,7 @@ const config = {
   /*
   * Redraw Interval / System Stats Gathering Interval
   */
-  redrawTime: 1,
+  redrawTime: process.env.WALLPAPER_INTERVAL || 5,
 
 
   /*

@@ -50,10 +50,10 @@ module.exports = sysTasks = async () => {
   await vWatch.newTask("systemInfoStats", vTime.seconds(config.redrawTime), async () => await systemInfoStats(vTime.seconds(config.redrawTime)), "Getting Current User and System Info");
 
   //* Internet Speed Test
-  await vWatch.newTask("netSpeedTest", vTime.minutes(30), netSpeedTest, "Internet Speed Test");
+  await vWatch.newTask("netSpeedTest", vTime.minutes(5), netSpeedTest, "Internet Speed Test");
 
   //* NPM Downloads
-  await vWatch.newTask("totalDownloads", vTime.days(1), totalDownloads, "Total Downloads");
+  await vWatch.newTask("totalDownloads", vTime.hours(12), totalDownloads, "Total Downloads");
 
   //* vWatch Info Cache
   await vWatch.newTask("vWatchDBG", vTime.minutes(1), vWatchDebug, "vWatch Info Cache");

@@ -42,11 +42,11 @@ process.on("SIGINT", async () => {
   // wallpaperGUI Terminate
   await wallpaperGUI.stop();
 
-  // v_tray Terminate
-  await v_tray.destroy();
-
   // vWatch Terminate
   await vWatch.stop();
+
+  // v_tray Terminate
+  await v_tray.destroy();
 
   // Set timeout to wait for all tasks to finish
   setTimeout(() => process.exit(0), 1000);
