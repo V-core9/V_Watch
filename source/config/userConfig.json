@@ -1,7 +1,6 @@
 {
-  "debug": false,
+  "debug": true,
   "notifications": false,
   "backgroundUpdates": true,
-  "extendedInfo": true,
-  "cacheFilePath": "C:\\Users\\v__V_\\Desktop\\V_Watch\\source\\core\\$_cache.json"
+  "extendedInfo": true
 }

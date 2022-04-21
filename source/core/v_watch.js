@@ -1,7 +1,9 @@
 const config = require('../config');
-const vwTasks = {};
 
-function V_Watch(data = {}) {
+
+module.exports = function V_Watch(data = {}) {
+
+  const vwTasks = {};
 
   this.version = "1.0.1";
 
@@ -42,8 +44,8 @@ function V_Watch(data = {}) {
   };
 
 
-  this.newTask = async (id, interval, callback, description = "") => {
-    vwTasks[id] = {
+  this.newTask = async (key, interval, callback, description = "") => {
+    vwTasks[key] = {
       interval: interval || this.tickInterval,
       callback: callback,
       description: description,
@@ -54,22 +56,22 @@ function V_Watch(data = {}) {
   };
 
 
-  this.disableTask = async (id) => {
-    return await this.setTaskStatus(id, false);
+  this.disableTask = async (key) => {
+    return await this.setTaskStatus(key, false);
   };
 
 
-  this.enableTask = async (id) => {
-    return await this.setTaskStatus(id, true);
+  this.enableTask = async (key) => {
+    return await this.setTaskStatus(key, true);
   };
 
 
-  this.setTaskStatus = async (id, value) => {
+  this.setTaskStatus = async (key, value) => {
     if (typeof value === "boolean") {
-      if (vwTasks[id]) {
-        vwTasks[id].enabled = value;
+      if (vwTasks[key]) {
+        vwTasks[key].enabled = value;
       } else {
-        console.log("V_Watch: Task not found: " + id);
+        console.log("V_Watch: Task not found: " + key);
       }
     } else {
       console.log("V_Watch: Invalid value: " + value);
@@ -77,23 +79,24 @@ function V_Watch(data = {}) {
   };
 
 
-  this.getTask = (id) => {
+  this.getTask = (key) => {
     return vwTasks[id] || null;
   };
 
 
-  this.tasksCount = async () => {
-    return Object.keys(vwTasks).length;
+  // All Tasks Listing
+  this.getAllTasks = async () => {
+    return vwTasks;
   };
 
 
-  this.totalTasksCount = async () => this.tasksCount();
+  this.totalTasksCount = async () => Object.keys(vwTasks).length;
 
 
   this.activeTasksCount = async () => {
     let count = 0;
-    for (const taskId in vwTasks) {
-      if (vwTasks[taskId].enabled) {
+    for (const task in Object.values(vwTasks)) {
+      if (task.enabled) {
         count++;
       }
     }
@@ -103,8 +106,8 @@ function V_Watch(data = {}) {
 
   this.disabledTasksCount = async () => {
     let count = 0;
-    for (const taskId in vwTasks) {
-      if (!vwTasks[taskId].enabled) {
+    for (const task in Object.values(vwTasks)) {
+      if (!task.enabled) {
         count++;
       }
     }
@@ -112,38 +115,7 @@ function V_Watch(data = {}) {
   };
 
 
-  this.allTasks = async () => {
-    return vwTasks;
-  };
-
-
-  this.activeTasks = async () => {
-    const activeTasks = [];
-    for (const taskId in vwTasks) {
-      const task = vwTasks[taskId];
-      if (task.enabled) {
-        activeTasks.push(task);
-      }
-    }
-    return activeTasks;
-  };
-
-
-  this.disabledTasks = async () => {
-    const disabledTasks = [];
-    for (const taskId in vwTasks) {
-      const task = vwTasks[taskId];
-      if (!task.enabled) {
-        disabledTasks.push(task);
-      }
-    }
-    return disabledTasks;
-  };
-
 
   if (this.autoStart) this.start();
 
 }
-
-
-module.exports = V_Watch;

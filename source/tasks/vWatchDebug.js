@@ -12,7 +12,7 @@ module.exports = vWatchDebug = async () => {
     activeTasksCount: await vWatch.activeTasksCount(),
     totalTasksCount: await vWatch.totalTasksCount(),
     vWatchVersion: vWatch.version,
-    tasks: await vWatch.allTasks(),
+    tasks: await vWatch.getAllTasks(),
   };
 
   await cache.set("vWatchDBG", vwDbgInfo);

@@ -1,4 +1,8 @@
+const config = require('../config');
+const { vWatch } = require("../core");
+const { vTime } = require('../helpers');
 
+const { seconds, minutes, hours, days } = vTime;
 
 //! System actions [ functions to call/use in vWatch Tasks List ]
 // Example [justDoIt()]
@@ -23,17 +27,13 @@ const totalDownloads = require('./total-downloads');
 const vWatchDebug = require('./vWatchDebug');
 
 
-
-const config = require('../config');
-const { vWatch } = require("../core");
-const { vTime } = require('../helpers');
-
-
+//! Base time
+const baseTime = seconds(config.redrawTime);
 
 module.exports = sysTasks = async () => {
 
   //* This will do the rendering of wallpaperGUI.
-  await vWatch.newTask("wallpaperGUI", vTime.seconds(config.redrawTime), wallpaperGUI, "This will do the rendering of wallpaperGUI");
+  await vWatch.newTask("wallpaperGUI", baseTime, wallpaperGUI, "This will do the rendering of wallpaperGUI");
   // This Tasks status should match config.backgroundUpdates value.
   await vWatch.setTaskStatus("wallpaperGUI", config.backgroundUpdates);
 
@@ -44,18 +44,18 @@ module.exports = sysTasks = async () => {
 
 
   //* CLOCK Task
-  await vWatch.newTask("clock", vTime.seconds(config.redrawTime), clockUpdate, "vWatch task that updates Clock in cache");
+  await vWatch.newTask("clock", baseTime, clockUpdate, "vWatch task that updates Clock in cache");
 
   //* Getting Current User&Device Info
-  await vWatch.newTask("systemInfoStats", vTime.seconds(config.redrawTime), async () => await systemInfoStats(vTime.seconds(config.redrawTime)), "Getting Current User and System Info");
+  await vWatch.newTask("systemInfoStats", baseTime, systemInfoStats, "Getting Current User and System Info");
 
   //* Internet Speed Test
-  await vWatch.newTask("netSpeedTest", vTime.minutes(5), netSpeedTest, "Internet Speed Test");
+  await vWatch.newTask("netSpeedTest", minutes(5), netSpeedTest, "Internet Speed Test");
 
   //* NPM Downloads
-  await vWatch.newTask("totalDownloads", vTime.hours(12), totalDownloads, "Total Downloads");
+  await vWatch.newTask("totalDownloads", hours(12), totalDownloads, "Total Downloads");
 
   //* vWatch Info Cache
-  await vWatch.newTask("vWatchDBG", vTime.minutes(1), vWatchDebug, "vWatch Info Cache");
+  await vWatch.newTask("vWatchDBG", seconds(30), vWatchDebug, "vWatch Info Cache");
 
 };

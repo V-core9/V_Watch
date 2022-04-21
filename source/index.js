@@ -49,6 +49,6 @@ process.on("SIGINT", async () => {
   await v_tray.destroy();
 
   // Set timeout to wait for all tasks to finish
-  setTimeout(() => process.exit(0), 1000);
+  setTimeout(() => process.exit(0), exitTimeout);
 
 });

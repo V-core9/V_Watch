@@ -1,9 +1,11 @@
 const { cache } = require('../core');
 const { byteSizer } = require('v_file_system');
-const { v_os, roundNumber } = require('../helpers');
+const { v_os, roundNumber, vTime } = require('../helpers');
+
+const config = require('../config');
 
 
-module.exports = async (timeLen = 1000) => {
+module.exports = async () => {
 
   const result = {
 
@@ -19,7 +21,7 @@ module.exports = async (timeLen = 1000) => {
 
     cpu: {
       count: v_os.cpu.count(),
-      usage: await v_os.cpu.usage(timeLen),
+      usage: await v_os.cpu.usage(vTime.seconds(config.redrawTime)),
     },
 
   };

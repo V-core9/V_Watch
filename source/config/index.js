@@ -101,8 +101,7 @@ const config = {
       debug: config.debug,
       notifications: config.notifications,
       backgroundUpdates: config.backgroundUpdates,
-      extendedInfo: config.extendedInfoStatus,
-      cacheFilePath: config.cacheFilePath,
+      extendedInfo: config.extendedInfo,
     };
 
     return v_fs.writeSy(config.fileLocation, `${JSON.stringify(data, null, 2)}`);
@@ -118,7 +117,6 @@ const config = {
       if (userConfig.notifications !== undefined) config.notifications = userConfig.notifications;
       if (userConfig.backgroundUpdates !== undefined) config.backgroundUpdates = userConfig.backgroundUpdates;
       if (userConfig.extendedInfo !== undefined) config.extendedInfo = userConfig.extendedInfo;
-      if (userConfig.cacheFilePath !== undefined) config.cacheFilePath = userConfig.cacheFilePath;
 
       return userConfig;
     } catch (error) {
@@ -133,14 +131,14 @@ const config = {
   /*
   ! EXITING Timeout
   */
-  exitingTimeout: 100,
+  _exitTimeout: 1000,
 
   set exitTimeout(value) {
-    return (!isNaN(value)) ? config.exitingTimeout = value : false;
+    return (!isNaN(value)) ? config._exitTimeout = value : false;
   },
 
   get exitTimeout() {
-    return config.exitingTimeout;
+    return config._exitTimeout;
   },
 
 
@@ -155,14 +153,14 @@ const config = {
   /*
   * extendedInfo Enable/Disable
   */
-  extendedInfoStatus: false,
+  _extendedInfo: false,
 
   set extendedInfo(value) {
-    return (typeof value === 'boolean') ? config.extendedInfoStatus = value : false;
+    return (typeof value === 'boolean') ? config._extendedInfo = value : false;
   },
 
   get extendedInfo() {
-    return config.extendedInfoStatus;
+    return config._extendedInfo;
   },
 
   toggleExtendedInfo() {

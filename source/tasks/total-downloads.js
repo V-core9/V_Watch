@@ -1,6 +1,6 @@
 var downloads = require('downloads');
 
-const {cache} = require('../core/');
+const { cache } = require('../core/');
 
 
 const items = require('../data/npm_items');
@@ -32,6 +32,9 @@ module.exports = totalDownloads = async () => {
       console.log(`Total downloads: ${totalCount}`);
 
       await cache.set("npmTotalDownloads", totalCount);
+
     }, i * 60000);
+
   }
-}
+
+};
