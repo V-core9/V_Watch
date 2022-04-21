@@ -90,12 +90,10 @@ const v_tray = new NodeTray(path.join(__dirname, "../../ASSETS/icon/rick.ico"));
 v_tray.setToolTip(process.title);
 
 
-/*
 v_tray.on('click', () => {
   let result = v_tray.toggleWindow(process.title);
   console.log("click, result = ", result);
 });
-*/
 
 
 v_tray.on('right-click', () => {

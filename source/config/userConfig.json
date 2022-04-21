@@ -2,6 +2,6 @@
   "debug": false,
   "notifications": false,
   "backgroundUpdates": true,
-  "extendedInfo": false,
+  "extendedInfo": true,
   "cacheFilePath": "C:\\Users\\v__V_\\Desktop\\V_Watch\\source\\core\\$_cache.json"
 }
