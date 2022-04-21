@@ -103,5 +103,6 @@ dist
 # TernJS port file
 .tern-port
 
-$.json
+$_cache.json
+userConfig.json
 .vscode/

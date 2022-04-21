@@ -1,6 +1,8 @@
+const path = require('path');
 const config = require('../config');
 const { cache } = require('../core');
 const { getRandomColor } = require('../helpers');
+const imageToBase64 = require('image-to-base64');
 
 
 const draw = {
@@ -10,12 +12,18 @@ const draw = {
   line: async (x1, y1, x2, y2, color) => `<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke="${color}" />`,
   polygon: async (points, color) => `<polygon points="${points}" fill="${color}" />`,
   path: async (d, color) => `<path d="${d}" fill="${color}" />`,
-  image: async (x, y, width, height, url) => `<image x="${x}" y="${y}" width="${width}" height="${height}" xlink:href="${url}" />`
+  image: async (x, y, width, height, data) => `<image x="${x}" y="${y}" width="${width}" height="${height}" href="${data}" alt="Description of the image" />`
 };
 
 
 
-function svgTemplate(data = {}) {
+(async () => {
+  if (!await cache.has("PICKLE_BASE64")) await cache.set("PICKLE_BASE64", `data:image/png;charset=utf-8;base64,${await imageToBase64(path.join(__dirname, "../ASSETS/image/PICKLE.png"))}`);
+  console.log(await cache.get("PICKLE_BASE64"));
+})();
+
+
+module.exports = function svgTemplate(data = {}) {
 
 
   const randomColors = async () => {
@@ -117,7 +125,8 @@ function svgTemplate(data = {}) {
   this.offlineNotice = async () => {
     return `<path d="M 170 697.5 l ${(this.helperWidth - 340)}  0 5 5 0 10 -5 5 ${-(this.helperWidth - 340)}  0 -5 -5 0 -10 5 -5" stroke="${this.main}80" stroke-width="1" fill="${this.main}50" ></path>
             ${await draw.text(180, 710, `V_WATCH: [OFFLINE]`, "#000000", this.normalFontSize)}
-            ${await draw.text(640, 710, `Restart application to get it running`, "#000000", this.normalFontSize)}`;
+            ${await draw.text(640, 710, `Restart application to get it running`, "#000000", this.normalFontSize)}
+            ${await draw.image(1080, 520, 200, 200, await cache.get("PICKLE_BASE64"))}`;
   };
 
 
@@ -318,6 +327,3 @@ function svgTemplate(data = {}) {
 
 
 }
-
-
-module.exports = svgTemplate;
