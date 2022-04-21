@@ -3,14 +3,13 @@ const config = require('../config');
 
 module.exports = function V_Watch(data = {}) {
 
-  const vwTasks = {};
 
-  this.version = "1.0.1";
-
-  this.tickInterval = data.interval || 1000;
-  this.autoStart = data.autoStart || true;
+  this.interval = data.interval || 1000;
+  this.autoStart = data.autoStart || false;
 
   this.loopCore = null;
+
+  const vwTasks = {};
 
 
   this.tick = async () => {
@@ -32,27 +31,50 @@ module.exports = function V_Watch(data = {}) {
 
 
   this.start = async () => {
-    if (config.debug) console.log("V_Watch: STARTING >>>");
-    this.loopCore = setInterval(this.tick, this.tickInterval);
+    try {
+      if (config.debug) console.log("V_Watch: STARTING >>>");
+
+      if (this.loopCore !== null) return false;
+
+      this.loopCore = setInterval(this.tick, this.interval);
+      return true;
+    } catch (error) {
+      console.log(error);
+      return false;
+    }
   };
 
 
   this.stop = async () => {
-    if (config.debug) console.log("V_Watch: STOPPING ...");
-    clearInterval(this.loopCore);
-    this.loopCore = null;
+    try {
+      if (this.loopCore === null) return false;
+
+      if (config.debug) console.log("V_Watch: STOPPING ...");
+      clearInterval(this.loopCore);
+      this.loopCore = null;
+      return true;
+    } catch (error) {
+      console.log(error);
+      return false;
+    }
   };
 
 
   this.newTask = async (key, interval, callback, description = "") => {
-    vwTasks[key] = {
-      interval: interval || this.tickInterval,
-      callback: callback,
-      description: description,
-      enabled: true,
-      lastRun: 0,
-      runs: 0,
-    };
+    try {
+      vwTasks[key] = {
+        interval: interval || this.interval,
+        callback: callback,
+        description: description,
+        enabled: true,
+        lastRun: 0,
+        runs: 0,
+      };
+      return true;
+    } catch (err) {
+      console.log(err);
+      return false;
+    }
   };
 
 
@@ -80,7 +102,7 @@ module.exports = function V_Watch(data = {}) {
 
 
   this.getTask = (key) => {
-    return vwTasks[id] || null;
+    return vwTasks[key] || undefined;
   };
 
 
@@ -95,8 +117,8 @@ module.exports = function V_Watch(data = {}) {
 
   this.activeTasksCount = async () => {
     let count = 0;
-    for (const task in Object.values(vwTasks)) {
-      if (task.enabled) {
+    for (const task in vwTasks) {
+      if (vwTasks[task].enabled) {
         count++;
       }
     }
@@ -106,8 +128,8 @@ module.exports = function V_Watch(data = {}) {
 
   this.disabledTasksCount = async () => {
     let count = 0;
-    for (const task in Object.values(vwTasks)) {
-      if (!task.enabled) {
+    for (const task in vwTasks) {
+      if (!vwTasks[task].enabled) {
         count++;
       }
     }
@@ -116,6 +138,36 @@ module.exports = function V_Watch(data = {}) {
 
 
 
+  this.changeInterval = async (value = this.interval) => {
+    await this.stop();
+    this.interval = value;
+    await this.start();
+  };
+
+
+  this.updateTaskInterval = async (key, value) => {
+    if (vwTasks[key]) {
+      vwTasks[key].interval = value;
+      return true;
+    } else {
+      console.log("V_Watch: Task not found: " + key);
+      return false;
+    }
+  };
+
+
+  this.stats = async () => {
+    return {
+      status: (this.loopCore !== null) ? true : false,
+      interval: this.interval, // in milliseconds
+      autoStart: this.autoStart,
+      disabledTasksCount: await this.disabledTasksCount(),
+      activeTasksCount: await this.activeTasksCount(),
+      totalTasksCount: await this.totalTasksCount(),
+    };
+  };
+
   if (this.autoStart) this.start();
 
-}
+
+};

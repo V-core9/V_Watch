@@ -202,7 +202,7 @@ module.exports = function svgTemplate(data = {}) {
             ${await draw.text(this.helpDim.X300, this.helpDim.Y + 375, `[ ${this.cacheData.vWatch.disabledTasksCount} ]`, this.white, this.normalFontSize)}
 
             ${await draw.text(this.helpDim.X, this.helpDim.Y + 390, "Tick Interval ", this.white, this.normalFontSize)}
-            ${await draw.text(this.helpDim.X300, this.helpDim.Y + 390, `[ ${this.cacheData.vWatch.tickInterval}ms ]`, this.white, this.normalFontSize)}
+            ${await draw.text(this.helpDim.X300, this.helpDim.Y + 390, `[ ${this.cacheData.vWatch.interval}ms ]`, this.white, this.normalFontSize)}
 
             ${await draw.text(this.helpDim.X, this.helpDim.Y + 405, "Tick Frequency ", this.white, this.normalFontSize)}
             ${await draw.text(this.helpDim.X300, this.helpDim.Y + 405, `[ ${this.cacheData.vWatch.frequency}Hz ]`, this.white, this.normalFontSize)}

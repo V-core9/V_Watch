@@ -5,13 +5,12 @@ module.exports = vWatchDebug = async () => {
 
   let vwDbgInfo = {
     status: (vWatch.loopCore !== null) ? true : false,
-    tickInterval: vWatch.tickInterval, // in milliseconds
-    frequency: (1000 / vWatch.tickInterval),
+    interval: vWatch.interval, // in milliseconds
+    frequency: (1000 / vWatch.interval),
     autoStart: vWatch.autoStart,
     disabledTasksCount: await vWatch.disabledTasksCount(),
     activeTasksCount: await vWatch.activeTasksCount(),
     totalTasksCount: await vWatch.totalTasksCount(),
-    vWatchVersion: vWatch.version,
     tasks: await vWatch.getAllTasks(),
   };
 
