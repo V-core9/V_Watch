@@ -60,13 +60,13 @@ module.exports = function V_Watch(data = {}) {
   };
 
 
-  this.newTask = async (key, interval, callback, description = "") => {
+  this.newTask = async (key, interval, callback, description = "", enabled = true) => {
     try {
       vwTasks[key] = {
         interval: interval || this.interval,
         callback: callback,
         description: description,
-        enabled: true,
+        enabled: enabled,
         lastRun: 0,
         runs: 0,
       };
@@ -166,6 +166,23 @@ module.exports = function V_Watch(data = {}) {
       totalTasksCount: await this.totalTasksCount(),
     };
   };
+
+
+  this.runTask = async (key) => {
+    try {
+      const task = vwTasks[key];
+      task.callback();
+      task.lastRun = Date.now();
+      task.runs++;
+      return true;
+    } catch (error) {
+      console.log(error);
+      return false;
+    }
+  };
+
+
+
 
   if (this.autoStart) this.start();
 

@@ -1,8 +1,9 @@
 module.exports = {
 
-  notify: require('./v_notify'),
 
   v_tray: require('./v_tray'),
+
+  notify: require('./v_notify'),
 
   v_os: require('./v_os'),
 

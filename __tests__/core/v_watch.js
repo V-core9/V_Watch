@@ -55,3 +55,41 @@ test('empty watcher test', async () => {
   expect(await watcher.stop()).toBe(true);
 
 });
+
+
+test('executing manually tasks', async () => {
+  const watcher = new V_Watch();
+
+  const testStats = {
+    interval: 1000,
+    status: false,
+    autoStart: false,
+    activeTasksCount: 0,
+    disabledTasksCount: 0,
+    totalTasksCount: 0
+  };
+
+  let stats = await watcher.stats();
+
+  expect(stats).toEqual(testStats);
+
+  let testValue = 0;
+
+  expect(await watcher.newTask('test',  1000, async () => testValue++,'')).toBe(true);
+
+  for (let i = 0; i < 100; i++) {
+    await watcher.runTask('test');
+  }
+
+  expect(testValue).toBe(100);
+
+
+  stats = await watcher.stats();
+
+  let testStats2 = testStats;
+  testStats2.totalTasksCount = 1;
+  testStats2.activeTasksCount = 1;
+
+  expect(stats).toEqual(testStats2);
+
+});

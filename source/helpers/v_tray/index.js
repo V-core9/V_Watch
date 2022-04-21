@@ -103,5 +103,7 @@ v_tray.on('right-click', () => {
 });
 
 
+v_tray.stop = async () => await v_tray.destroy();
+
 
 module.exports = v_tray;
