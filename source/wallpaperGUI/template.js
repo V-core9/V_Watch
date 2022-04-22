@@ -100,7 +100,7 @@ module.exports = function svgTemplate(data = {}) {
     this.cacheData = {
       clock: await cache.get('clock') || { strTime: "", datePrint: "" },
       system: await cache.get('system') || { cpu: {}, ram: {}, deviceUserInfo: {} },
-      netSpeed: await cache.get('netSpeed') || { download: 0, upload: 0 },
+      netSpeed: await cache.get('netSpeed') || { external_ip: "0.0.0.0", latency: 0, download: 0, upload: 0 },
       svgStats: await cache.get('svgStats') || { lastExecTimeVal: 0, totalUpdates: 0, scale: 1, running: false, quality: 75 },
       vWatch: (config.debug) ? await cache.get("vWatchDBG") : {},
     };
@@ -141,9 +141,10 @@ module.exports = function svgTemplate(data = {}) {
 
 
   this.printBotStats = async () => {
+    let { netSpeed, system } = this.cacheData;
     return `<path d="M 170 697.5 l ${(this.helperWidth - 340)}  0 5 5 0 10 -5 5 ${-(this.helperWidth - 340)}  0 -5 -5 0 -10 5 -5" stroke="${this.main}80" stroke-width="1" fill="${this.main}50" ></path>
-            ${await draw.text(180, 710, `👤 ${this.cacheData.system.deviceUserInfo}`, this.main, this.normalFontSize)}
-            ${await draw.text(640, 710, `📦 Net Speed [ D: ${this.cacheData.netSpeed.download} Mbs || U:${this.cacheData.netSpeed.upload} Mbs ]`, this.main, this.normalFontSize)}`;
+            ${await draw.text(180, 710, `👤 ${system.deviceUserInfo}`, this.main, this.normalFontSize)}
+            ${await draw.text(640, 710, `🌐 ${netSpeed.external_ip} [ D: ${netSpeed.download} Mbs / U:${netSpeed.upload} Mbs @ ${netSpeed.latency}ms]`, this.main, this.normalFontSize)}`;
   };
 
 

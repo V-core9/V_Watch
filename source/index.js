@@ -11,7 +11,4 @@ const { vWatch } = require("./core");
 
   await vWatch.runTask("STARTING");
 
-  //! Exit Handler
-  process.on("SIGINT", async () => await vWatch.runTask("EXITING"));
-
 })();
