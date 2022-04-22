@@ -1,30 +1,27 @@
 const path = require('path');
 const fs = require('fs');
-const v_execute = require('v_execute');
-// NPM: svg2png [many more options]
+const wallpaper = require('wallpaper');
 var svg2img = require('svg2img');
+const { listDisplays } = require('screenshot-desktop');
 
 const { cache } = require('../core');
-
 const config = require('../config');
 
-
 const svgTemplate = require('./template');
-var mainSVG_Template = new svgTemplate({ useRandomColors: false });
-
-
-const wallpaper = require('wallpaper');
 
 
 function backgroundGUI(data = {}) {
 
+  let mainSVG_Template = new svgTemplate({ useRandomColors: false });
+
   // Few variables setup.
-  console.log(data);
-  this.mFile = path.join(__dirname, './img/generated.jpg');
+  if (config.debug) console.log(data);
+
+  this.file = path.join(__dirname, './img/generated.jpg');
   this.templateHelper = "";
   this.autoInit = data.autoInit || false;
   this.scale = data.scale || 1;
-  this.quality = data.quality || 75;
+  this.quality = data.quality || 100;
   this.totalUpdates = 0;
   this.lastExecTimeVal = 0;
   this.loopObj = null;
@@ -42,20 +39,15 @@ function backgroundGUI(data = {}) {
   * Gets the screen size using powershell command.
   */
   this.getScreenSize = async () => {
-    var response = await v_execute(" powershell -c \" Add-Type -AssemblyName System.Windows.Forms ; [System.Windows.Forms.Screen]::AllScreens \" ", this.handleGettingResolution);
-    console.time("- handleGettingResolution(response) ");
-    var stdoutHelp = response.stdout.replace(/[&\/\\#+()$~%.'"*?<> ]/g, '');
-    stdoutHelp = stdoutHelp.replace(/\r\n/g, ',');
-    response.stdout = stdoutHelp;
-
-    var displayWidthH = response.stdout.split("Bounds:{")[1].split(",Width=")[1].split(",Height=");
-    this.screen.width = displayWidthH[0];
-    this.screen.height = displayWidthH[1].split("},DeviceName")[0];
+    var screenData = (await listDisplays())[0];
+    this.screen.width = screenData.width;
+    this.screen.height = screenData.height;
+    this.scale = screenData.dpiScale;
 
     this.screen.widthScaled = this.screen.width * this.scale;
     this.screen.heightScaled = this.screen.height * this.scale;
-    console.log(`System Display Resolution\n[o> Height: ${this.screen.height}px\n[o> Width: ${this.screen.width}px`);
-    console.timeEnd("- handleGettingResolution(response) ");
+
+    if (config.debug) console.log(this.screen);
     return this.screen;
   };
 
@@ -65,8 +57,8 @@ function backgroundGUI(data = {}) {
   */
   this.saveAndSetBackground = async (error, buffer) => {
     try {
-      fs.writeFileSync(this.mFile, buffer);
-      await wallpaper.set(this.mFile);;
+      fs.writeFileSync(this.file, buffer);
+      await wallpaper.set(this.file);
       this.totalUpdates++;
       return this;
     } catch (err) {
@@ -83,7 +75,7 @@ function backgroundGUI(data = {}) {
       totalUpdates: this.totalUpdates,
       lastExecTimeVal: this.lastExecTimeVal,
       running: (this.loopObj != null) ? true : false,
-      imgLocation: this.mFile,
+      imgLocation: this.file,
       scale: this.scale,
       quality: this.quality,
     };
@@ -98,10 +90,10 @@ function backgroundGUI(data = {}) {
   /*
   * Starts the looping process.
   */
-  this.start = () => {
+  this.start = async () => {
 
     if (config.debug) console.log("BackgroundGUI: STARTING >>>");
-    this.getScreenSize();
+    await this.getScreenSize();
 
     this.loopObj = setInterval(async () => {
       this.render();
@@ -114,7 +106,7 @@ function backgroundGUI(data = {}) {
   * Stop the whole thing from running by clearing the Interval.
   */
   this.stop = async () => {
-    console.log("BackgroundGUI: STOPPING...🙋‍♂️");
+    if (config.debug) console.log("BackgroundGUI: STOPPING...🙋‍♂️");
     await this.render();
     clearInterval(this.loopObj);
     this.loopObj = null;

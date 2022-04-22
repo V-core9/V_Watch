@@ -19,7 +19,7 @@ const draw = {
 
 (async () => {
   if (!await cache.has("PICKLE_BASE64")) await cache.set("PICKLE_BASE64", `data:image/png;charset=utf-8;base64,${await imageToBase64(path.join(__dirname, "../ASSETS/image/PICKLE.png"))}`);
-  console.log(await cache.get("PICKLE_BASE64"));
+  if (config.debug) console.log(await cache.get("PICKLE_BASE64"));
 })();
 
 
@@ -105,7 +105,7 @@ module.exports = function svgTemplate(data = {}) {
       vWatch: (config.debug) ? await cache.get("vWatchDBG") : {},
     };
 
-    //console.log(this.cacheData);
+    if (config.debug) console.log(this.cacheData);
 
     return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${this.helperWidth} ${this.helperHeight}"  height="${this.helperHeight}" width="${this.helperWidth}" class="${this.name}"  shape-rendering="geometricPrecision" font-family="monospace" >
               ${(!config.exiting) ?
@@ -173,10 +173,10 @@ module.exports = function svgTemplate(data = {}) {
     let taskNames = Object.keys(tasks);
 
     for (let i = 0; i < taskNames.length; i++) {
-      taskVIEW += `${await draw.text(this.helpDim.X500, this.helpDim.Y + 340 + i * 30, `${taskNames[i]}`, this.white, this.normalFontSize)}
-                   ${await draw.text(this.helpDim.X840, this.helpDim.Y + 340 + i * 30, `[ ${(tasks[taskNames[i]].enabled) ? "✔ Enabled" : "❌ Disabled"} ]`, this.main, this.normalFontSize)}
-                   ${await draw.text(this.helpDim.X500, this.helpDim.Y + 350 + i * 30, `${tasks[taskNames[i]].description}`, this.white, 8)}
-                   ${await draw.text(this.helpDim.X840, this.helpDim.Y + 350 + i * 30, `[ Δ ${tasks[taskNames[i]].interval}ms | Σ ${tasks[taskNames[i]].runs} ]`, this.main, 8)}`;
+      taskVIEW += `${await draw.text(this.helpDim.X500, this.helpDim.Y + 330 + i * 22.5, `${taskNames[i]}`, this.white, 8)}
+                   ${await draw.text(this.helpDim.X840, this.helpDim.Y + 330 + i * 22.5, `[ ${(tasks[taskNames[i]].enabled) ? "✔ Enabled" : "❌ Disabled"} ]`, this.main, 8)}
+                   ${await draw.text(this.helpDim.X500, this.helpDim.Y + 337.5 + i * 22.5, `${tasks[taskNames[i]].description}`, this.white, 6)}
+                   ${await draw.text(this.helpDim.X840, this.helpDim.Y + 337.5 + i * 22.5, `[ Δ ${tasks[taskNames[i]].interval}ms | Σ ${tasks[taskNames[i]].runs} ]`, this.main, 6)}`;
     }
 
     return `<path d="M ${this.debugX + 520} ${this.debugY + 320} l 460 0 10 10 0 230 -10 10 -460 0 -10 -10  0 -230 10 -10" stroke="${this.main}" stroke-width="1" fill="#203040" ></path>
@@ -293,18 +293,29 @@ module.exports = function svgTemplate(data = {}) {
 
 
   this.renderEIP = async () => {
+    let screenInfo = await cache.get("ScreenResolutionInfo");
+    let weatherApi = await cache.get('weatherApi') || { main: {}, wind: {}, clouds: {}, weather: [] };
+    let wthMain = weatherApi.weather[0].main;
+    let wthDescription = weatherApi.weather[0].description;
+    let wthTemp = weatherApi.main.temp || 0;
+    let wthWindSpeed = weatherApi.wind.speed || 0;
+
+
     return `
               <path d="M 35 15 l 110 0  20 20   -130 130  -20 -20  0 -110  20 -20" stroke="${this.main}" stroke-width="1" fill="#101520" ></path>
               ${await draw.text(35, 40, "💻 EIP#1", this.white, this.subFontSize)}
 
               <path d="M 35 705 l 110 0   20 -20   -130 -130  -20 20   0 110   20 20" stroke="${this.main}" stroke-width="1" fill="#101520" ></path>
-              ${await draw.text(35, 695, "💻 EIP#2", this.white, this.subFontSize)}
+              ${await draw.text(35, 695, "😎 " + wthMain , this.white, this.normalFontSize)}
+              ${await draw.text(35, 680, "🔥 " + wthTemp + "°C " , this.white, this.normalFontSize)}
+              ${await draw.text(35, 665, "〰 " + wthWindSpeed + "m/s", this.white, this.normalFontSize)}
 
               <path d="M 1135 15 l 110 0   20 20   0 110   -20 20   -130 -130  20 -20" stroke="${this.main}" stroke-width="1" fill="#101520" ></path>
               ${await draw.text(1140, 40, "💹 " + await cache.get('npmTotalDownloads'), this.white, this.subFontSize)}
 
               <path d="M 1135 705 l 110 0   20 -20   0 -110 -20 -20 -130 130  20 20 " stroke="${this.main}" stroke-width="1" fill="#101520" ></path>
-              ${await draw.text(1140, 695, "💻 EIP#4", this.white, this.subFontSize)}
+              ${await draw.text(1140, 695, "📏 " + screenInfo.width + "x" + screenInfo.height + "px", this.white, this.normalFontSize)}
+              ${await draw.text(1150, 680, "🔍 " + screenInfo.dpiScale + "dpi", this.white, this.normalFontSize)}
 
               <path d="M 5 145 l   25 25   0 380   -25 25   0 -430  " stroke="${this.main}" stroke-width="1" fill="#101520" ></path>
               ${await draw.text(10, 185, "🆒", this.main, this.normalFontSize)}

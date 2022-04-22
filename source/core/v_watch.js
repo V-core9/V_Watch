@@ -63,7 +63,7 @@ module.exports = function V_Watch(data = {}) {
   this.newTask = async (key, interval, callback, description = "", enabled = true) => {
     try {
       vwTasks[key] = {
-        interval: interval || this.interval,
+        interval: (!isNaN(interval)) ? interval : this.interval,
         callback: callback,
         description: description,
         enabled: enabled,
@@ -110,6 +110,9 @@ module.exports = function V_Watch(data = {}) {
   this.getAllTasks = async () => {
     return vwTasks;
   };
+
+
+  this.hasTask = (key) => (vwTasks[key]) ? true : false;
 
 
   this.totalTasksCount = async () => Object.keys(vwTasks).length;

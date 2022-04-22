@@ -7,7 +7,7 @@ const { cache, vWatch } = require("../core");
 const { notify, v_tray } = require("../helpers");
 
 //? wallpaperGUI - Background GUI
-const wallpaperGUI = require("../wallpaperGUI");
+const wallpaperGUI = require("../wallpaper");
 
 
 module.exports = application_exit = async () => {

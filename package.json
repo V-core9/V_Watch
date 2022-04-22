@@ -6,7 +6,7 @@
   "scripts": {
     "test": "jest",
     "start": "node ./source",
-    "dev": "bash -c \"WALLPAPER_INTERVAL=1 npm start\"",
+    "dev": "bash -c \"WALLPAPER_INTERVAL=2 npm start\"",
     "setup": "powershell -c \" Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1')) \" && powershell -c \"choco install visualstudio2017buildtools -A \"  && bash -c \" npm config set msvs_version 2017 \" ",
     "autostart": "bash -c \" npm install -g pm2 pm2-windows-startup \" && bash -c \" pm2-startup install \"",
     "preinstall": "bash -c \" npm install -g node-gyp \" ",
@@ -43,12 +43,13 @@
     "image-to-base64": "^2.2.0",
     "node-notifier": "^10.0.0",
     "node-os-utils": "^1.3.6",
+    "openweather-apis": "^4.4.2",
+    "screenshot-desktop": "^1.12.7",
     "speedtest-net": "^2.2.0",
     "svg-to-png": "^4.0.0",
     "svg2img": "^0.9.3",
     "url-regex-safe": "^2.0.2",
     "v_core_cache": "^1.0.4",
-    "v_execute": "^1.0.3",
     "v_file_system": "^1.0.5",
     "wallpaper": "^5.0.1",
     "windows-tray": "github:AHgPuK/window-tray"

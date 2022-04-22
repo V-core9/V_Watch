@@ -1,5 +1,6 @@
 const v_fs = require('v_file_system');
 const path = require('path');
+const { fstat } = require('fs');
 
 
 process.title = '-v-';
@@ -36,7 +37,7 @@ const config = {
     if (typeof value === 'boolean') {
       const { vWatch } = require('../core');
       config.bgUpdates = value;
-      vWatch.setTaskStatus('wallpaperGUI', value);
+      if (vWatch.hasTask("wallpaperGUI")) vWatch.setTaskStatus('wallpaperGUI', value);
       return true;
     } else {
       return false;
@@ -93,7 +94,7 @@ const config = {
   /*
   * FILE - Save/Read Config
   */
-  fileLocation: path.join(__dirname, './userConfig.json'),
+  fileLocation: path.join(__dirname, '../data/userConfig.json'),
 
   saveConfigToFile() {
 
@@ -168,7 +169,7 @@ const config = {
   },
 
 
-  cacheFilePath: path.join(__dirname, "../core/$_cache.json"),
+  cacheFilePath: path.join(__dirname, "../data/$_cache.json"),
 
 
 
@@ -183,7 +184,13 @@ const config = {
   },
 
 
-};
+  // Weather Config.
+  weatherApiKey: v_fs.readSy(path.join(__dirname, "openweather_api_key.txt")) || '',
 
+  weatherCity: "Kljajicevo",
+
+  weatherUnits: "metric",
+
+};
 
 module.exports = config;
