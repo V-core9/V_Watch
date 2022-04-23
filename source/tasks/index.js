@@ -1,38 +1,25 @@
-const config = require('../config');
-const { vWatch } = require("../core");
-const { seconds, minutes, hours } = require('../helpers').vTime;
+module.exports = sysTasks = {
 
-//! Base time
-const baseTime = seconds(config.redrawTime);
+  appSTARTING: require('./app.STARTING'),
+  appEXITING: require('./app.EXITING'),
 
 
-module.exports = sysTasks = async () => {
+  wallpaperGUI: require('./render-wallpapergui'),
 
-  await vWatch.newTask("STARTING", 0, require('./app.STARTING'), "DISABLED Task that should only fire once STARTING.", false);
-  await vWatch.newTask("EXITING", 0, require('./app.EXITING'), "DISABLED Task that should only fire once EXITING.", false);
+  justDoIt: require('./justDoIt'),
 
+  clock: require('./clock-update'),
 
-  await vWatch.newTask("wallpaperGUI", baseTime, require('./render-wallpapergui'), "This will do the rendering of wallpaperGUI", config.backgroundUpdates);
+  systemInfo: require('./system-info-stats'),
 
-  await vWatch.newTask("justDoIt", 750, require('./justDoIt'), "Demo Task Description Placeholder");
-  await vWatch.disableTask("justDoIt");
+  netSpeed: require('./internet-speed-test'),
 
+  screenshot: require('./screenshot-desktop'),
 
-  await vWatch.newTask("clock", baseTime, require('./clock-update'), "vWatch task that updates Clock in cache");
+  totalDownloads: require('./total-downloads'),
 
-  await vWatch.newTask("systemInfoStats", baseTime, require('./system-info-stats'), "Getting Current User and System Info");
+  vWatchDBG: require('./vWatchDebug'),
 
-  await vWatch.newTask("netSpeedTest", minutes(5), require('./internet-speed-test'), "Internet Speed Test");
-
-  await vWatch.newTask("screenshot-desktop", minutes(5), require('./screenshot-desktop'), "Automatic Desktop Screenshots");
-
-  await vWatch.newTask("totalDownloads", hours(12), require('./total-downloads'), "Total Downloads");
-
-  await vWatch.newTask("vWatchDBG", seconds(30), require('./vWatchDebug'), "vWatch Info Cache");
-
-  await vWatch.newTask("weatherApi", hours(1), require('./weather-api'), "Weather API Info Cache");
-
-
-
+  weatherApi: require('./weather-api'),
 
 };

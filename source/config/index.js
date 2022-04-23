@@ -35,8 +35,8 @@ const config = {
 
   set backgroundUpdates(value) {
     if (typeof value === 'boolean') {
-      const { vWatch } = require('../core');
       config.bgUpdates = value;
+      const { vWatch } = require('../core');
       if (vWatch.hasTask("wallpaperGUI")) vWatch.setTaskStatus('wallpaperGUI', value);
       return true;
     } else {
@@ -94,7 +94,7 @@ const config = {
   /*
   * FILE - Save/Read Config
   */
-  fileLocation: path.join(__dirname, '../data/userConfig.json'),
+  filePath: path.join(__dirname, '../data/userConfig.json'),
 
   saveConfigToFile() {
 
@@ -105,13 +105,13 @@ const config = {
       extendedInfo: config.extendedInfo,
     };
 
-    return v_fs.writeSy(config.fileLocation, `${JSON.stringify(data, null, 2)}`);
+    return v_fs.writeSy(config.filePath, `${JSON.stringify(data, null, 2)}`);
 
   },
 
   loadConfigFromFile() {
     try {
-      const userConfig = JSON.parse(v_fs.readSy(config.fileLocation, 'utf8'));
+      const userConfig = JSON.parse(v_fs.readSy(config.filePath, 'utf8'));
       console.log(userConfig);
 
       if (userConfig.debug !== undefined) config.debug = userConfig.debug;
