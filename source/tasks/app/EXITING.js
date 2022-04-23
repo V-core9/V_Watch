@@ -1,9 +1,9 @@
 
 //? Config
 const config = require("../../config");
-const { exitTimeout, cacheFilePath, saveConfigToFile,} = config;
+const { exitTimeout, cacheFilePath, saveConfigToFile, } = config;
 
-const { cache, vWatch } = require("../../core");
+const { cache, appWatch, customWatch, builtinWatch } = require("../../core");
 const { notify, v_tray } = require("../../helpers");
 
 //? wallpaperGUI - Background GUI
@@ -26,7 +26,9 @@ module.exports = application_exit = async () => {
   await wallpaperGUI.stop();
 
   // vWatch Terminate
-  await vWatch.stop();
+  await customWatch.stop();
+  await builtinWatch.stop();
+  await appWatch.stop();
 
   // v_tray Terminate
   await v_tray.stop();

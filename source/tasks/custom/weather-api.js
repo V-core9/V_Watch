@@ -12,7 +12,6 @@ module.exports = weatherApi = async () => {
 
   weather.setUnits(config.weatherUnits);
 
-
   weather.getAllWeather(async (err, JSONObj) => {
     if (config.debug) console.log(JSONObj);
     await cache.set('weatherApi', JSONObj);

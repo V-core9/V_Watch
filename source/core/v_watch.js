@@ -1,13 +1,13 @@
 const config = require('../config');
 
 
-module.exports = function V_Watch(data = {}) {
+module.exports = function V_Watch(cfg = {}) {
 
 
-  this.interval = data.interval || 1000;
-  this.autoStart = data.autoStart || false;
+  interval = cfg.interval || 1000;
+  autoStart = cfg.autoStart || false;
 
-  this.loopCore = null;
+  let loopCore = null;
 
   const vwTasks = {};
 
@@ -34,9 +34,10 @@ module.exports = function V_Watch(data = {}) {
     try {
       if (config.debug) console.log("V_Watch: STARTING >>>");
 
-      if (this.loopCore !== null) return false;
+      if (loopCore !== null) return false;
 
-      this.loopCore = setInterval(this.tick, this.interval);
+      loopCore = setInterval(this.tick, interval);
+
       return true;
     } catch (error) {
       console.log(error);
@@ -47,11 +48,11 @@ module.exports = function V_Watch(data = {}) {
 
   this.stop = async () => {
     try {
-      if (this.loopCore === null) return false;
+      if (loopCore === null) return false;
 
       if (config.debug) console.log("V_Watch: STOPPING ...");
-      clearInterval(this.loopCore);
-      this.loopCore = null;
+      clearInterval(loopCore);
+      loopCore = null;
       return true;
     } catch (error) {
       console.log(error);
@@ -60,10 +61,10 @@ module.exports = function V_Watch(data = {}) {
   };
 
 
-  this.newTask = async (key, interval, callback, description = "", enabled = true) => {
+  this.newTask = async (key, inter, callback, description = "", enabled = true) => {
     try {
       vwTasks[key] = {
-        interval: (!isNaN(interval)) ? interval : this.interval,
+        interval: (!isNaN(inter)) ? inter : interval,
         callback: callback,
         description: description,
         enabled: enabled,
@@ -141,10 +142,13 @@ module.exports = function V_Watch(data = {}) {
 
 
 
-  this.changeInterval = async (value = this.interval) => {
-    await this.stop();
-    this.interval = value;
-    await this.start();
+  this.changeInterval = async (value = interval) => {
+    let runningStatus = await this.status();
+    interval = (!isNaN(value) && value > 10) ? value : interval;
+    if (runningStatus) {
+      await this.stop();
+      await this.start();
+    }
   };
 
 
@@ -158,12 +162,13 @@ module.exports = function V_Watch(data = {}) {
     }
   };
 
+  this.status = async () => (loopCore !== null);
 
   this.stats = async () => {
     return {
-      status: (this.loopCore !== null) ? true : false,
-      interval: this.interval, // in milliseconds
-      autoStart: this.autoStart,
+      status: await this.status(),
+      interval: interval,
+      autoStart: autoStart,
       disabledTasksCount: await this.disabledTasksCount(),
       activeTasksCount: await this.activeTasksCount(),
       totalTasksCount: await this.totalTasksCount(),
@@ -187,7 +192,7 @@ module.exports = function V_Watch(data = {}) {
 
 
 
-  if (this.autoStart) this.start();
+  if (autoStart) this.start();
 
 
 };
