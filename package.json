@@ -38,6 +38,7 @@
   "dependencies": {
     "@mapbox/node-pre-gyp": "^1.0.5",
     "@schlameel/native-idle-time": "^1.0.6",
+    "canvas": "^2.9.1",
     "downloads": "^0.1.0",
     "glob-parent": ">=5.1.2",
     "image-to-base64": "^2.2.0",

@@ -110,3 +110,4 @@ userConfig.json
 source/data/screenshots/desktop_*.png
 
 openweather_api_key.txt
+build/
