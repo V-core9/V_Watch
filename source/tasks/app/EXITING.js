@@ -1,13 +1,13 @@
 
 //? Config
-const config = require("../config");
+const config = require("../../config");
 const { exitTimeout, cacheFilePath, saveConfigToFile,} = config;
 
-const { cache, vWatch } = require("../core");
-const { notify, v_tray } = require("../helpers");
+const { cache, vWatch } = require("../../core");
+const { notify, v_tray } = require("../../helpers");
 
 //? wallpaperGUI - Background GUI
-const wallpaperGUI = require("../wallpaper");
+const wallpaperGUI = require("../../wallpaper");
 
 
 module.exports = application_exit = async () => {

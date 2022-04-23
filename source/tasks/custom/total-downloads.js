@@ -1,9 +1,9 @@
 var downloads = require('downloads');
 
-const config = require('../config');
-const { cache } = require('../core');
+const config = require('../../config');
+const { cache } = require('../../core');
 
-const items = require('../data/npm_items');
+const items = require('../../data/npm_items');
 
 
 module.exports = totalDownloads = async () => {

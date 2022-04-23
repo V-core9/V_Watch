@@ -1,8 +1,8 @@
-const { cache } = require('../core');
+const { cache } = require('../../core');
 const { byteSizer } = require('v_file_system');
-const { v_os, roundNumber, vTime } = require('../helpers');
+const { v_os, roundNumber, vTime } = require('../../helpers');
 
-const config = require('../config');
+const config = require('../../config');
 
 
 module.exports = async () => {

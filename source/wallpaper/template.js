@@ -109,7 +109,7 @@ module.exports = function svgTemplate(data = {}) {
 
     return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${this.helperWidth} ${this.helperHeight}"  height="${this.helperHeight}" width="${this.helperWidth}" class="${this.name}"  shape-rendering="geometricPrecision" font-family="monospace" >
               ${(!config.exiting) ?
-        `${await this.bckLayer()}
+                `${await this.bckLayer()}
                 ${await this.printOsInfo()}
                 ${await this.printBotStats()}
                 ${await this.printClock()}
@@ -294,7 +294,7 @@ module.exports = function svgTemplate(data = {}) {
 
   this.renderEIP = async () => {
     let screenInfo = await cache.get("ScreenResolutionInfo");
-    let weatherApi = await cache.get('weatherApi') || { main: {}, wind: {}, clouds: {}, weather: [] };
+    let weatherApi = await cache.get('weatherApi') || { main: {}, wind: {}, clouds: {}, weather: [{ main: "", description: "" }] };
     let wthMain = weatherApi.weather[0].main;
     let wthDescription = weatherApi.weather[0].description;
     let wthTemp = weatherApi.main.temp || 0;
@@ -306,8 +306,8 @@ module.exports = function svgTemplate(data = {}) {
               ${await draw.text(35, 40, "💻 EIP#1", this.white, this.subFontSize)}
 
               <path d="M 35 705 l 110 0   20 -20   -130 -130  -20 20   0 110   20 20" stroke="${this.main}" stroke-width="1" fill="#101520" ></path>
-              ${await draw.text(35, 695, "😎 " + wthMain , this.white, this.normalFontSize)}
-              ${await draw.text(35, 680, "🔥 " + wthTemp + "°C " , this.white, this.normalFontSize)}
+              ${await draw.text(35, 695, "😎 " + wthMain, this.white, this.normalFontSize)}
+              ${await draw.text(35, 680, "🔥 " + wthTemp + "°C ", this.white, this.normalFontSize)}
               ${await draw.text(35, 665, "〰 " + wthWindSpeed + "m/s", this.white, this.normalFontSize)}
 
               <path d="M 1135 15 l 110 0   20 20   0 110   -20 20   -130 -130  20 -20" stroke="${this.main}" stroke-width="1" fill="#101520" ></path>

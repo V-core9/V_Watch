@@ -1,9 +1,9 @@
 const v_fs = require('v_file_system');
 const path = require('path');
-const { fstat } = require('fs');
 
+const packageInfo = require('../../package.json');
 
-process.title = '-v-';
+process.title = packageInfo.name;
 
 
 const config = {

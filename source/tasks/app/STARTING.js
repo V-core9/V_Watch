@@ -1,9 +1,9 @@
 
 //? Config
-const { cacheFilePath } = require("../config");
+const { cacheFilePath } = require("../../config");
 
-const { cache, vWatch } = require("../core");
-const { notify } = require("../helpers");
+const { cache, vWatch } = require("../../core");
+const { notify } = require("../../helpers");
 
 module.exports = application_start = () => {
 

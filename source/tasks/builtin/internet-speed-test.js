@@ -1,9 +1,9 @@
 const speedTest = require('speedtest-net');
 
-const config = require('../config');
-const { cache } = require('../core');
+const config = require('../../config');
+const { cache } = require('../../core');
 const { byteSizer } = require('v_file_system');
-const { roundNumber } = require('../helpers');
+const { roundNumber } = require('../../helpers');
 
 
 module.exports = async () => {

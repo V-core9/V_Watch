@@ -1,4 +1,4 @@
-const { cache } = require('../core');
+const { cache } = require('../../core');
 
 module.exports = clockUpdate = async () => {
 
@@ -16,6 +16,6 @@ module.exports = clockUpdate = async () => {
 
   var strTime = hours + ':' + minutes + ':' + seconds;
 
-  await cache.set("clock", { strTime: strTime, datePrint: datePrint });
+  await cache.set("clock", { strTime, datePrint });
 
 };
