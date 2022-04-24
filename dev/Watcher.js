@@ -1,59 +1,87 @@
 const EventEmitter = require('events');
 
+
 module.exports = class Watcher extends EventEmitter {
-    constructor(props = {}) {
 
-        super(props);
+  constructor(props = {}) {
 
-        this._loop = null;
+    super(props);
 
-        this.name = props.name || "Missing Name";
-        this.interval = props.interval || 100;
-        this.cb = (typeof props.cb === 'function') ? props.cb : () => console.warn("missing callback");
+    let loop = null;
 
-        this.enabled = (typeof props.enabled === 'boolean') ? props.enabled : false;
+    let autoStart = (typeof props.autoStart === 'boolean') ? props.autoStart : true;
 
-        //? Begin/Start It
-        this.begin = async () => {
-            let result = false;
-            if (this._loop === null) {
-                this._loop = setInterval(async () => {
-                    this.cb();
-                    this.emit('run', { name: this.name, ts: Date.now() })
-                }, this.interval);
-                result = true;
-            }
-            this.emit('start', result);
-            return result;
-        };
-
-        //* [this.begin()] - Alias
-        this.start = async () => await this.begin();
-
-        //? End/Stop it
-        this.end = async () => {
-            let result = false;
-            if (this._loop !== null) {
-                clearInterval(this._loop);
-                this._loop = null;
-                result = true;
-            }
-            this.emit('end', result);
-            return result;
-        };
-        
-        //* [this.end()] - Alias
-        this.stop = async () => await this.end();
-
-        //? Is Running Status Check
-        this.isRunning = async () => (this._loop !== null);
-
-        //* [this.isRunning()] - Alias
-        this.isActive = async () => await this.isRunning();
+    this.interval = (!isNaN(props.interval) && props.interval > 0) ? props.interval : 100;
+    this.cb = (typeof props.cb === 'function') ? props.cb : () => console.warn("missing callback");
 
 
-        if (this.enabled) this.start();
-    
-    }
-}
+    //* Begin/Start It
+    this.begin = async () => {
+      let result = false;
+      if (loop === null) {
+        loop = setInterval(async () => {
+          this.cb();
+          this.emit('run');
+        }, this.interval);
+        result = true;
+      }
+      this.emit('start', result);
+      return result;
+    };
+
+
+    //* End/Stop it
+    this.end = async () => {
+      if (loop !== null) {
+        clearInterval(loop);
+        loop = null;
+      }
+      let result = (loop === null);
+      this.emit('end', result);
+      return result;
+    };
+
+
+    //* Is Running Status Check
+    this.isRunning = async () => (loop !== null);
+
+
+    //* Change Interval
+    this.setInterval = async (val = this.interval) => {
+      if (isNaN(val) || val <= 0) return false;
+
+      this.interval = val;
+
+      if (await this.isRunning()) {
+        this.end();
+        this.begin();
+      }
+
+      return true;
+    };
+
+
+    //? HELPERS:
+    //* Getting Interval
+    this.getInterval = async () => this.interval;
+
+
+
+    //? ALIASES:
+    //* this.end()
+    this.stop = this.end;
+    //* this.begin()
+    this.start = this.begin;
+    //* this.isRunning()
+    this.isActive = this.isRunning;
+    //* this.setInterval()
+    this.changeInterval = this.setInterval;
+
+
+    //! AutoStart if not disabled
+    if (autoStart) this.start();
+
+  }
+
+};
 
