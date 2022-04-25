@@ -1,9 +1,7 @@
 const V_Core_Cache = require('v_core_cache');
-const V_Watch = require('./v_watch');
+const Watch = require('./Watch');
 
 module.exports = {
-  appWatch: new V_Watch({ autoStart: true, interval: 50 }),
-  builtinWatch: new V_Watch({ autoStart: true, interval: 500 }),
-  customWatch: new V_Watch({ autoStart: true, interval: 250 }),
   cache: new V_Core_Cache(),
+  watch: new Watch(),
 };

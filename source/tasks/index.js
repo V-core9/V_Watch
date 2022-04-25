@@ -1,5 +1,5 @@
 const config = require('../config');
-const { appWatch, builtinWatch, customWatch } = require("../core");
+const { watch } = require("../core");
 const { seconds, minutes, hours } = require('../helpers').vTime;
 
 //* Base time
@@ -14,24 +14,37 @@ const { justDoIt, weatherApi, totalDownloads } = require('./custom');
 module.exports = sysTasks = async () => {
 
   //! App Tasks
-  await appWatch.newTask("STARTING", 0, STARTING, "DISABLED Task that should only fire once STARTING.", false);
-  await appWatch.newTask("EXITING", 0, EXITING, "DISABLED Task that should only fire once EXITING.", false);
-  await appWatch.newTask("vWatchDBG", seconds(30), vWatchDBG, "vWatch Info Cache");
+  await watch.new("STARTING", 0, STARTING, false);
+  await watch.new("EXITING", 0, EXITING, false);
+  await watch.new("vWatchDBG", seconds(30), vWatchDBG);
+  await watch.run("vWatchDBG");
 
 
   //? Builtin Tasks
-  await builtinWatch.newTask("wallpaperGUI", baseTime, wallpaperGUI, "This will do the rendering of wallpaperGUI", config.backgroundUpdates);
-  await builtinWatch.newTask("clock", baseTime, clock, "vWatch task that updates Clock in cache");
-  await builtinWatch.newTask("systemInfoStats", baseTime, systemInfoStats, "Getting Current User and System Info");
-  await builtinWatch.newTask("netSpeedTest", minutes(5), netSpeedTest, "Internet Speed Test");
-  await builtinWatch.newTask("screenshot-desktop", minutes(5), screenshotDesktop, "Automatic Desktop Screenshots");
+  await watch.new("wallpaperGUI", baseTime, wallpaperGUI, config.backgroundUpdates);
+  await watch.run("wallpaperGUI");
+
+  await watch.new("clock", baseTime, clock);
+  await watch.run("clock");
+
+  await watch.new("systemInfoStats", baseTime, systemInfoStats);
+  await watch.run("systemInfoStats");
+
+  await watch.new("netSpeedTest", minutes(5), netSpeedTest);
+  await watch.run("netSpeedTest");
+
+  await watch.new("screenshot-desktop", minutes(5), screenshotDesktop);
+  await watch.run("screenshot-desktop");
 
 
   //* Custom Tasks
-  await customWatch.newTask("justDoIt", 750, justDoIt, "Demo Task Description Placeholder");
-  await customWatch.disableTask("justDoIt");
+  await watch.new("justDoIt", 750, justDoIt);
+  await watch.stop("justDoIt");
 
-  await customWatch.newTask("weatherApi", hours(1), weatherApi, "Weather API Info Cache");
-  await customWatch.newTask("totalDownloads", hours(12), totalDownloads, "Total Downloads");
+  await watch.new("weatherApi", hours(1), weatherApi);
+  await watch.run("weatherApi");
+
+  await watch.new("totalDownloads", hours(12), totalDownloads);
+  await watch.run("totalDownloads");
 
 };

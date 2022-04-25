@@ -35,9 +35,7 @@ const config = {
 
   set backgroundUpdates(value) {
     if (typeof value === 'boolean') {
-      const { builtinWatch } = require('../core');
       config.bgUpdates = value;
-      if (builtinWatch.hasTask("wallpaperGUI")) builtinWatch.setTaskStatus('wallpaperGUI', value);
       return true;
     } else {
       return false;
