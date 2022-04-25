@@ -6,8 +6,7 @@ const { exitTimeout, cacheFilePath, saveConfigToFile, } = config;
 const { cache, watch } = require("../../core");
 const { notify, v_tray } = require("../../helpers");
 
-//? wallpaperGUI - Background GUI
-const wallpaperGUI = require("../../wallpaper");
+const { wallpaper } = require("../builtin");
 
 
 module.exports = application_exit = async () => {
@@ -23,7 +22,7 @@ module.exports = application_exit = async () => {
   await saveConfigToFile();
 
   // wallpaperGUI Terminate
-  await wallpaperGUI.stop();
+  await wallpaper.render();
 
   // vWatch Terminate
   await watch.end();

@@ -1,6 +1,6 @@
 const path = require('path');
 const config = require('../config');
-const { cache } = require('../core');
+const cache = require('../core/cache');
 const { getRandomColor } = require('../helpers');
 const imageToBase64 = require('image-to-base64');
 
@@ -23,7 +23,7 @@ const draw = {
 })();
 
 
-module.exports = function svgTemplate(data = {}) {
+module.exports = function BaseTemplate(data = {}) {
 
 
   const randomColors = async () => {
@@ -47,7 +47,6 @@ module.exports = function svgTemplate(data = {}) {
   this.containerBackground = data.containerBackground || "#555555";
   this.mainSuccess = data.mainSuccess || "#40ff40";
   this.mainWarn = data.mainWarn || "#FFA500";
-  this.useRandomColors = data.useRandomColors || false;
 
   this.helperWidth = 1280;
   this.helperHeight = 720;
@@ -95,7 +94,6 @@ module.exports = function svgTemplate(data = {}) {
 
 
   this.render = async () => {
-    if (this.useRandomColors) await randomColors();
 
     this.cacheData = {
       clock: await cache.get('clock') || { strTime: "", datePrint: "" },
@@ -114,7 +112,7 @@ module.exports = function svgTemplate(data = {}) {
                 ${await this.printBotStats()}
                 ${await this.printClock()}
                 ${(config.extendedInfo) ? await this.extendedInfoPanel() : ''}
-                ${(config.debug) ? await this.debug() : `${await draw.text(1125, 25, `<text fill="${this.main}">${this.cacheData.svgStats.lastExecTimeVal}</text>ms | ${this.cacheData.svgStats.totalUpdates} @ ${this.cacheData.svgStats.scale}`, this.white, this.normalFontSize)}`}
+                ${(config.debug) ? await this.debug() : `${await draw.text(1125, 25, `<text fill="${this.main}">${this.cacheData.svgStats.lastExecTimeVal}</text>ms | ${this.cacheData.svgStats.totalUpdates}`, this.white, this.normalFontSize)}`}
                 ` : await this.offlineNotice()}
             </svg>`;
 

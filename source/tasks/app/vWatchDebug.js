@@ -7,7 +7,7 @@ module.exports = vWatchDebug = async () => {
 
   stats.frequency = 1000 / stats.interval;
 
-  stats.tasks= await watch.getAll();
+  stats.tasks = await watch.getAll();
 
   await cache.set("vWatchDBG", stats);
 

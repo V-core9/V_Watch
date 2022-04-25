@@ -6,7 +6,6 @@ const util = require('util');
 util.inherits(NodeTray, EventEmitter);
 const path = require("path");
 
-const { watch } = require("../../core");
 
 
 /*
@@ -48,10 +47,11 @@ const menu = [
       config.toggleBackgroundUpdates();
       menu[2].title = getBackgroundTitle();
       notify.wallpaperGUI();
+      const { watch } = require("../../core");
       if (config.backgroundUpdates === true) {
-        watch.start("wallpaperGUI");
+        watch.start("wallpaper_render");
       } else {
-        watch.stop("wallpaperGUI");
+        watch.stop("wallpaper_render");
       }
     }
   },

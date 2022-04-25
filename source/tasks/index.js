@@ -7,7 +7,7 @@ const baseTime = seconds(config.redrawTime);
 
 const { STARTING, EXITING, vWatchDBG } = require('./app');
 
-const { clock, wallpaperGUI, systemInfoStats, netSpeedTest, screenshotDesktop } = require('./builtin');
+const { clock, wallpaper, systemInfoStats, netSpeedTest, screenshotDesktop } = require('./builtin');
 
 const { justDoIt, weatherApi, totalDownloads } = require('./custom');
 
@@ -21,8 +21,14 @@ module.exports = sysTasks = async () => {
 
 
   //? Builtin Tasks
-  await watch.new("wallpaperGUI", baseTime, wallpaperGUI, config.backgroundUpdates);
-  await watch.run("wallpaperGUI");
+  await watch.new("wallpaper_render", baseTime, wallpaper.render, config.backgroundUpdates);
+
+  let wallpaperTask = await watch.get("wallpaper_render");
+  wallpaperTask.on('run', wallpaper.set);
+
+  await watch.run("wallpaper_render");
+
+
 
   await watch.new("clock", baseTime, clock);
   await watch.run("clock");

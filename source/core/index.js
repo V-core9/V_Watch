@@ -1,7 +1,8 @@
-const V_Core_Cache = require('v_core_cache');
 const Watch = require('./Watch');
+const Wallpaper = require('./Wallpaper');
 
 module.exports = {
-  cache: new V_Core_Cache(),
+  cache: require('./cache'),
   watch: new Watch(),
+  wallpaper: new Wallpaper({ quality: 25 })
 };
