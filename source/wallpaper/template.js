@@ -102,14 +102,14 @@ module.exports = function svgTemplate(data = {}) {
       system: await cache.get('system') || { cpu: {}, ram: {}, deviceUserInfo: {} },
       netSpeed: await cache.get('netSpeed') || { external_ip: "0.0.0.0", latency: 0, download: 0, upload: 0 },
       svgStats: await cache.get('svgStats') || { lastExecTimeVal: 0, totalUpdates: 0, scale: 1, running: false, quality: 75 },
-      vWatch: (config.debug) ? await cache.get("vWatchDBG") : {},
+      vWatch: (config.debug && await cache.has("vWatchDBG")) ? await cache.get("vWatchDBG") : {},
     };
 
     if (config.debug) console.log(this.cacheData);
 
     return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${this.helperWidth} ${this.helperHeight}"  height="${this.helperHeight}" width="${this.helperWidth}" class="${this.name}"  shape-rendering="geometricPrecision" font-family="monospace" >
               ${(!config.exiting) ?
-                `${await this.bckLayer()}
+        `${await this.bckLayer()}
                 ${await this.printOsInfo()}
                 ${await this.printBotStats()}
                 ${await this.printClock()}
@@ -191,25 +191,25 @@ module.exports = function svgTemplate(data = {}) {
             ${await draw.text(this.helpDim.X, this.helpDim.Y + 312.5, "vWatch Tasks Runner:", this.main, this.subFontSize)}
 
             ${await draw.text(this.helpDim.X, this.helpDim.Y + 330, "Running Status", this.white, this.normalFontSize)}
-            ${await draw.text(this.helpDim.X300, this.helpDim.Y + 330, `[ ${(this.cacheData.vWatch.status) ? '<text fill="' + this.mainSuccess + '">ACTIVE</text>' : '<text fill="' + this.mainWarn + '">STOPPED</text>'} ]`, this.white, this.normalFontSize)}
+            ${await draw.text(this.helpDim.X300, this.helpDim.Y + 330, `[ ${(this.cacheData.vWatch.status || "0") ? '<text fill="' + this.mainSuccess + '">ACTIVE</text>' : '<text fill="' + this.mainWarn + '">STOPPED</text>'} ]`, this.white, this.normalFontSize)}
 
             ${await draw.text(this.helpDim.X, this.helpDim.Y + 345, "Total Tasks Count", this.white, this.normalFontSize)}
-            ${await draw.text(this.helpDim.X300, this.helpDim.Y + 345, `[ <text fill="${this.main}">${this.cacheData.vWatch.totalTasksCount}</text> ]`, this.white, this.normalFontSize)}
+            ${await draw.text(this.helpDim.X300, this.helpDim.Y + 345, `[ <text fill="${this.main}">${this.cacheData.vWatch.totalTasksCount || "0"}</text> ]`, this.white, this.normalFontSize)}
 
             ${await draw.text(this.helpDim.X, this.helpDim.Y + 360, "Active Tasks ", this.white, this.normalFontSize)}
-            ${await draw.text(this.helpDim.X300, this.helpDim.Y + 360, `[ <text fill="${this.mainAlt}">${this.cacheData.vWatch.activeTasksCount}</text> ]`, this.white, this.normalFontSize)}
+            ${await draw.text(this.helpDim.X300, this.helpDim.Y + 360, `[ <text fill="${this.mainAlt}">${this.cacheData.vWatch.activeTasksCount || "0"}</text> ]`, this.white, this.normalFontSize)}
 
             ${await draw.text(this.helpDim.X, this.helpDim.Y + 375, "Disabled Tasks ", this.white, this.normalFontSize)}
-            ${await draw.text(this.helpDim.X300, this.helpDim.Y + 375, `[ ${this.cacheData.vWatch.disabledTasksCount} ]`, this.white, this.normalFontSize)}
+            ${await draw.text(this.helpDim.X300, this.helpDim.Y + 375, `[ ${this.cacheData.vWatch.disabledTasksCount || "0"} ]`, this.white, this.normalFontSize)}
 
             ${await draw.text(this.helpDim.X, this.helpDim.Y + 390, "Tick Interval ", this.white, this.normalFontSize)}
-            ${await draw.text(this.helpDim.X300, this.helpDim.Y + 390, `[ ${this.cacheData.vWatch.interval}ms ]`, this.white, this.normalFontSize)}
+            ${await draw.text(this.helpDim.X300, this.helpDim.Y + 390, `[ ${this.cacheData.vWatch.interval || "0"}ms ]`, this.white, this.normalFontSize)}
 
             ${await draw.text(this.helpDim.X, this.helpDim.Y + 405, "Tick Frequency ", this.white, this.normalFontSize)}
-            ${await draw.text(this.helpDim.X300, this.helpDim.Y + 405, `[ ${this.cacheData.vWatch.frequency}Hz ]`, this.white, this.normalFontSize)}
+            ${await draw.text(this.helpDim.X300, this.helpDim.Y + 405, `[ ${this.cacheData.vWatch.frequency || "0"}Hz ]`, this.white, this.normalFontSize)}
 
             ${await draw.text(this.helpDim.X, this.helpDim.Y + 420, "AutoStart Option ", this.white, this.normalFontSize)}
-            ${await draw.text(this.helpDim.X300, this.helpDim.Y + 420, `[ ${this.cacheData.vWatch.autoStart} ]`, this.white, this.normalFontSize)}`;
+            ${await draw.text(this.helpDim.X300, this.helpDim.Y + 420, `[ ${this.cacheData.vWatch.autoStart || "0"} ]`, this.white, this.normalFontSize)}`;
   };
 
 
@@ -293,7 +293,7 @@ module.exports = function svgTemplate(data = {}) {
 
 
   this.renderEIP = async () => {
-    let screenInfo = await cache.get("ScreenResolutionInfo");
+    let screenInfo = await cache.get("ScreenResolutionInfo") || { width: 0, height: 0, dpiScale: 1 };
     let weatherApi = await cache.get('weatherApi') || { main: {}, wind: {}, clouds: {}, weather: [{ main: "", description: "" }] };
     let wthMain = weatherApi.weather[0].main;
     let wthDescription = weatherApi.weather[0].description;
@@ -338,4 +338,4 @@ module.exports = function svgTemplate(data = {}) {
   };
 
 
-}
+};

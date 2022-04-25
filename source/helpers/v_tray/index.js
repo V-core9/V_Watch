@@ -1,10 +1,12 @@
 const config = require('../../config');
-const notify  = require('../v_notify');
+const notify = require('../v_notify');
 const EventEmitter = require('events').EventEmitter;
 const NodeTray = require("../../../node_modules/windows-tray/build/Release/tray").NodeTray;
 const util = require('util');
 util.inherits(NodeTray, EventEmitter);
 const path = require("path");
+
+const { watch } = require("../../core");
 
 
 /*
@@ -46,6 +48,11 @@ const menu = [
       config.toggleBackgroundUpdates();
       menu[2].title = getBackgroundTitle();
       notify.wallpaperGUI();
+      if (config.backgroundUpdates === true) {
+        watch.start("wallpaperGUI");
+      } else {
+        watch.stop("wallpaperGUI");
+      }
     }
   },
   {

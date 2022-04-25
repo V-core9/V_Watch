@@ -1,4 +1,4 @@
-const Watch = require('./Watch');
+const { Watch } = require('../../source/core/Watch');
 
 const watch = new Watch();
 
