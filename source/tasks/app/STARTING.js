@@ -1,4 +1,4 @@
-
+const v_fs = require("v_file_system");
 //? Config
 const { cacheFilePath } = require("../../config");
 
@@ -10,7 +10,8 @@ module.exports = application_start = () => {
   //! Exit Handler
   process.on("SIGINT", async () => await watch.run("EXITING"));
 
-  cache.fromFile(cacheFilePath);
+  let cacheData = v_fs.readSy(cacheFilePath);
+  if (cacheData !== false) cache.fromString(cacheData);
 
   notify.app.starting();
 

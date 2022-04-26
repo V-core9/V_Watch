@@ -1,11 +1,11 @@
 
 //? Config
+const v_fs = require("v_file_system");
 const config = require("../../config");
 const { exitTimeout, cacheFilePath, saveConfigToFile, } = config;
 
 const { cache, watch } = require("../../core");
 const { notify, v_tray } = require("../../helpers");
-
 const { wallpaper } = require("../builtin");
 
 
@@ -16,7 +16,7 @@ module.exports = application_exit = async () => {
   await notify.app.stopping();
 
   // Save Cache
-  await cache.toFile(cacheFilePath);
+  await v_fs.write(cacheFilePath, await cache.toString());
 
   // Save Config
   await saveConfigToFile();

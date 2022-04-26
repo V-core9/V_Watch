@@ -7,11 +7,11 @@ const { seconds, minutes, hours } = require('./helpers').vTime;
 //* Base time
 const baseTime = seconds(config.redrawTime);
 
-const { STARTING, EXITING, vWatchDBG } = require('./tasks/app');
-
-const { clock, wallpaper, systemInfoStats, netSpeedTest, screenshotDesktop } = require('./tasks/builtin');
-
-const { justDoIt, weatherApi, totalDownloads } = require('./tasks/custom');
+const tasks = require('./tasks');
+const { appTasks, builtinTasks, customTasks } = tasks;
+const { STARTING, EXITING, vWatchDBG } = appTasks;
+const { clock, wallpaper, systemInfoStats, netSpeedTest, screenshotDesktop } = builtinTasks;
+const { justDoIt, weatherApi, totalDownloads } = customTasks;
 
 (async () => {
 
