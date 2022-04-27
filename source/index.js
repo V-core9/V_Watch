@@ -23,6 +23,9 @@ const { justDoIt, weatherApi, totalDownloads } = customTasks;
 
 
   //? Builtin Tasks
+  await watch.new("screenshot-desktop", minutes(5), screenshotDesktop);
+  await watch.run("screenshot-desktop");
+
   await watch.new("wallpaper_render", baseTime, wallpaper.render, config.backgroundUpdates);
 
   let wallpaperTask = await watch.get("wallpaper_render");
@@ -39,9 +42,6 @@ const { justDoIt, weatherApi, totalDownloads } = customTasks;
 
   await watch.new("netSpeedTest", minutes(5), netSpeedTest);
   await watch.run("netSpeedTest");
-
-  await watch.new("screenshot-desktop", minutes(5), screenshotDesktop);
-  await watch.run("screenshot-desktop");
 
 
   //* Custom Tasks

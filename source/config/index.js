@@ -110,7 +110,7 @@ const config = {
   loadConfigFromFile() {
     try {
       const userConfig = JSON.parse(v_fs.readSy(config.fileLocation, 'utf8'));
-      console.log(userConfig);
+      if (config.debug) console.log(userConfig);
 
       if (userConfig.debug !== undefined) config.debug = userConfig.debug;
       if (userConfig.notifications !== undefined) config.notifications = userConfig.notifications;
@@ -119,7 +119,7 @@ const config = {
 
       return userConfig;
     } catch (error) {
-      console.log(error);
+      if (config.debug) console.log(error);
       return false;
     }
   },

@@ -4,6 +4,7 @@ const wallpaper = require('wallpaper');
 var svg2img = require('svg2img');
 const { listDisplays } = require('screenshot-desktop');
 const config = require('../config');
+const cache = require('./cache');
 
 
 
@@ -18,9 +19,9 @@ module.exports = function Wallpaper(data = {}) {
   this.height = 0;
 
 
-  this.saveAndSetBackground = async (error, buffer) => {
+  this.saveAndSet = async () => {
     try {
-      fs.writeFileSync(this.file, buffer);
+      fs.writeFileSync(this.file, await cache.get('wallpaper_buffer_value'));
       await wallpaper.set(this.file);
       this.totalUpdates++;
       return this;
@@ -33,7 +34,7 @@ module.exports = function Wallpaper(data = {}) {
   this.render = async (svgData = "") => {
     var time_01 = Date.now();
     if (config.debug) console.log("RENDERING-->>");
-    svg2img(svgData, { width: this.width, height: this.height, format: 'jpg', 'quality': this.quality }, this.saveAndSetBackground);
+    svg2img(svgData, { width: this.width, height: this.height, format: 'jpg', 'quality': this.quality }, async (error, buffer) => await cache.set('wallpaper_buffer_value', buffer));
     this.lastExecTimeVal = Date.now() - time_01;
   };
 

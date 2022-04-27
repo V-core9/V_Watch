@@ -7,7 +7,7 @@ const count = require('./count');
 module.exports = async () => {
 
   for (let i = 0; i < npmItems.length; i++) {
-    console.log(npmItems[i]);
+    if (config.debug) console.log(npmItems[i]);
     let done = false;
     while (done === false) {
 
