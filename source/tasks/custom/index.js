@@ -1,5 +1,5 @@
 module.exports = {
   justDoIt: require('./justDoIt'),
-  totalDownloads: require('./total-downloads'),
+  totalDownloads: require('./npm_downloads'),
   weatherApi: require('./weather-api'),
 };
