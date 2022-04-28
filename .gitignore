@@ -107,7 +107,7 @@ $_cache.json
 userConfig.json
 .vscode/
 
-source/data/screenshots/desktop_*.png
+**/screenshots/desktop_*.png
 
 openweather_api_key.txt
 build/

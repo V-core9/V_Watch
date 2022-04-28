@@ -5,7 +5,7 @@
   "main": "./source/index.js",
   "scripts": {
     "test": "jest",
-    "start": "node ./source",
+    "start": "node ./wallpaper_app",
     "dev": "bash -c \"WALLPAPER_INTERVAL=1 npm start\"",
     "setup": "powershell -c \" Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1')) \" && powershell -c \"choco install visualstudio2017buildtools -A \"  && bash -c \" npm config set msvs_version 2017 \" ",
     "autostart": "bash -c \" npm install -g pm2 pm2-windows-startup \" && bash -c \" pm2-startup install \"",

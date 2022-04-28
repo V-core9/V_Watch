@@ -1,9 +1,9 @@
 const EventEmitter = require('events');
 
-const Watcher = require('./Watcher');
+const V_Core_Timer = require('./V_Core_Timer');
 
 
-module.exports = class Core_Watch extends EventEmitter {
+module.exports = class V_Watch extends EventEmitter {
   constructor(props = {}) {
 
     super(props);
@@ -19,7 +19,7 @@ module.exports = class Core_Watch extends EventEmitter {
     this.count = async () => Object.keys(tasksList).length;
 
     this.new = async (name, interval, cb, autoStart = true) => {
-      let task = new Watcher({ interval, cb, autoStart });
+      let task = new V_Core_Timer({ interval, cb, autoStart });
       tasksList[name] = task;
       this.emit('new', task);
       return true;
@@ -104,5 +104,6 @@ module.exports = class Core_Watch extends EventEmitter {
         totalTasksCount: await this.count(),
       };
     };
+
   }
 };

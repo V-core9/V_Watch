@@ -1,7 +1,7 @@
 const EventEmitter = require('events');
 
 
-module.exports = class Watcher extends EventEmitter {
+module.exports = class V_Core_Timer extends EventEmitter {
 
   constructor(props = {}) {
 

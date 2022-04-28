@@ -1,3 +1,4 @@
+
 const v_execute = require('v_execute');
 const config = require('../../../config');
 const npmItems = require('../../../data/npm_items');
@@ -11,7 +12,7 @@ module.exports = async () => {
     let done = false;
     while (done === false) {
 
-      let results = await v_execute(`bash -c "REPO='${npmItems[i]}' node source/tasks/custom/npm_downloads/gather.js"`);
+      let results = await v_execute(`bash -c "REPO='${npmItems[i]}' node wallpaper_app/tasks/custom/npm_downloads/gather.js"`);
 
       if (config.debug) console.log(results);
 

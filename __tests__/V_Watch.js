@@ -1,12 +1,24 @@
-const { Watch } = require('../../source/core/Watch');
+const { V_Watch } = require('..');
 
-const watch = new Watch();
+const watch = new V_Watch();
 
 watch.on('new', (task) => console.log("Created New Task: ", task));
 watch.on('stop', (task) => console.log("Stopped Task: ", task));
 watch.on('end', () => console.log("Here my Watch has Ended."));
 
-(async () => {
+const delayedAction = async (waitTime, action) => {
+  return new Promise((resolve, reject) => {
+    setTimeout(() => {
+      try {
+        resolve(action());
+      } catch (err) {
+        reject(err);
+      }
+    }, waitTime);
+  });
+};
+
+test("base test run", async () => {
 
   let counters = {
     test1: 0,
@@ -29,17 +41,17 @@ watch.on('end', () => console.log("Here my Watch has Ended."));
   await testTask.start();
 
   console.log(await watch.getAll());
+  expect(Object.keys(await watch.getAll()).length).toBe(2);
 
-  setTimeout(async () => {
+  expect(await delayedAction(500, async () => await watch.get("yeaMissing"))).toBe(undefined);
 
-    console.log(await watch.get("yeaMissing"));
+  expect(await delayedAction(500, async () => await watch.end())).toBe(true);
 
-    await watch.end();
+  expect(Object.keys(await watch.getAll()).length).toBe(0);
 
-    console.log(counters);
+  expect(counters.test1 * 2).toBe(counters.test3);
+  expect(counters.test1).toBeGreaterThan(50);
 
-    console.log(await watch.getAll());
+  console.log(counters);
 
-  }, 1000);
-
-})();
+});
