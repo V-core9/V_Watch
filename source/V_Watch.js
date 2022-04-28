@@ -16,7 +16,9 @@ module.exports = class V_Watch extends EventEmitter {
 
     this.has = async (key) => (tasksList[key] !== undefined);
 
-    this.count = async () => Object.keys(tasksList).length;
+    this.keys = async () => Object.keys(tasksList);
+
+    this.count = async () => (await this.keys()).length;
 
     this.new = async (name, interval, cb, autoStart = true) => {
       let task = new V_Core_Timer({ interval, cb, autoStart });
