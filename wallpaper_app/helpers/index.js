@@ -7,7 +7,6 @@ module.exports = {
 
   v_os: require('./v_os'),
 
-  vTime: require('./vTime'),
 
   roundNumber: (val, i = 0) => {
     i = Math.pow(10, i);
