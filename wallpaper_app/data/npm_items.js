@@ -13,4 +13,5 @@ module.exports = npmItems = [
   "v_shortkeys",
   "x-powered-by-random",
   "v_core_cache",
+  "v_core_timers",
 ];
